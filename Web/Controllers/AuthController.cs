@@ -15,4 +15,11 @@ public class AuthController(IMediator mediator) : ControllerBase
         var user = await mediator.Send(loginCommand);
         return Ok(user);
     }
+
+    [HttpPost("validate-signup")]
+    public async Task<ActionResult<UserDto>> ValidateSignup(ValidateSignupCommand validateSignupCommand)
+    {
+        var token = await mediator.Send(validateSignupCommand);
+        return Ok(new { token });
+    }
 }

@@ -53,4 +53,31 @@ public class TokenService(
 
         return tokenHandler.WriteToken(token);
     }
+
+    public string CreateVerifyPincodeToken(string email, string action)
+    {
+        var tokenKey = config["TokenKey"] ?? throw new Exception("Cannot access tokenKey from appsettings");
+        if (tokenKey.Length < 64) throw new Exception("Your tokenKey needs to be longer");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
+
+        var claims = new List<Claim>
+        {
+            new("action", action),
+            new(ClaimTypes.Email, email)
+        };
+
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddMinutes(2),
+            SigningCredentials = creds
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        return tokenHandler.WriteToken(token);
+    }
 }

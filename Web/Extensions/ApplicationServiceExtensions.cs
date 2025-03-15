@@ -1,4 +1,5 @@
 using Application.Behaviors;
+using Application.Helpers;
 using Domain.Services;
 using ExternalServices;
 using FluentValidation;
@@ -25,6 +26,7 @@ public static class ApplicationServiceExtensions
         });
 
         // Services
+        services.AddSingleton<PincodeStore>();
         services.AddScoped<ITokenService, TokenService>();
 
         // Middleware
