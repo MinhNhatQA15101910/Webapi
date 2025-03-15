@@ -1,8 +1,10 @@
 using Application.Commands.Auth;
 using Application.Helpers;
+using Application.Notifications.Auth;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Services;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +13,8 @@ namespace Application.Handlers.CommandHandlers.Auth;
 public class ValidateSignupHandler(
     UserManager<User> userManager,
     PincodeStore pincodeStore,
-    ITokenService tokenService
+    ITokenService tokenService,
+    IMediator mediator
 ) : ICommandHandler<ValidateSignupCommand, string>
 {
     public async Task<string> Handle(ValidateSignupCommand request, CancellationToken cancellationToken)
@@ -42,21 +45,10 @@ public class ValidateSignupHandler(
         pincodeStore.AddValidateUser(request.Email, request);
 
         // Send pincode email
-        // var displayName = registerDto.FirstName;
-        // var email = registerDto.Email;
-        // var subject = "VERA ACCOUNT VERIFICATION CODE";
-        // var message = await System.IO.File.ReadAllTextAsync("./Assets/EmailContent.html");
-        // message = message.Replace("{{hideEmail}}", HideEmail(email));
-        // message = message.Replace("{{pincode}}", pincode);
-
-        // await emailService.SendEmailAsync(
-        //     new EmailMessage(
-        //         displayName,
-        //         email,
-        //         subject,
-        //         message
-        //     )
-        // );
+        await mediator.Publish(
+            new SignupValidatedNotification(request.Username, request.Email, pincode),
+            cancellationToken
+        );
 
         return tokenService.CreateVerifyPincodeToken(request.Email, PincodeAction.Signup.ToString());
     }

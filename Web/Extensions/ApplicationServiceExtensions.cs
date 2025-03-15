@@ -1,5 +1,6 @@
 using Application.Behaviors;
 using Application.Helpers;
+using Domain.Helpers;
 using Domain.Services;
 using ExternalServices;
 using FluentValidation;
@@ -28,6 +29,10 @@ public static class ApplicationServiceExtensions
         // Services
         services.AddSingleton<PincodeStore>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IEmailService, EmailService>();
+
+        // Options pattern
+        services.Configure<EmailSenderSettings>(config.GetSection("EmailSenderSettings"));
 
         // Middleware
         services.AddScoped<ExceptionHandlingMiddleware>();
