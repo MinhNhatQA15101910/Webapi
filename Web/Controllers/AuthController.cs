@@ -22,4 +22,16 @@ public class AuthController(IMediator mediator) : ControllerBase
         var token = await mediator.Send(validateSignupCommand);
         return Ok(new { token });
     }
+
+    [HttpPost("email-exists")]
+    public async Task<ActionResult<object>> EmailExists(ValidateEmailCommand validateEmailCommand)
+    {
+        var exists = await mediator.Send(validateEmailCommand);
+        if (exists is bool)
+        {
+            return exists;
+        }
+
+        return Ok(new { token = exists });
+    }
 }
