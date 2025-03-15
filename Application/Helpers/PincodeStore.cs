@@ -44,4 +44,20 @@ public class PincodeStore
         var random = new Random();
         return random.Next(100000, 999999).ToString();
     }
+
+    public void RemovePincode(string key)
+    {
+        lock (_pincodeMap)
+        {
+            _pincodeMap.Remove(key);
+        }
+    }
+
+    public void RemoveValidateUser(string key)
+    {
+        lock (_validateUserMap)
+        {
+            _validateUserMap.Remove(key);
+        }
+    }
 }

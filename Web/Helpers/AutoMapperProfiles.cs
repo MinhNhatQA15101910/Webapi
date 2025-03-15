@@ -1,3 +1,4 @@
+using Application.Commands.Auth;
 using AutoMapper;
 using Domain.Dtos;
 using Domain.Entities;
@@ -22,5 +23,6 @@ public class AutoMapperProfiles : Profile
                     s => s.UserRoles.Select(x => x.Role.Name)
                 )
             );
+        CreateMap<ValidateSignupCommand, User>();
     }
 }
