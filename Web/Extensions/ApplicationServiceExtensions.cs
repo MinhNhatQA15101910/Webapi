@@ -1,12 +1,14 @@
 using Application.Behaviors;
 using Application.Helpers;
 using Domain.Helpers;
+using Domain.Repositories;
 using Domain.Services;
 using ExternalServices;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Persistence.Repositories;
 using Web.Middlewares;
 
 namespace Web.Extensions;
@@ -25,6 +27,8 @@ public static class ApplicationServiceExtensions
                 options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
             );
         });
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Services
         services.AddSingleton<PincodeStore>();

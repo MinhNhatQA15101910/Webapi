@@ -1,6 +1,6 @@
 namespace Domain.Exceptions;
 
-public class ProductNotFoundException(Guid userId)
-    : NotFoundException($"The product with the identifier {userId} was not found.")
+public class UserNotFoundException(Guid userId)
+    : NotFoundException($"The user with the identifier {userId} was not found.")
 {
 }
