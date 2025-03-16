@@ -64,4 +64,18 @@ public class AuthController(IMediator mediator) : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPatch("reset-password")]
+    [Authorize]
+    public async Task<ActionResult> ResetPassword(ResetPasswordCommand resetPasswordCommand)
+    {
+        // Get userId
+        var userId = User.GetUserId();
+
+        resetPasswordCommand.UserId = userId;
+
+        await mediator.Send(resetPasswordCommand);
+
+        return NoContent();
+    }
 }
