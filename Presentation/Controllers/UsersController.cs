@@ -24,13 +24,13 @@ public class UsersController(IMediator mediator) : ControllerBase
 
     [HttpPatch("change-password")]
     [Authorize]
-    public async Task<ActionResult> ChangePassword(ChangePasswordCommand changePasswordCommand)
+    public async Task<ActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
     {
         var userId = User.GetUserId();
 
-        changePasswordCommand.UserId = userId;
+        changePasswordDto.UserId = userId;
 
-        await mediator.Send(changePasswordCommand);
+        await mediator.Send(new ChangePasswordCommand(changePasswordDto));
 
         return NoContent();
     }

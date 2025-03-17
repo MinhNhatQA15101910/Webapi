@@ -9,11 +9,15 @@ public class ChangePasswordHandler(UserManager<User> userManager) : ICommandHand
 {
     public async Task<bool> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        var user = await userManager.FindByIdAsync(request.UserId.ToString())
-            ?? throw new UserNotFoundException(request.UserId);
+        var user = await userManager.FindByIdAsync(request.ChangePasswordDto.UserId.ToString())
+            ?? throw new UserNotFoundException(request.ChangePasswordDto.UserId);
 
         user.UpdatedAt = DateTime.UtcNow;
-        var changePasswordResult = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+        var changePasswordResult = await userManager.ChangePasswordAsync(
+            user, 
+            request.ChangePasswordDto.CurrentPassword, 
+            request.ChangePasswordDto.NewPassword
+        );
         if (!changePasswordResult.Succeeded)
         {
             throw new IdentityErrorException(changePasswordResult.Errors);

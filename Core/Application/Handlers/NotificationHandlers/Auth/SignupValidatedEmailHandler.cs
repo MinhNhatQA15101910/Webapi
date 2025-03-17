@@ -12,7 +12,7 @@ public class SignupValidatedEmailHandler(IEmailService emailService) : INotifica
         var email = notification.Email;
         var pincode = notification.Pincode;
         var subject = "ACCOUNT VERIFICATION CODE";
-        var message = await File.ReadAllTextAsync("../Application/Assets/EmailContent.html", cancellationToken);
+        var message = await File.ReadAllTextAsync("../Core/Application/Assets/EmailContent.html", cancellationToken);
         message = message.Replace("{{PINCODE}}", pincode);
 
         await emailService.SendEmailAsync(displayName, email, subject, message);

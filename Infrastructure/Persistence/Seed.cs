@@ -14,7 +14,7 @@ public class Seed
     {
         if (await userManager.Users.AnyAsync()) return;
 
-        var userData = await File.ReadAllTextAsync("../Persistence/Data/UserSeedData.json");
+        var userData = await File.ReadAllTextAsync("../Infrastructure/Persistence/Data/UserSeedData.json");
 
         var options = new JsonSerializerOptions
         {

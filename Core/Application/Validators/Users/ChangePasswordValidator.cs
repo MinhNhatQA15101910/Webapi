@@ -7,12 +7,12 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
 {
     public ChangePasswordValidator()
     {
-        RuleFor(x => x.CurrentPassword)
+        RuleFor(x => x.ChangePasswordDto.CurrentPassword)
             .NotEmpty().WithMessage("CurrentPassword is required.");
 
-        RuleFor(x => x.NewPassword)
+        RuleFor(x => x.ChangePasswordDto.NewPassword)
             .NotEmpty().WithMessage("NewPassword is required.")
             .MinimumLength(6).WithMessage("NewPassword must be at least 6 characters long.")
-            .NotEqual(x => x.CurrentPassword).WithMessage("NewPassword should not be the same as CurrentPassword.");
+            .NotEqual(x => x.ChangePasswordDto.CurrentPassword).WithMessage("NewPassword should not be the same as CurrentPassword.");
     }
 }

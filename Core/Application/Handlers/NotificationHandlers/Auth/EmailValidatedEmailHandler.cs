@@ -11,7 +11,7 @@ public class EmailValidatedEmailHandler(IEmailService emailService) : INotificat
         var displayName = notification.Email;
         var email = notification.Email;
         var subject = "ACCOUNT VERIFICATION CODE";
-        var message = await File.ReadAllTextAsync("../Application/Assets/EmailContent.html", cancellationToken);
+        var message = await File.ReadAllTextAsync("../Core/Application/Assets/EmailContent.html", cancellationToken);
         message = message.Replace("{{PINCODE}}", notification.Pincode);
 
         await emailService.SendEmailAsync(displayName, email, subject, message);
