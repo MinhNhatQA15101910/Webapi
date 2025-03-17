@@ -1,7 +1,7 @@
 using Application.Behaviors;
 using Application.Interfaces;
 using Application.Services;
-using Domain.Helpers;
+using Configuration;
 using Domain.Repositories;
 using FluentValidation;
 using MediatR;
@@ -48,7 +48,7 @@ public static class ApplicationServiceExtensions
         services.AddValidatorsFromAssembly(applicationAssembly);
 
         // Others
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddAutoMapper(applicationAssembly);
 
         return services;
     }

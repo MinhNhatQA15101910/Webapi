@@ -1,10 +1,10 @@
-using Application.Commands.Auth;
+using Application.DTOs.Auth;
 using Application.DTOs.Photos;
 using Application.DTOs.Users;
 using AutoMapper;
 using Domain.Entities;
 
-namespace Presentation.Helpers;
+namespace Application.Mappings;
 
 public class AutoMapperProfiles : Profile
 {
@@ -24,6 +24,6 @@ public class AutoMapperProfiles : Profile
                     s => s.UserRoles.Select(x => x.Role.Name)
                 )
             );
-        CreateMap<ValidateSignupCommand, User>();
+        CreateMap<ValidateSignupDto, User>();
     }
 }

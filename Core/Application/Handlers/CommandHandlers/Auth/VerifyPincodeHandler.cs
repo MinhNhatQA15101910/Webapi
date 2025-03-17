@@ -31,10 +31,10 @@ public class VerifyPincodeHandler(
         // Process action
         if (request.VerifyPincodeDto.Action == PincodeAction.Signup)
         {
-            var validateSignupCommand = pincodeStore.GetValidateUser(request.VerifyPincodeDto.Email!);
-            var user = mapper.Map<User>(validateSignupCommand);
+            var validateSignupDto = pincodeStore.GetValidateUser(request.VerifyPincodeDto.Email!);
+            var user = mapper.Map<User>(validateSignupDto);
 
-            var result = await userManager.CreateAsync(user, validateSignupCommand.Password);
+            var result = await userManager.CreateAsync(user, validateSignupDto.Password);
             if (!result.Succeeded)
             {
                 throw new IdentityErrorException(result.Errors);

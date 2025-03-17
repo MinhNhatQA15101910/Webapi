@@ -1,4 +1,4 @@
-namespace Domain.Helpers;
+namespace Configuration;
 
 public class EmailSenderSettings
 {
