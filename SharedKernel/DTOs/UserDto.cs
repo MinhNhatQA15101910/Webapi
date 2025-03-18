@@ -1,6 +1,4 @@
-using Application.DTOs.Photos;
-
-namespace Application.DTOs.Users;
+namespace SharedKernel.DTOs;
 
 public class UserDto
 {

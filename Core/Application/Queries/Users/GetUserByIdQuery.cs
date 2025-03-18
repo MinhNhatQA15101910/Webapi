@@ -1,4 +1,4 @@
-using Application.DTOs.Users;
+using SharedKernel.DTOs;
 
 namespace Application.Queries.Users;
 

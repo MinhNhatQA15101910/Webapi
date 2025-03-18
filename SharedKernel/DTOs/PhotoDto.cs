@@ -1,4 +1,4 @@
-namespace Application.DTOs.Photos;
+namespace SharedKernel.DTOs;
 
 public class PhotoDto
 {

@@ -1,5 +1,5 @@
 using Application.DTOs.Auth;
-using Application.DTOs.Users;
+using SharedKernel.DTOs;
 
 namespace Application.Commands.Auth;
 

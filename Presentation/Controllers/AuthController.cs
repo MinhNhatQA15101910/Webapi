@@ -1,12 +1,12 @@
 using Application.Commands.Auth;
 using Application.DTOs.Auth;
-using Application.DTOs.Users;
 using Domain.Enums;
 using Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Extensions;
+using SharedKernel.DTOs;
 
 namespace Presentation.Controllers;
 

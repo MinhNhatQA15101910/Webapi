@@ -1,8 +1,8 @@
-using Application.DTOs.Users;
 using Application.Queries.Users;
 using AutoMapper;
 using Domain.Exceptions;
 using Domain.Repositories;
+using SharedKernel.DTOs;
 
 namespace Application.Handlers.QueryHandlers.Users;
 

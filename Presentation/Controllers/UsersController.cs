@@ -5,6 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Extensions;
+using SharedKernel.DTOs;
+using SharedKernel.Params;
 
 namespace Presentation.Controllers;
 
@@ -33,5 +35,17 @@ public class UsersController(IMediator mediator) : ControllerBase
         await mediator.Send(new ChangePasswordCommand(changePasswordDto));
 
         return NoContent();
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers([FromQuery] UserParams userParams)
+    {
+        userParams.CurrentUserId = User.GetUserId();
+        var users = await mediator.Send(new GetUsersQuery(userParams));
+
+        Response.AddPaginationHeader(users);
+
+        return Ok(users);
     }
 }

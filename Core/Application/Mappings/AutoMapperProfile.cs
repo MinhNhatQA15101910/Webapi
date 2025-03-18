@@ -1,8 +1,7 @@
 using Application.DTOs.Auth;
-using Application.DTOs.Photos;
-using Application.DTOs.Users;
 using AutoMapper;
 using Domain.Entities;
+using SharedKernel.DTOs;
 
 namespace Application.Mappings;
 

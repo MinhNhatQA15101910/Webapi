@@ -6,6 +6,7 @@ using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SharedKernel.DTOs;
 
 namespace Application.Handlers.CommandHandlers.Auth;
 

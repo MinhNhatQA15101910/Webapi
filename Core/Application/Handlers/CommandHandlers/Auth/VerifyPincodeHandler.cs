@@ -1,5 +1,4 @@
 using Application.Commands.Auth;
-using Application.DTOs.Users;
 using Application.Interfaces;
 using Application.Services;
 using AutoMapper;
@@ -7,6 +6,7 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
+using SharedKernel.DTOs;
 
 namespace Application.Handlers.CommandHandlers.Auth;
 
