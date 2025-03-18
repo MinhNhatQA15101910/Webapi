@@ -34,8 +34,10 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<PincodeStore>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IFileService, FileService>();
 
         // Options pattern
+        services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
         services.Configure<EmailSenderSettings>(config.GetSection("EmailSenderSettings"));
 
         // Middleware

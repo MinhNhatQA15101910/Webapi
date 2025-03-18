@@ -24,6 +24,13 @@ public class UsersController(IMediator mediator) : ControllerBase
         return Ok(userDto);
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserDto>> GetUser(Guid id)
+    {
+        var userDto = await mediator.Send(new GetUserByIdQuery(id));
+        return Ok(userDto);
+    }
+
     [HttpPatch("change-password")]
     [Authorize]
     public async Task<ActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
@@ -47,5 +54,17 @@ public class UsersController(IMediator mediator) : ControllerBase
         Response.AddPaginationHeader(users);
 
         return Ok(users);
+    }
+
+    [HttpPost("add-photo")]
+    [Authorize]
+    public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+    {
+        var photo = await mediator.Send(new AddPhotoCommand(User.GetUserId(), file));
+        return CreatedAtAction(
+            nameof(GetUser),
+            new { id = User.GetUserId() },
+            photo
+        );
     }
 }
