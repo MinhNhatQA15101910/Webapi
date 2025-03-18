@@ -67,4 +67,12 @@ public class UsersController(IMediator mediator) : ControllerBase
             photo
         );
     }
+
+    [HttpPut("set-main-photo/{photoId}")]
+    [Authorize]
+    public async Task<ActionResult> SetMainPhoto(Guid photoId)
+    {
+        await mediator.Send(new SetMainPhotoCommand(User.GetUserId(), photoId));
+        return NoContent();
+    }
 }

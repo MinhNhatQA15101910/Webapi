@@ -10,7 +10,7 @@ namespace Services;
 public class FileService : IFileService
 {
     private readonly Cloudinary _cloudinary;
-    private readonly string _folderRoot = "Webapi/";
+    private readonly string _folderRoot;
 
     public FileService(IOptions<CloudinarySettings> config)
     {
@@ -21,6 +21,8 @@ public class FileService : IFileService
         );
 
         _cloudinary = new Cloudinary(acc);
+
+        _folderRoot = config.Value.FolderRoot;
     }
 
     public async Task<ImageUploadResult> UploadPhotoAsync(string folderPath, IFormFile file)
@@ -33,7 +35,7 @@ public class FileService : IFileService
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(file.FileName, stream),
-                Folder = _folderRoot + folderPath
+                Folder = _folderRoot + "/" + folderPath
             };
 
             uploadResult = await _cloudinary.UploadAsync(uploadParams);
