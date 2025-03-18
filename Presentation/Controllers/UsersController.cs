@@ -75,4 +75,12 @@ public class UsersController(IMediator mediator) : ControllerBase
         await mediator.Send(new SetMainPhotoCommand(User.GetUserId(), photoId));
         return NoContent();
     }
+
+    [HttpDelete("delete-photo/{photoId}")]
+    [Authorize]
+    public async Task<IActionResult> DeletePhoto(Guid photoId)
+    {
+        await mediator.Send(new DeletePhotoCommand(User.GetUserId(), photoId));
+        return Ok();
+    }
 }

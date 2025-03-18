@@ -25,6 +25,17 @@ public class FileService : IFileService
         _folderRoot = config.Value.FolderRoot;
     }
 
+    public async Task<DeletionResult> DeleteFileAsync(string publicId, ResourceType resourceType)
+    {
+        var deletionParams = new DeletionParams(publicId)
+        {
+            ResourceType = resourceType
+        };
+
+        var deletionResult = await _cloudinary.DestroyAsync(deletionParams);
+        return deletionResult;
+    }
+
     public async Task<ImageUploadResult> UploadPhotoAsync(string folderPath, IFormFile file)
     {
         var uploadResult = new ImageUploadResult();
