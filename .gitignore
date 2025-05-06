@@ -483,7 +483,6 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-Presentation/appsettings.json
-Presentation/auth.db
-Presentation/auth.db-shm
-Presentation/auth.db-wal
+Webapi.Presentation/nike_clone.db
+Webapi.Presentation/nike_clone.db-shm
+Webapi.Presentation/nike_clone.db-wal
