@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Webapi.Infrastructure.Migrations;
+namespace Webapi.Infrastructure.Persistence.Migrations;
 
 /// <inheritdoc />
 public partial class SqlInitial : Migration
