@@ -9,6 +9,8 @@ public static class ApplicationServiceExtensions
     {
         services.AddControllers();
         services.AddHttpContextAccessor();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
 
         return services.AddDatabaseContext(config);
     }
