@@ -11,7 +11,7 @@ using Webapi.Infrastructure.Persistence;
 namespace Webapi.Infrastructure.Persistence.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-[Migration("20250507103545_SqlInitial")]
+[Migration("20250508105735_SqlInitial")]
 partial class SqlInitial
 {
     /// <inheritdoc />
