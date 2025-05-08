@@ -1,4 +1,4 @@
-namespace Domain.Exceptions;
+namespace Webapi.Application.Common.Exceptions;
 
 public abstract class ApplicationException(string title, string message) : Exception(message)
 {

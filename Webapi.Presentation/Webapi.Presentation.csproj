@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Webapi.Application\Webapi.Application.csproj" />
     <ProjectReference Include="..\Webapi.Infrastructure.Persistence\Webapi.Infrastructure.Persistence.csproj" />
   </ItemGroup>
 

@@ -4,6 +4,7 @@ using Webapi.Domain.Entities;
 using Webapi.Infrastructure.Persistence;
 using Webapi.Infrastructure.Persistence.Data;
 using Webapi.Presentation.Extensions;
+using Webapi.Presentation.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

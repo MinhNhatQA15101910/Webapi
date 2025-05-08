@@ -1,4 +1,4 @@
-namespace Domain.Exceptions;
+namespace Webapi.Application.Common.Exceptions;
 
 public class ValidationException(IReadOnlyDictionary<string, string[]> errorsDictionary)
     : ApplicationException("Validation Failure", "One or more validation errors occurred.")
