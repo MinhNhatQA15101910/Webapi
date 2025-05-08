@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Webapi.Application.AuthCQRS.Commands.Login;
+using Webapi.Application.AuthCQRS.Commands.ValidateEmail;
 using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.SharedKernel.DTOs;
 
@@ -22,5 +23,17 @@ public class AuthController(IMediator mediator) : ControllerBase
     {
         var token = await mediator.Send(new ValidateSignupCommand(validateSignupDto));
         return Ok(new { token });
+    }
+
+    [HttpPost("email-exists")]
+    public async Task<ActionResult<object>> EmailExists(ValidateEmailDto validateEmailDto)
+    {
+        var exists = await mediator.Send(new ValidateEmailCommand(validateEmailDto));
+        if (exists is bool)
+        {
+            return exists;
+        }
+
+        return Ok(new { token = exists });
     }
 }
