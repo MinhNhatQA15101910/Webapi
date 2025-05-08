@@ -1,4 +1,4 @@
-namespace SharedKernel.DTOs;
+namespace Webapi.SharedKernel.DTOs;
 
 public class UserDto
 {
