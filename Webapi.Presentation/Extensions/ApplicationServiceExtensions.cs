@@ -2,8 +2,10 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Webapi.Application;
+using Webapi.Application.Common.Helpers;
 using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Infrastructure.Persistence;
+using Webapi.Infrastructure.Services.Configurations;
 using Webapi.Infrastructure.Services.Services;
 using Webapi.Presentation.Middlewares;
 
@@ -22,7 +24,7 @@ public static class ApplicationServiceExtensions
 
         return services.AddDatabaseContext(config)
             .AddApplication()
-            .AddExternalServices();
+            .AddExternalServices(config);
     }
 
     public static IServiceCollection AddApplication(this IServiceCollection services)
@@ -32,14 +34,19 @@ public static class ApplicationServiceExtensions
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddValidatorsFromAssembly(applicationAssembly);
 
+        services.AddSingleton<PincodeStore>();
+
         services.AddAutoMapper(applicationAssembly);
 
         return services;
     }
 
-    public static IServiceCollection AddExternalServices(this IServiceCollection services)
+    public static IServiceCollection AddExternalServices(this IServiceCollection services, IConfiguration config)
     {
+        services.Configure<EmailSenderSettings>(config.GetSection(nameof(EmailSenderSettings)));
+
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IEmailService, EmailService>();
 
         return services;
     }

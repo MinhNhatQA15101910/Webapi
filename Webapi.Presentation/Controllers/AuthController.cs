@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Webapi.Application.AuthCQRS.Commands.Login;
+using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.SharedKernel.DTOs;
 
 namespace Webapi.Presentation.Controllers;
@@ -14,5 +15,12 @@ public class AuthController(IMediator mediator) : ControllerBase
     {
         var user = await mediator.Send(new LoginCommand(loginDto));
         return Ok(user);
+    }
+
+    [HttpPost("validate-signup")]
+    public async Task<ActionResult<UserDto>> ValidateSignup(ValidateSignupDto validateSignupDto)
+    {
+        var token = await mediator.Send(new ValidateSignupCommand(validateSignupDto));
+        return Ok(new { token });
     }
 }
