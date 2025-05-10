@@ -1,4 +1,5 @@
 using AutoMapper;
+using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Domain.Entities;
 using Webapi.SharedKernel.DTOs;
 
@@ -11,7 +12,7 @@ public class AutoMapperProfile : Profile
         CreateMap<UserPhoto, PhotoDto>();
         CreateMap<User, UserDto>()
             .ForMember(
-                dest => dest.Roles, 
+                dest => dest.Roles,
                 opt => opt.MapFrom(
                     src => src.UserRoles.Select(
                         ur => ur.Role.Name).ToList()))
@@ -20,5 +21,6 @@ public class AutoMapperProfile : Profile
                 opt => opt.MapFrom(
                     src => src.Photos.FirstOrDefault(
                         p => p.IsMain)!.Url));
+        CreateMap<ValidateSignupDto, User>();
     }
 }
