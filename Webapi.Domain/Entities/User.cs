@@ -8,4 +8,6 @@ public class User : IdentityUser<Guid>
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<UserPhoto> Photos { get; set; } = [];
     public ICollection<UserRole> UserRoles { get; set; } = [];
+    public ICollection<CartItem> CartItems { get; set; } = [];
+    public ICollection<Order> Orders { get; set; } = [];
 }
