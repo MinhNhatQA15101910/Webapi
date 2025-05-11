@@ -5,14 +5,17 @@ namespace Webapi.Application.Common.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
+    public static Guid GetUserId(this ClaimsPrincipal user)
+    {
+        var userIdString = user.FindFirstValue(ClaimTypes.NameIdentifier) 
+            ?? throw new Exception("Cannot get user id from token");
+        return Guid.Parse(userIdString);
+    }
+
     public static string GetEmail(this ClaimsPrincipal user)
     {
-        var email = user.FindFirstValue(ClaimTypes.Email);
-        if (email == null)
-        {
-            throw new Exception("Cannot get email from token");
-        }
-
+        var email = user.FindFirstValue(ClaimTypes.Email) 
+            ?? throw new Exception("Cannot get email from token");
         return email;
     }
 

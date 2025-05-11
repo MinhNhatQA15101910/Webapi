@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Webapi.Application.AuthCQRS.Commands.Login;
+using Webapi.Application.AuthCQRS.Commands.ResetPassword;
 using Webapi.Application.AuthCQRS.Commands.ValidateEmail;
 using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Application.AuthCQRS.Commands.VerifyPincode;
@@ -50,5 +51,14 @@ public class AuthController(IMediator mediator) : ControllerBase
         }
 
         return Ok(result);
+    }
+
+    [HttpPatch("reset-password")]
+    [Authorize]
+    public async Task<ActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+    {
+        await mediator.Send(new ResetPasswordCommand(resetPasswordDto));
+
+        return NoContent();
     }
 }
