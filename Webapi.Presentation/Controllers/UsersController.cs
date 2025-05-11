@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Webapi.Application.UsersCQRS.Commands.ChangePassword;
 using Webapi.Application.UsersCQRS.Queries.GetCurrentUser;
 using Webapi.Application.UsersCQRS.Queries.GetUserById;
 using Webapi.SharedKernel.DTOs;
@@ -24,5 +25,14 @@ public class UsersController(IMediator mediator) : ControllerBase
     {
         var userDto = await mediator.Send(new GetUserByIdQuery(id));
         return Ok(userDto);
+    }
+
+    [HttpPatch("change-password")]
+    [Authorize]
+    public async Task<ActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+    {
+        await mediator.Send(new ChangePasswordCommand(changePasswordDto));
+
+        return NoContent();
     }
 }
