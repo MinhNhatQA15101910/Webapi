@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Webapi.Application;
 using Webapi.Application.Common.Helpers;
 using Webapi.Application.Common.Interfaces.Services;
+using Webapi.Domain.Interfaces;
 using Webapi.Infrastructure.Persistence;
+using Webapi.Infrastructure.Persistence.Repositories;
 using Webapi.Infrastructure.Services.Configurations;
 using Webapi.Infrastructure.Services.Services;
 using Webapi.Presentation.Middlewares;
@@ -57,6 +59,8 @@ public static class ApplicationServiceExtensions
         {
             options.UseSqlite(config.GetConnectionString("DefaultConnection"));
         });
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }

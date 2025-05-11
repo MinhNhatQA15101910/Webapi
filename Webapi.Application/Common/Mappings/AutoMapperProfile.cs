@@ -1,9 +1,10 @@
+
 using AutoMapper;
 using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Domain.Entities;
 using Webapi.SharedKernel.DTOs;
 
-namespace Webapi.Application.Mappings;
+namespace Webapi.Application.Common.Mappings;
 
 public class AutoMapperProfile : Profile
 {
