@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Webapi.Application.Common.Extensions;
+using Webapi.Application.UsersCQRS.Commands.AddPhoto;
 using Webapi.Application.UsersCQRS.Commands.ChangePassword;
 using Webapi.Application.UsersCQRS.Queries.GetCurrentUser;
 using Webapi.Application.UsersCQRS.Queries.GetUserById;
@@ -48,5 +50,17 @@ public class UsersController(IMediator mediator) : ControllerBase
         Response.AddPaginationHeader(users);
 
         return Ok(users);
+    }
+
+    [HttpPost("add-photo")]
+    [Authorize]
+    public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+    {
+        var photo = await mediator.Send(new AddPhotoCommand(file));
+        return CreatedAtAction(
+            nameof(GetUser),
+            new { id = User.GetUserId() },
+            photo
+        );
     }
 }

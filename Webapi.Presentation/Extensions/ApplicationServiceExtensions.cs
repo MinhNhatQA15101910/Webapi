@@ -46,9 +46,11 @@ public static class ApplicationServiceExtensions
     public static IServiceCollection AddExternalServices(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<EmailSenderSettings>(config.GetSection(nameof(EmailSenderSettings)));
+        services.Configure<CloudinarySettings>(config.GetSection(nameof(CloudinarySettings)));
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IFileService, FileService>();
 
         return services;
     }
