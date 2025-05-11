@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Webapi.Application.UsersCQRS.Commands.ChangePassword;
 using Webapi.Application.UsersCQRS.Queries.GetCurrentUser;
 using Webapi.Application.UsersCQRS.Queries.GetUserById;
+using Webapi.Application.UsersCQRS.Queries.GetUsers;
+using Webapi.Presentation.Extensions;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.Params;
 
 namespace Webapi.Presentation.Controllers;
 
@@ -34,5 +37,16 @@ public class UsersController(IMediator mediator) : ControllerBase
         await mediator.Send(new ChangePasswordCommand(changePasswordDto));
 
         return NoContent();
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers([FromQuery] UserParams userParams)
+    {
+        var users = await mediator.Send(new GetUsersQuery(userParams));
+
+        Response.AddPaginationHeader(users);
+
+        return Ok(users);
     }
 }
