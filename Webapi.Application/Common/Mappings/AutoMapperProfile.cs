@@ -1,4 +1,3 @@
-
 using AutoMapper;
 using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Domain.Entities;
@@ -23,5 +22,18 @@ public class AutoMapperProfile : Profile
                     src => src.Photos.FirstOrDefault(
                         p => p.IsMain)!.Url));
         CreateMap<ValidateSignupDto, User>();
+        
+        CreateMap<ProductPhoto, ProductPhotoDto>();
+        CreateMap<Category, CategoryDto>();
+        
+        CreateMap<Product, ProductDto>()
+            .ForMember(
+                dest => dest.Categories,
+                opt => opt.MapFrom(src => 
+                    src.Categories.Select(pc => pc.Category)))
+            .ForMember(
+                dest => dest.MainPhotoUrl,
+                opt => opt.MapFrom(src => 
+                    src.Photos.FirstOrDefault(p => p.IsMain)!.Url));
     }
 }

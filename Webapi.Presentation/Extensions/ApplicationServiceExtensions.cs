@@ -22,6 +22,9 @@ public static class ApplicationServiceExtensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
+        // Add CORS services
+        services.AddCors();
+
         services.AddScoped<ExceptionHandlingMiddleware>();
 
         return services.AddDatabaseContext(config)
@@ -63,6 +66,7 @@ public static class ApplicationServiceExtensions
         });
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
 
         return services;
     }

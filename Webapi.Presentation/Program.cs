@@ -21,6 +21,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Add CORS middleware
+app.UseCors(policy => policy
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .WithOrigins("http://localhost:3000") 
+    .AllowCredentials());
+
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
