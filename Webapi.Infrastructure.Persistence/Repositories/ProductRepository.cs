@@ -32,6 +32,7 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Photos)
             .Include(p => p.Categories)
                 .ThenInclude(pc => pc.Category)
+            .Include(p => p.Sizes) // Add this line to include sizes
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
@@ -41,6 +42,7 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Photos)
             .Include(p => p.Categories)
                 .ThenInclude(pc => pc.Category)
+            .Include(p => p.Sizes) // Add this line to include sizes
             .ToListAsync(cancellationToken);
     }
 
@@ -50,6 +52,7 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Photos)
             .Include(p => p.Categories)
                 .ThenInclude(pc => pc.Category)
+            .Include(p => p.Sizes) // Add this line to include sizes
             .AsQueryable();
 
         // Apply filtering
@@ -104,6 +107,7 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Photos)
             .Include(p => p.Categories)
                 .ThenInclude(pc => pc.Category)
+            .Include(p => p.Sizes) // Add this line to include sizes
             .Where(predicate)
             .ToListAsync(cancellationToken);
     }
@@ -283,6 +287,7 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Photos)
             .Include(p => p.Categories)
                 .ThenInclude(pc => pc.Category)
+            .Include(p => p.Sizes) // Add this line to include sizes
             .Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm))
             .AsQueryable();
 
@@ -328,15 +333,15 @@ public class ProductRepository : IProductRepository
             .Where(pc => pc.CategoryId == categoryId)
             .Select(pc => pc.Product)
             .Include(p => p.Photos)
+            .Include(p => p.Sizes) // Add this line to include sizes
             .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Product>> GetFeaturedProductsAsync(int count, CancellationToken cancellationToken = default)
     {
-        // This is a simple implementation that returns the most recent products
-        // In a real application, you might have a "Featured" flag on products
         return await _context.Products
             .Include(p => p.Photos)
+            .Include(p => p.Sizes) // Add this line to include sizes
             .OrderByDescending(p => p.CreatedAt)
             .Take(count)
             .ToListAsync(cancellationToken);
@@ -346,6 +351,7 @@ public class ProductRepository : IProductRepository
     {
         return await _context.Products
             .Include(p => p.Photos)
+            .Include(p => p.Sizes) // Add this line to include sizes
             .OrderByDescending(p => p.CreatedAt)
             .Take(count)
             .ToListAsync(cancellationToken);
@@ -362,10 +368,56 @@ public class ProductRepository : IProductRepository
         // Get products that share categories with the specified product
         return await _context.Products
             .Include(p => p.Photos)
+            .Include(p => p.Sizes) // Add this line to include sizes
             .Where(p => p.Id != productId && p.Categories.Any(pc => productCategories.Contains(pc.CategoryId)))
             .OrderByDescending(p => p.Categories.Count(pc => productCategories.Contains(pc.CategoryId))) // Order by number of matching categories
             .Take(count)
             .ToListAsync(cancellationToken);
+    }
+
+    #endregion
+
+    #region Size Operations
+
+    public async Task<IEnumerable<ProductSize>> GetProductSizesAsync(Guid productId, CancellationToken cancellationToken = default)
+    {
+        return await _context.ProductSizes
+            .Where(ps => ps.ProductId == productId)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task AddSizeAsync(Guid productId, ProductSize size, CancellationToken cancellationToken = default)
+    {
+        // Set the ProductId
+        size.ProductId = productId;
+        
+        _context.ProductSizes.Add(size);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateSizeAsync(Guid sizeId, string sizeName, int quantity, CancellationToken cancellationToken = default)
+    {
+        var size = await _context.ProductSizes.FindAsync(new object[] { sizeId }, cancellationToken);
+        
+        if (size != null)
+        {
+            size.Size = sizeName;
+            size.Quantity = quantity;
+            size.UpdatedAt = DateTime.UtcNow;
+            
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+    }
+
+    public async Task DeleteSizeAsync(Guid sizeId, CancellationToken cancellationToken = default)
+    {
+        var size = await _context.ProductSizes.FindAsync(new object[] { sizeId }, cancellationToken);
+        
+        if (size != null)
+        {
+            _context.ProductSizes.Remove(size);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 
     #endregion

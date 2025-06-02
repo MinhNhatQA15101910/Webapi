@@ -45,4 +45,13 @@ public interface IProductRepository
     Task<IEnumerable<Product>> GetFeaturedProductsAsync(int count, CancellationToken cancellationToken = default);
     Task<IEnumerable<Product>> GetNewArrivalsAsync(int count, CancellationToken cancellationToken = default);
     Task<IEnumerable<Product>> GetRelatedProductsAsync(Guid productId, int count, CancellationToken cancellationToken = default);
+    
+    #region Size Operations
+
+    Task<IEnumerable<ProductSize>> GetProductSizesAsync(Guid productId, CancellationToken cancellationToken = default);
+    Task AddSizeAsync(Guid productId, ProductSize size, CancellationToken cancellationToken = default);
+    Task UpdateSizeAsync(Guid sizeId, string sizeName, int quantity, CancellationToken cancellationToken = default);
+    Task DeleteSizeAsync(Guid sizeId, CancellationToken cancellationToken = default);
+
+    #endregion
 }
