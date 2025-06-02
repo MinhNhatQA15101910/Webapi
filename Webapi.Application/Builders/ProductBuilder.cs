@@ -7,7 +7,7 @@ public class ProductBuilder
 {
     private readonly Product _product = new();
     private readonly List<Guid> _categoryIds = [];
-    private readonly List<ProductSizeCreateDto> _sizes = [];
+    private readonly List<CreateProductSizeDto> _sizes = [];
     
     public ProductBuilder WithName(string name)
     {
@@ -42,7 +42,7 @@ public class ProductBuilder
         return this;
     }
     
-    public ProductBuilder WithSizes(IEnumerable<ProductSizeCreateDto> sizes)
+    public ProductBuilder WithSizes(IEnumerable<CreateProductSizeDto> sizes)
     {
         if (sizes != null)
         {
@@ -51,7 +51,7 @@ public class ProductBuilder
         return this;
     }
     
-    public (Product Product, List<Guid> CategoryIds, List<ProductSizeCreateDto> Sizes) Build()
+    public (Product Product, List<Guid> CategoryIds, List<CreateProductSizeDto> Sizes) Build()
     {
         return (_product, _categoryIds, _sizes);
     }
