@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace Webapi.SharedKernel.DTOs;
 
 public class ProductDto
@@ -12,6 +14,7 @@ public class ProductDto
     public string? MainPhotoUrl { get; set; }
     public ICollection<ProductPhotoDto> Photos { get; set; } = new List<ProductPhotoDto>();
     public ICollection<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
+    public ICollection<ProductSizeDto> Sizes { get; set; } = new List<ProductSizeDto>();
 }
 
 public class ProductPhotoDto
@@ -22,13 +25,6 @@ public class ProductPhotoDto
     public bool IsMain { get; set; }
 }
 
-public class CategoryDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-}
-
 public class CreateProductDto
 {
     public string Name { get; set; } = string.Empty;
@@ -36,6 +32,10 @@ public class CreateProductDto
     public decimal Price { get; set; }
     public int InStock { get; set; }
     public ICollection<Guid> CategoryIds { get; set; } = new List<Guid>();
+    public ICollection<CreateProductSizeDto> Sizes { get; set; } = new List<CreateProductSizeDto>();
+    public ICollection<Guid> SizeIds { get; set; } = new List<Guid>();
+    public IFormFile? MainImage { get; set; }
+    public ICollection<IFormFile>? AdditionalImages { get; set; }
 }
 
 public class UpdateProductDto
@@ -45,4 +45,5 @@ public class UpdateProductDto
     public decimal Price { get; set; }
     public int InStock { get; set; }
     public ICollection<Guid> CategoryIds { get; set; } = new List<Guid>();
+    public ICollection<CreateProductSizeDto> Sizes { get; set; } = new List<CreateProductSizeDto>();
 }
