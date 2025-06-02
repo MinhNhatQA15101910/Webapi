@@ -30,7 +30,8 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.Products, opt => opt.Ignore()); // Ignore Products to prevent circular mapping
 
         CreateMap<ProductSize, ProductSizeDto>();
-        CreateMap<ProductSizeCreateDto, ProductSize>();
+        CreateMap<CreateProductSizeDto, ProductSize>();
+        CreateMap<UpdateProductSizeDto, ProductSize>();
         
         CreateMap<Product, ProductDto>()
             .ForMember(
@@ -52,6 +53,10 @@ public class AutoMapperProfile : Profile
             .ForMember(
                 dest => dest.Photos,
                 opt => opt.MapFrom(src => 
-                    src.Photos != null ? src.Photos : new List<ProductPhoto>()));
+                    src.Photos != null ? src.Photos : new List<ProductPhoto>()))
+            .ForMember(
+                dest => dest.Sizes,
+                opt => opt.MapFrom(src => 
+                    src.Sizes != null ? src.Sizes : new List<ProductSize>()));
     }
 }

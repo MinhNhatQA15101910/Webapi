@@ -108,10 +108,6 @@ public class AppDbContext : IdentityDbContext<
             .HasForeignKey(x => x.CategoryId)
             .IsRequired();
 
-        builder.Entity<ProductSize>()
-            .HasOne(ps => ps.Product)
-            .WithMany(p => p.Sizes)
-            .HasForeignKey(ps => ps.ProductId);
 
     }
 }
