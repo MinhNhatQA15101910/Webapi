@@ -29,6 +29,8 @@ public class AppDbContext : IdentityDbContext<
     public DbSet<Category> Categories { get; set; }
     public DbSet<ProductPhoto> ProductPhotos { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
+    
+    public DbSet<ProductSize> ProductSizes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -105,5 +107,11 @@ public class AppDbContext : IdentityDbContext<
             .WithOne(x => x.Category)
             .HasForeignKey(x => x.CategoryId)
             .IsRequired();
+
+        builder.Entity<ProductSize>()
+            .HasOne(ps => ps.Product)
+            .WithMany(p => p.Sizes)
+            .HasForeignKey(ps => ps.ProductId);
+
     }
 }

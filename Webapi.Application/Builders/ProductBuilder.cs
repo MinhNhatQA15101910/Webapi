@@ -7,6 +7,7 @@ public class ProductBuilder
 {
     private readonly Product _product = new();
     private readonly List<Guid> _categoryIds = [];
+    private readonly List<ProductSizeCreateDto> _sizes = [];
     
     public ProductBuilder WithName(string name)
     {
@@ -34,16 +35,25 @@ public class ProductBuilder
     
     public ProductBuilder WithCategories(IEnumerable<Guid> categoryIds)
     {
-        _categoryIds.AddRange(categoryIds);
+        if (categoryIds != null)
+        {
+            _categoryIds.AddRange(categoryIds);
+        }
         return this;
     }
     
-    public (Product Product, List<Guid> CategoryIds) Build()
+    public ProductBuilder WithSizes(IEnumerable<ProductSizeCreateDto> sizes)
     {
-        _product.Id = Guid.NewGuid();
-        _product.CreatedAt = DateTime.UtcNow;
-        _product.UpdatedAt = DateTime.UtcNow;
-        return (_product, _categoryIds);
+        if (sizes != null)
+        {
+            _sizes.AddRange(sizes);
+        }
+        return this;
+    }
+    
+    public (Product Product, List<Guid> CategoryIds, List<ProductSizeCreateDto> Sizes) Build()
+    {
+        return (_product, _categoryIds, _sizes);
     }
     
     public static ProductBuilder FromDto(CreateProductDto dto)
@@ -53,22 +63,16 @@ public class ProductBuilder
             .WithDescription(dto.Description)
             .WithPrice(dto.Price)
             .WithStock(dto.InStock)
-            .WithCategories(dto.CategoryIds);
+            .WithCategories(dto.CategoryIds)
+            .WithSizes(dto.Sizes);
     }
     
     public static ProductBuilder FromEntity(Product product)
     {
-        var builder = new ProductBuilder()
+        return new ProductBuilder()
             .WithName(product.Name)
             .WithDescription(product.Description)
             .WithPrice(product.Price)
             .WithStock(product.InStock);
-        
-        if (product.Categories.Any())
-        {
-            builder.WithCategories(product.Categories.Select(pc => pc.CategoryId));
-        }
-        
-        return builder;
     }
 }

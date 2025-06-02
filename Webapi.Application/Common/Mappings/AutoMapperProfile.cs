@@ -24,16 +24,34 @@ public class AutoMapperProfile : Profile
         CreateMap<ValidateSignupDto, User>();
         
         CreateMap<ProductPhoto, ProductPhotoDto>();
-        CreateMap<Category, CategoryDto>();
+        
+        // Fix the circular reference issue
+        CreateMap<Category, CategoryDto>()
+            .ForMember(dest => dest.Products, opt => opt.Ignore()); // Ignore Products to prevent circular mapping
+
+        CreateMap<ProductSize, ProductSizeDto>();
+        CreateMap<ProductSizeCreateDto, ProductSize>();
         
         CreateMap<Product, ProductDto>()
             .ForMember(
                 dest => dest.Categories,
                 opt => opt.MapFrom(src => 
-                    src.Categories.Select(pc => pc.Category)))
+                    src.Categories != null ? 
+                    src.Categories.Select(pc => new CategoryDto { 
+                        Id = pc.Category.Id, 
+                        Name = pc.Category.Name 
+                        // Don't include Products here to avoid circular reference
+                    }).ToList() : 
+                    new List<CategoryDto>()))
             .ForMember(
                 dest => dest.MainPhotoUrl,
                 opt => opt.MapFrom(src => 
-                    src.Photos.FirstOrDefault(p => p.IsMain)!.Url));
+                    src.Photos != null && src.Photos.Any(p => p.IsMain) ? 
+                    src.Photos.FirstOrDefault(p => p.IsMain)!.Url : 
+                    null))
+            .ForMember(
+                dest => dest.Photos,
+                opt => opt.MapFrom(src => 
+                    src.Photos != null ? src.Photos : new List<ProductPhoto>()));
     }
 }

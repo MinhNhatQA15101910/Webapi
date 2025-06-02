@@ -13,4 +13,5 @@ public class Product
     public ICollection<CartItem> CartItems { get; set; } = [];
     public ICollection<OrderProduct> Orders { get; set; } = [];
     public ICollection<ProductCategory> Categories { get; set; } = [];
+    public ICollection<ProductSize> Sizes { get; set; } = [];
 }
