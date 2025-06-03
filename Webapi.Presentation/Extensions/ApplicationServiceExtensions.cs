@@ -7,6 +7,7 @@ using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Domain.Interfaces;
 using Webapi.Infrastructure.Persistence;
 using Webapi.Infrastructure.Persistence.Repositories;
+using Webapi.Infrastructure.Repositories;
 using Webapi.Infrastructure.Services.Configurations;
 using Webapi.Infrastructure.Services.Services;
 using Webapi.Presentation.Middlewares;
@@ -21,6 +22,9 @@ public static class ApplicationServiceExtensions
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+
+        // Add CORS services
+        services.AddCors();
 
         services.AddScoped<ExceptionHandlingMiddleware>();
 
@@ -63,7 +67,10 @@ public static class ApplicationServiceExtensions
         });
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
-
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IProductPhotoRepository, ProductPhotoRepository>();
+        services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
         return services;
     }
 }

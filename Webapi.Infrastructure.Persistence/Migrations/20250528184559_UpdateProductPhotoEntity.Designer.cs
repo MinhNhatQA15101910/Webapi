@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Webapi.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using Webapi.Infrastructure.Persistence;
 namespace Webapi.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250528184559_UpdateProductPhotoEntity")]
+    partial class UpdateProductPhotoEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -341,35 +344,6 @@ namespace Webapi.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ProductPhotos");
-                });
-
-            modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("Webapi.Domain.Entities.Review", b =>
@@ -730,15 +704,6 @@ namespace Webapi.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.Product", "Product")
-                        .WithMany("Sizes")
-                        .HasForeignKey("ProductId");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Webapi.Domain.Entities.Review", b =>
                 {
                     b.HasOne("Webapi.Domain.Entities.User", "Owner")
@@ -809,8 +774,6 @@ namespace Webapi.Infrastructure.Persistence.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Photos");
-
-                    b.Navigation("Sizes");
                 });
 
             modelBuilder.Entity("Webapi.Domain.Entities.Role", b =>
