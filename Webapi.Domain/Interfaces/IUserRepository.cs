@@ -8,5 +8,5 @@ namespace Webapi.Domain.Interfaces;
 public interface IUserRepository
 {
     Task<User?> GetUserByIdAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<PagedList<UserDto>> GetUsersAsync(Guid userId, UserParams userParams, CancellationToken cancellationToken = default);
+    Task<PagedList<UserDto>> GetUsersAsync(Guid currentUserId, UserParams userParams, CancellationToken cancellationToken = default);
 }

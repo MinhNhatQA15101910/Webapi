@@ -6,6 +6,7 @@ using Webapi.Application.Common.Helpers;
 using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Domain.Interfaces;
 using Webapi.Infrastructure.Persistence;
+using Webapi.Infrastructure.Persistence.Proxies;
 using Webapi.Infrastructure.Persistence.Repositories;
 using Webapi.Infrastructure.Repositories;
 using Webapi.Infrastructure.Services.Configurations;
@@ -19,6 +20,7 @@ public static class ApplicationServiceExtensions
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddControllers();
+        services.AddMemoryCache();
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -51,10 +53,12 @@ public static class ApplicationServiceExtensions
     {
         services.Configure<EmailSenderSettings>(config.GetSection(nameof(EmailSenderSettings)));
         services.Configure<CloudinarySettings>(config.GetSection(nameof(CloudinarySettings)));
+        services.Configure<CacheSettings>(config.GetSection(nameof(CacheSettings)));
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<ICacheService, CacheService>();
 
         return services;
     }
@@ -66,11 +70,14 @@ public static class ApplicationServiceExtensions
             options.UseSqlite(config.GetConnectionString("DefaultConnection"));
         });
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<UserRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IProductPhotoRepository, ProductPhotoRepository>();
         services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
+
+        services.AddScoped<IUserRepository, UserProxy>();
+        
         return services;
     }
 }
