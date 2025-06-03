@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Webapi.Application.ProductCQRS.Commands.AddProductPhoto;
 using Webapi.Application.ProductCQRS.Commands.DeleteProduct;
-using Webapi.Application.ProductCQRS.Commands.DeleteProductPhoto;
 using Webapi.Application.ProductCQRS.Commands.SetMainProductPhoto;
 using Webapi.Application.ProductCQRS.Queries.GetProductById;
 using Webapi.Application.ProductCQRS.Queries.GetProductPhotos;
@@ -12,8 +11,10 @@ using Webapi.Application.ProductCQRS.Queries.GetProducts;
 using Webapi.Application.ProductCQRS.Commands.CreateProduct;
 using Webapi.Application.ProductCQRS.Commands.UpdateProduct;
 using Webapi.Presentation.Extensions;
-using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.Product;
+using Webapi.SharedKernel.DTOs.ProductPhoto;
 using Webapi.SharedKernel.Params;
+using ProductDto = Webapi.SharedKernel.DTOs.ProductDto;
 
 namespace Webapi.Presentation.Controllers;
 
@@ -47,11 +48,7 @@ public class ProductController(IMediator mediator) : ControllerBase
     {
         var product = await mediator.Send(new CreateProductCommand(createProductDto));
         
-        return CreatedAtAction(
-            nameof(GetProduct),
-            new { id = product.Id },
-            product
-        );
+        return Ok(product);
     }
     
     // PUT: api/Product/{id}
@@ -103,14 +100,5 @@ public class ProductController(IMediator mediator) : ControllerBase
     {
         var photo = await mediator.Send(new SetMainProductPhotoCommand(id, photoId));
         return Ok(photo);
-    }
-    
-    // DELETE: api/Product/{id}/photos/{photoId}
-    [HttpDelete("{id}/photos/{photoId}")]
-    // [Authorize(Roles = "Admin")]
-    public async Task<ActionResult> DeleteProductPhoto(Guid id, Guid photoId)
-    {
-        await mediator.Send(new DeleteProductPhotoCommand(id, photoId));
-        return NoContent();
     }
 }

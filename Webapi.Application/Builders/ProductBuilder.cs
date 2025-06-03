@@ -1,5 +1,6 @@
 using Webapi.Domain.Entities;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.Product;
 
 namespace Webapi.Application.Builders;
 

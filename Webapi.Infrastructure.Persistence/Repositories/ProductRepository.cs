@@ -2,21 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
-using Webapi.Infrastructure.Persistence;
+using Webapi.Infrastructure.Persistence.Data;
 using Webapi.SharedKernel.Helpers;
 using Webapi.SharedKernel.Params;
 
 namespace Webapi.Infrastructure.Persistence.Repositories;
 
-
-public class ProductRepository : IProductRepository
+public class ProductRepository(AppDbContext context) : IProductRepository
 {
-    private readonly AppDbContext _context;
-
-    public ProductRepository(AppDbContext context)
-    {
-        _context = context;
-    }
+    private readonly AppDbContext _context = context;
 
     #region Basic CRUD Operations
 
@@ -32,7 +26,7 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Photos)
             .Include(p => p.Categories)
                 .ThenInclude(pc => pc.Category)
-            .Include(p => p.Sizes) // Add this line to include sizes
+            .Include(p => p.Sizes)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
@@ -147,7 +141,7 @@ public class ProductRepository : IProductRepository
         };
 
         _context.ProductCategories.Add(productCategory);
-        await _context.SaveChangesAsync(cancellationToken);
+        // Remove SaveChangesAsync
     }
 
     public async Task RemoveCategoryAsync(Guid productId, Guid categoryId, CancellationToken cancellationToken = default)
@@ -158,7 +152,7 @@ public class ProductRepository : IProductRepository
         if (productCategory != null)
         {
             _context.ProductCategories.Remove(productCategory);
-            await _context.SaveChangesAsync(cancellationToken);
+            // Remove SaveChangesAsync
         }
     }
 
