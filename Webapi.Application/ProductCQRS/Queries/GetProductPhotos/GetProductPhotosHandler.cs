@@ -1,16 +1,11 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Webapi.Application.Common.Exceptions;
-using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
-using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
 using Webapi.SharedKernel.DTOs;
 
 namespace Webapi.Application.ProductCQRS.Queries.GetProductPhotos;
 
 public class GetProductPhotosHandler(
-    IHttpContextAccessor httpContextAccessor,
     IUnitOfWork unitOfWork,
     IMapper mapper
 ) : IQueryHandler<GetProductPhotosQuery, IEnumerable<ProductPhotoDto>>

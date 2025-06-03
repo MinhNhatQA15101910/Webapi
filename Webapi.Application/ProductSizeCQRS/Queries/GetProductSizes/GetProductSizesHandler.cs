@@ -1,9 +1,5 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using System.Linq;
-using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
-using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
 using Webapi.SharedKernel.DTOs;
 using Webapi.SharedKernel.Helpers;
@@ -11,7 +7,6 @@ using Webapi.SharedKernel.Helpers;
 namespace Webapi.Application.ProductSizeCQRS.Queries.GetProductSizes;
 
 public class GetProductSizesHandler(
-    IHttpContextAccessor httpContextAccessor,
     IUnitOfWork unitOfWork,
     IMapper mapper
 ) : IQueryHandler<GetProductSizesQuery, PagedList<ProductSizeDto>>
@@ -23,7 +18,7 @@ public class GetProductSizesHandler(
             request.ProductSizeParams, cancellationToken);
             
         // Map product sizes to DTOs
-        var productSizeDtos = productSizesPage.Select(size => mapper.Map<ProductSizeDto>(size)).ToList();
+        var productSizeDtos = productSizesPage.Select(mapper.Map<ProductSizeDto>).ToList();
         
         // Create new PagedList with mapped items
         return new PagedList<ProductSizeDto>(

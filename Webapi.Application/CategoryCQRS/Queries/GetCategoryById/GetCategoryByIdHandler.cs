@@ -13,13 +13,9 @@ public class GetCategoryByIdHandler(
 {
     public async Task<CategoryDto> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-        var category = await unitOfWork.CategoryRepository.GetCategoryWithDetailsAsync(request.Id, cancellationToken);
-        
-        if (category == null)
-        {
-            throw new Exception($"Category with ID {request.Id} not found");
-        }
-        
+        var category = await unitOfWork.CategoryRepository.GetCategoryWithDetailsAsync(request.Id, cancellationToken)
+            ?? throw new CategoryNotFoundException(request.Id);
+
         return mapper.Map<CategoryDto>(category);
     }
 }

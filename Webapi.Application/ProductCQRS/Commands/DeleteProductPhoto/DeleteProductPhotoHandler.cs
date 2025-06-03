@@ -1,5 +1,3 @@
-using AutoMapper;
-using CloudinaryDotNet;
 using Microsoft.AspNetCore.Http;
 using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Extensions;
@@ -13,8 +11,7 @@ namespace Webapi.Application.ProductCQRS.Commands.DeleteProductPhoto;
 public class DeleteProductPhotoHandler(
     IHttpContextAccessor httpContextAccessor,
     IUnitOfWork unitOfWork,
-    IFileService fileService,
-    IMapper mapper
+    IFileService fileService
 ) : ICommandHandler<DeleteProductPhotoCommand, ProductPhoto>
 {
     public async Task<ProductPhoto> Handle(DeleteProductPhotoCommand request, CancellationToken cancellationToken)
