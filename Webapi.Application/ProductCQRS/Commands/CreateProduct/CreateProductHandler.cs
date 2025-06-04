@@ -1,7 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Webapi.Application.Builders;
-using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Exceptions.Category;
 using Webapi.Application.Common.Exceptions.Product;
 using Webapi.Application.Common.Exceptions.ProductPhoto;
@@ -11,7 +10,8 @@ using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
-using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.Product;
+using Webapi.SharedKernel.DTOs.ProductSize;
 
 namespace Webapi.Application.ProductCQRS.Commands.CreateProduct;
 
@@ -85,7 +85,7 @@ public class CreateProductHandler(
                     }
                     catch (Exception ex)
                     {
-                        throw new ProductSizeCreateException($"Failed to create size '{sizeDto.Size}': {ex.Message}");
+                        throw new ProductSizeCreateException($"Failed to create size: {ex.Message}");
                     }
                 }
             }

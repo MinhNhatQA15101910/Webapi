@@ -8,6 +8,7 @@ using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Application.ProductCQRS.Commands.DeleteProduct;
 using Webapi.Domain.Interfaces;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.Product;
 
 public class DeleteProductHandler(
     IHttpContextAccessor httpContextAccessor,

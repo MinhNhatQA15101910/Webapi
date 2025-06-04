@@ -28,14 +28,5 @@ public class CreateProductValidator : AbstractValidator<CreateProductCommand>
         RuleFor(x => x.ProductDto.CategoryIds)
             .NotEmpty().WithMessage("At least one category is required");
             
-        RuleForEach(x => x.ProductDto.CategoryIds)
-            .MustAsync(async (categoryId, cancellation) => {
-                return await _unitOfWork.CategoryRepository.ExistsAsync(categoryId, cancellation);
-            }).WithMessage(x => $"Category with ID {x} does not exist");
-            
-        RuleForEach(x => x.ProductDto.SizeIds)
-            .MustAsync(async (sizeId, cancellation) => {
-                return await _unitOfWork.ProductSizeRepository.ExistsAsync(sizeId, cancellation);
-            }).WithMessage(x => $"Size with ID {x} does not exist");
     }
 }

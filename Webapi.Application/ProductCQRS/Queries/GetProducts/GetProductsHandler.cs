@@ -2,6 +2,7 @@ using AutoMapper;
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Domain.Interfaces;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.Product;
 using Webapi.SharedKernel.Helpers;
 
 namespace Webapi.Application.ProductCQRS.Queries.GetProducts;

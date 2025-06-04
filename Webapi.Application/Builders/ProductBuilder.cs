@@ -1,6 +1,7 @@
 using Webapi.Domain.Entities;
 using Webapi.SharedKernel.DTOs;
 using Webapi.SharedKernel.DTOs.Product;
+using Webapi.SharedKernel.DTOs.ProductSize;
 
 namespace Webapi.Application.Builders;
 

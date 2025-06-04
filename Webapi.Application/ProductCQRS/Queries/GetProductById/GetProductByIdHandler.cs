@@ -4,6 +4,7 @@ using Webapi.Application.Common.Exceptions.Product;
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Domain.Interfaces;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.Product;
 
 namespace Webapi.Application.ProductCQRS.Queries.GetProductById;
 
