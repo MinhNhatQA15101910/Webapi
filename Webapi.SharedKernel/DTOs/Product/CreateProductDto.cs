@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Webapi.SharedKernel.DTOs.ProductSize;
 
 namespace Webapi.SharedKernel.DTOs.Product;
 

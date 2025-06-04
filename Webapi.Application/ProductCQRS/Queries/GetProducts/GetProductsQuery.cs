@@ -1,5 +1,6 @@
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.Product;
 using Webapi.SharedKernel.Helpers;
 using Webapi.SharedKernel.Params;
 

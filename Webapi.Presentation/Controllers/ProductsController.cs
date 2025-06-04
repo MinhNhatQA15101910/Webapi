@@ -12,7 +12,6 @@ using Webapi.Presentation.Extensions;
 using Webapi.SharedKernel.DTOs.Product;
 using Webapi.SharedKernel.DTOs.ProductPhoto;
 using Webapi.SharedKernel.Params;
-using ProductDto = Webapi.SharedKernel.DTOs.ProductDto;
 
 namespace Webapi.Presentation.Controllers;
 

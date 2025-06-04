@@ -8,7 +8,8 @@ public class UnitOfWork(
     IProductRepository productRepository,
     IProductPhotoRepository productPhotoRepository,
     ICategoryRepository categoryRepository,
-    IProductSizeRepository productSizeRepository
+    IProductSizeRepository productSizeRepository,
+    ICartItemRepository cartItemRepository
 ) : IUnitOfWork
 {
     public IUserRepository UserRepository => userRepository;
@@ -17,6 +18,7 @@ public class UnitOfWork(
     public ICategoryRepository CategoryRepository => categoryRepository;
     public IProductPhotoRepository ProductPhotoRepository => productPhotoRepository;
     public IProductSizeRepository ProductSizeRepository => productSizeRepository;
+    public ICartItemRepository CartItemRepository => cartItemRepository;
 
     public async Task<bool> CompleteAsync()
     {

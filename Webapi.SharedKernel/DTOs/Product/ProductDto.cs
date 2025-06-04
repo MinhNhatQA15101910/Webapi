@@ -1,4 +1,5 @@
 using Webapi.SharedKernel.DTOs.ProductPhoto;
+using Webapi.SharedKernel.DTOs.ProductSize;
 
 namespace Webapi.SharedKernel.DTOs.Product;
 

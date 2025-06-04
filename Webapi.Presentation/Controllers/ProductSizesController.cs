@@ -8,6 +8,7 @@ using Webapi.Application.ProductSizeCQRS.Queries.GetProductSizes;
 using Webapi.Application.ProductSizeCQRS.Queries.GetProductSizesByProductId;
 using Webapi.Presentation.Extensions;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.ProductSize;
 using Webapi.SharedKernel.Params;
 
 namespace Webapi.Presentation.Controllers;

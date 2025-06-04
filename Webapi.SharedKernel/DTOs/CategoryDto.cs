@@ -1,3 +1,5 @@
+using Webapi.SharedKernel.DTOs.Product;
+
 namespace Webapi.SharedKernel.DTOs;
 
 public class CategoryDto
