@@ -51,7 +51,7 @@ public class ProductsController(IMediator mediator) : ControllerBase
     // PUT: api/Product/{id}
     [HttpPut("{id}")]
     // [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ProductDto>> UpdateProduct(Guid id, [FromBody] UpdateProductDto updateProductDto)
+    public async Task<ActionResult<ProductDto>> UpdateProduct(Guid id, [FromForm] UpdateProductDto updateProductDto)
     {
         var product = await mediator.Send(new UpdateProductCommand(id, updateProductDto));
         return Ok(product);
