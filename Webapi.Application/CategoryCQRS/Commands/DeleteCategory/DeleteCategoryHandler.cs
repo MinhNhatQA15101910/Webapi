@@ -18,7 +18,6 @@ public class DeleteCategoryHandler(
     {
         try
         {
-            var userId = httpContextAccessor.HttpContext.User.GetUserId();
             
             // Get category
             var category = await unitOfWork.CategoryRepository.GetByIdAsync(request.Id, cancellationToken)

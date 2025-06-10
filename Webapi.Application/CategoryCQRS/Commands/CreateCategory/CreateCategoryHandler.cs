@@ -19,7 +19,6 @@ public class CreateCategoryHandler(
     {
         try
         {
-            var userId = httpContextAccessor.HttpContext.User.GetUserId();
             // Create new category
             var category = new Category
             {
