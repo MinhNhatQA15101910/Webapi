@@ -107,7 +107,5 @@ public class AppDbContext : IdentityDbContext<
             .WithOne(x => x.Category)
             .HasForeignKey(x => x.CategoryId)
             .IsRequired();
-
-
     }
 }

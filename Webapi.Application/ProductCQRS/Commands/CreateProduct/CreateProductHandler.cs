@@ -26,9 +26,7 @@ public class CreateProductHandler(
     {
         try
         {
-            var userId = httpContextAccessor.HttpContext.User.GetUserId();
-
-            // Process size IDs
+            // Process existing sizes
             if (request.ProductDto.SizeIds?.Any() == true)
             {
                 foreach (var sizeId in request.ProductDto.SizeIds)
@@ -36,16 +34,12 @@ public class CreateProductHandler(
                     var size = await unitOfWork.ProductSizeRepository.GetByIdAsync(sizeId, cancellationToken)
                         ?? throw new ProductSizeNotFoundException(sizeId);
                     
-                    request.ProductDto.Sizes.Add(new CreateProductSizeDto
-                    {
-                        Size = size.Size,
-                        Quantity = size.Quantity
-                    });
+                    // We'll associate these existing sizes with the product after creation
                 }
             }
             
             // Use the builder pattern to create a new product
-            var (product, categoryIds, sizes) = ProductBuilder
+            var (product, categoryIds, newSizes, existingSizeIds) = ProductBuilder
                 .FromDto(request.ProductDto)
                 .Build();
                 
@@ -67,10 +61,10 @@ public class CreateProductHandler(
                 }
             }
             
-            // Add sizes if needed
-            if (sizes.Any())
+            // Add new sizes
+            if (newSizes.Any())
             {
-                foreach (var sizeDto in sizes)
+                foreach (var sizeDto in newSizes)
                 {
                     try
                     {
@@ -78,7 +72,9 @@ public class CreateProductHandler(
                         {
                             Size = sizeDto.Size,
                             Quantity = sizeDto.Quantity,
-                            ProductId = product.Id
+                            ProductId = product.Id,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow
                         };
                         
                         unitOfWork.ProductSizeRepository.Add(productSize);
@@ -90,7 +86,40 @@ public class CreateProductHandler(
                 }
             }
             
-            // Handle photos
+            // Link existing sizes to the product
+            if (existingSizeIds.Any())
+            {
+                foreach (var sizeId in existingSizeIds)
+                {
+                    try
+                    {
+                        var existingSize = await unitOfWork.ProductSizeRepository.GetByIdAsync(sizeId, cancellationToken)
+                            ?? throw new ProductSizeNotFoundException(sizeId);
+                        
+                        // Create a new size with the same properties but linked to this product
+                        var productSize = new ProductSize
+                        {
+                            Size = existingSize.Size,
+                            Quantity = existingSize.Quantity,
+                            ProductId = product.Id,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow
+                        };
+                        
+                        unitOfWork.ProductSizeRepository.Add(productSize);
+                    }
+                    catch (ProductSizeNotFoundException)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ProductSizeCreateException($"Failed to link existing size: {ex.Message}");
+                    }
+                }
+            }
+            
+            // Handle main image
             if (request.ProductDto.MainImage != null)
             {
                 try
