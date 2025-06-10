@@ -42,7 +42,7 @@ public class UsersController(IMediator mediator) : ControllerBase
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers([FromQuery] UserParams userParams)
     {
