@@ -6,7 +6,7 @@ public interface ICacheService
 {
     // Adds a cache entry and tracks its key in our ConcurrentDictionary.
     // options can define expiration strategies, priority, etc.
-    void Set<T>(string key, T value, MemoryCacheEntryOptions options);
+    void Set<T>(string key, T value);
 
     // Attempts to retrieve a cache entry.
     // If the key exists in the IMemoryCache, returns true along with the value.
@@ -15,6 +15,8 @@ public interface ICacheService
 
     // Removes a cache entry from both IMemoryCache and our dictionary.
     void Remove(string key);
+
+    void RemoveKeysStartingWith(string keyPart);
 
     // Returns all currently known (tracked) cache keys.
     // Note: This might include keys that recently expired, so you may want to
