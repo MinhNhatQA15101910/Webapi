@@ -49,8 +49,8 @@ public class CategoriesController(IMediator mediator) : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateCategory(Guid id, UpdateCategoryDto updateCategoryDto)
     {
-        await mediator.Send(new UpdateCategoryCommand(id, updateCategoryDto));
-        return NoContent();
+        var updatedProduct = await mediator.Send(new UpdateCategoryCommand(id, updateCategoryDto));
+        return Ok(updatedProduct);
     }
 
     [HttpDelete("{id}")]

@@ -2,6 +2,7 @@ using AutoMapper;
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Domain.Interfaces;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.ProductSize;
 using Webapi.SharedKernel.Helpers;
 
 namespace Webapi.Application.ProductSizeCQRS.Queries.GetProductSizes;

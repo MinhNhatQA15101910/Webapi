@@ -2,6 +2,10 @@ using AutoMapper;
 using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Domain.Entities;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.CartItem;
+using Webapi.SharedKernel.DTOs.Product;
+using Webapi.SharedKernel.DTOs.ProductPhoto;
+using Webapi.SharedKernel.DTOs.ProductSize;
 
 namespace Webapi.Application.Common.Mappings;
 
@@ -58,5 +62,19 @@ public class AutoMapperProfile : Profile
                 dest => dest.Sizes,
                 opt => opt.MapFrom(src => 
                     src.Sizes != null ? src.Sizes : new List<ProductSize>()));
+
+        CreateMap<CartItem, CartItemDto>()
+            .ForMember(
+                dest => dest.ProductName,
+                opt => opt.MapFrom(src => src.Product.Name))
+            .ForMember(
+                dest => dest.ProductPrice,
+                opt => opt.MapFrom(src => src.Product.Price))
+            .ForMember(
+                dest => dest.ProductPhotoUrl,
+                opt => opt.MapFrom(src => 
+                    src.Product.Photos != null && src.Product.Photos.Any(p => p.IsMain) ? 
+                    src.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url : 
+                    null));
     }
 }

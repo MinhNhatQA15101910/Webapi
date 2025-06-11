@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+using Webapi.Application.Common.Exceptions.Category;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Domain.Entities;
@@ -17,32 +17,33 @@ public class CreateCategoryHandler(
 {
     public async Task<CategoryDto> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
-        var userId = httpContextAccessor.HttpContext.User.GetUserId();
-        
-        Console.WriteLine(
-            "Creating category for user with id: {0}",
-            userId
-            );
-        
-        Console.WriteLine("Creating category");
-        Console.WriteLine("request: ", JsonConvert.SerializeObject(request));
-        // Create a new category
-        var category = new Category
+        try
         {
-            Id = Guid.NewGuid(),
-            Name = request.CategoryDto.Name,
-            Description = request.CategoryDto.Description,
-            Size = request.CategoryDto.Size,
-            Type = request.CategoryDto.Type,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-        
-        // Add category to database
-        unitOfWork.CategoryRepository.Add(category);
-        await unitOfWork.CompleteAsync();
-        
-        // Map to DTO and return
-        return mapper.Map<CategoryDto>(category);
+            // Create new category
+            var category = new Category
+            {
+                Name = request.CategoryDto.Name,
+                Description = request.CategoryDto.Description,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            
+            // Add to repository
+            unitOfWork.CategoryRepository.Add(category);
+            await unitOfWork.CompleteAsync();
+            
+            // Return mapped DTO
+            return mapper.Map<CategoryDto>(category);
+        }
+        catch (CategoryCreateException)
+        {
+            // Rethrow specific exceptions
+            throw;
+        }
+        catch (Exception ex)
+        {
+            // Wrap other exceptions
+            throw new CategoryCreateException($"An unexpected error occurred: {ex.Message}");
+        }
     }
 }

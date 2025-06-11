@@ -7,6 +7,7 @@ public interface IUnitOfWork
     IProductPhotoRepository ProductPhotoRepository { get; }
     ICategoryRepository CategoryRepository { get; }
     IProductSizeRepository ProductSizeRepository { get; }
+    ICartItemRepository CartItemRepository { get; }
     
     Task<bool> CompleteAsync();
 }

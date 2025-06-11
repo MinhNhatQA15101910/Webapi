@@ -1,5 +1,6 @@
 using AutoMapper;
 using Webapi.Application.Common.Exceptions;
+using Webapi.Application.Common.Exceptions.Category;
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Domain.Interfaces;
 using Webapi.SharedKernel.DTOs;

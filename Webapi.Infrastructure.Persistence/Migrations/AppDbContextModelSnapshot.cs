@@ -112,6 +112,9 @@ namespace Webapi.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ProductSizeId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
@@ -121,6 +124,8 @@ namespace Webapi.Infrastructure.Persistence.Migrations
                     b.HasKey("UserId", "ProductId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductSizeId");
 
                     b.ToTable("CartItems");
                 });
@@ -623,6 +628,12 @@ namespace Webapi.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Webapi.Domain.Entities.ProductSize", "ProductSize")
+                        .WithMany()
+                        .HasForeignKey("ProductSizeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Webapi.Domain.Entities.User", "User")
                         .WithMany("CartItems")
                         .HasForeignKey("UserId")
@@ -630,6 +641,8 @@ namespace Webapi.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("ProductSize");
 
                     b.Navigation("User");
                 });

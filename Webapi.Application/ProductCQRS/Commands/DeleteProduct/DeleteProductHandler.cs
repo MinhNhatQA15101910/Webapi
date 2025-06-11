@@ -1,45 +1,50 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Webapi.Application.Common.Extensions;
+using Webapi.Application.Common.Exceptions.Product;
+using Webapi.Application.Common.Exceptions.ProductPhoto;
 using Webapi.Application.Common.Interfaces.MediatR;
+using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Application.ProductCQRS.Commands.DeleteProduct;
 using Webapi.Domain.Interfaces;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.Product;
 
 public class DeleteProductHandler(
     IHttpContextAccessor httpContextAccessor,
     IUnitOfWork unitOfWork,
+    IFileService fileService,
     IMapper mapper
 ) : ICommandHandler<DeleteProductCommand, ProductDto>
 {
     public async Task<ProductDto> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        var userId = httpContextAccessor.HttpContext?.User.GetUserId();
-        
-        // Check if user has permission to delete the product (optional)
-        // This depends on your authorization strategy
-        
-        // Get product
-        var product = await unitOfWork.ProductRepository.GetByIdAsync(
-            request.ProductId, cancellationToken) 
-            ?? throw new Exception( $"Product with id: {request.ProductId} was not found");
-        
-        // Delete photos first (if you want to clean up related resources)
-        var photos = await unitOfWork.ProductRepository.GetProductPhotosAsync(
-            product.Id, cancellationToken);
-            
-        foreach (var photo in photos)
+        try
         {
-            await unitOfWork.ProductRepository.DeletePhotoAsync(photo.Id, cancellationToken);
+            // Get product with all related data
+            var product = await unitOfWork.ProductRepository.GetProductWithDetailsAsync(request.ProductId, cancellationToken)
+                ?? throw new ProductNotFoundException(request.ProductId);
+                
+            // Map to DTO for return value before deletion
+            var productDto = mapper.Map<ProductDto>(product);
+            
+            // Delete product
+            unitOfWork.ProductRepository.Delete(product);
+            
+            // Save changes
+            await unitOfWork.CompleteAsync();
+            
+            return productDto;
         }
-        
-        // Delete the product
-        unitOfWork.ProductRepository.Delete(product);
-        
-        // Save changes
-        await unitOfWork.CompleteAsync();
-        
-        return mapper.Map<ProductDto>(product);
+        catch (ProductNotFoundException)
+        {
+            // Rethrow these specific exceptions to maintain their status code
+            throw;
+        }
+        catch (Exception ex)
+        {
+            // Catch any other unexpected exceptions
+            throw new ProductDeleteException(request.ProductId, ex.Message);
+        }
     }
 }

@@ -2,21 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
-using Webapi.Infrastructure.Persistence;
+using Webapi.Infrastructure.Persistence.Data;
 using Webapi.SharedKernel.Helpers;
 using Webapi.SharedKernel.Params;
 
 namespace Webapi.Infrastructure.Persistence.Repositories;
 
-
-public class ProductRepository : IProductRepository
+public class ProductRepository(AppDbContext context) : IProductRepository
 {
-    private readonly AppDbContext _context;
-
-    public ProductRepository(AppDbContext context)
-    {
-        _context = context;
-    }
+    private readonly AppDbContext _context = context;
 
     #region Basic CRUD Operations
 
@@ -32,7 +26,7 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Photos)
             .Include(p => p.Categories)
                 .ThenInclude(pc => pc.Category)
-            .Include(p => p.Sizes) // Add this line to include sizes
+            .Include(p => p.Sizes)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 
@@ -52,7 +46,7 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Photos)
             .Include(p => p.Categories)
                 .ThenInclude(pc => pc.Category)
-            .Include(p => p.Sizes) // Add this line to include sizes
+            .Include(p => p.Sizes)
             .AsQueryable();
 
         // Apply filtering
@@ -76,29 +70,53 @@ public class ProductRepository : IProductRepository
             query = query.Where(p => p.Price <= productParams.MaxPrice.Value);
         }
 
-        // Apply sorting
-        query = productParams.OrderBy?.ToLower() switch
+        // Convert the query to list before ordering by price
+        // This moves the sorting operation to the client side for decimal fields
+        if (productParams.OrderBy?.ToLower() == "price")
         {
-            "name" => productParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(p => p.Name) 
-                : query.OrderBy(p => p.Name),
-            "price" => productParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(p => p.Price) 
-                : query.OrderBy(p => p.Price),
-            "created" => productParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(p => p.CreatedAt) 
-                : query.OrderBy(p => p.CreatedAt),
-            _ => productParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(p => p.Name) 
-                : query.OrderBy(p => p.Name),
-        };
+            // Execute the query to get the data without ordering
+            var products = await query.ToListAsync(cancellationToken);
+            
+            // Then sort in memory
+            if (productParams.SortBy?.ToLower() == "desc")
+            {
+                products = products.OrderByDescending(p => p.Price).ToList();
+            }
+            else
+            {
+                products = products.OrderBy(p => p.Price).ToList();
+            }
+            
+            // Create paged list from memory collection
+            return PagedList<Product>.Create(
+                products,
+                productParams.PageNumber,
+                productParams.PageSize
+            );
+        }
+        else
+        {
+            // For other fields, let the database handle the sorting
+            query = productParams.OrderBy?.ToLower() switch
+            {
+                "name" => productParams.SortBy?.ToLower() == "desc" 
+                    ? query.OrderByDescending(p => p.Name) 
+                    : query.OrderBy(p => p.Name),
+                "created" => productParams.SortBy?.ToLower() == "desc" 
+                    ? query.OrderByDescending(p => p.CreatedAt) 
+                    : query.OrderBy(p => p.CreatedAt),
+                _ => productParams.SortBy?.ToLower() == "desc" 
+                    ? query.OrderByDescending(p => p.Name) 
+                    : query.OrderBy(p => p.Name),
+            };
 
-        return await PagedList<Product>.CreateAsync(
-            query,
-            productParams.PageNumber,
-            productParams.PageSize,
-            cancellationToken
-        );
+            return await PagedList<Product>.CreateAsync(
+                query,
+                productParams.PageNumber,
+                productParams.PageSize,
+                cancellationToken
+            );
+        }
     }
 
     public async Task<IEnumerable<Product>> FindAsync(Expression<Func<Product, bool>> predicate, CancellationToken cancellationToken = default)
@@ -147,7 +165,7 @@ public class ProductRepository : IProductRepository
         };
 
         _context.ProductCategories.Add(productCategory);
-        await _context.SaveChangesAsync(cancellationToken);
+        // Remove SaveChangesAsync
     }
 
     public async Task RemoveCategoryAsync(Guid productId, Guid categoryId, CancellationToken cancellationToken = default)
@@ -158,7 +176,7 @@ public class ProductRepository : IProductRepository
         if (productCategory != null)
         {
             _context.ProductCategories.Remove(productCategory);
-            await _context.SaveChangesAsync(cancellationToken);
+            // Remove SaveChangesAsync
         }
     }
 

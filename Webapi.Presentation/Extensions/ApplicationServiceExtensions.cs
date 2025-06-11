@@ -75,6 +75,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IProductPhotoRepository, ProductPhotoRepository>();
         services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
+        services.AddScoped<ICartItemRepository, CartItemRepository>();
 
         services.AddScoped<IUserRepository, UserProxy>();
         

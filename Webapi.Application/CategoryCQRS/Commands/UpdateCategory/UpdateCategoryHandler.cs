@@ -1,4 +1,5 @@
 using AutoMapper;
+using Newtonsoft.Json;
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Domain.Interfaces;
 using Webapi.SharedKernel.DTOs;
@@ -19,6 +20,9 @@ public class UpdateCategoryHandler(
             throw new Exception($"Category with ID {request.Id} not found");
         }
         
+        Console.WriteLine("Updating category: " + JsonConvert.SerializeObject(request.CategoryDto) );
+        Console.WriteLine("Updating category details: ", request.CategoryDto);
+        
         // Update category properties
         category.Name = request.CategoryDto.Name;
         category.Description = request.CategoryDto.Description;
@@ -26,7 +30,10 @@ public class UpdateCategoryHandler(
         category.Type = request.CategoryDto.Type;
         category.UpdatedAt = DateTime.UtcNow;
         
-        unitOfWork.CategoryRepository.Update(category);
+        
+        
+         unitOfWork.CategoryRepository.Update(category);
+         await unitOfWork.CompleteAsync();
         return mapper.Map<CategoryDto>(category);
     }
 }

@@ -1,5 +1,7 @@
 using Webapi.Domain.Entities;
 using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.Product;
+using Webapi.SharedKernel.DTOs.ProductSize;
 
 namespace Webapi.Application.Builders;
 
@@ -8,6 +10,7 @@ public class ProductBuilder
     private readonly Product _product = new();
     private readonly List<Guid> _categoryIds = [];
     private readonly List<CreateProductSizeDto> _sizes = [];
+    private readonly List<Guid> _existingSizeIds = [];
     
     public ProductBuilder WithName(string name)
     {
@@ -42,7 +45,16 @@ public class ProductBuilder
         return this;
     }
     
-    public ProductBuilder WithSizes(IEnumerable<CreateProductSizeDto> sizes)
+    public ProductBuilder WithExistingSizes(IEnumerable<Guid> sizeIds)
+    {
+        if (sizeIds != null)
+        {
+            _existingSizeIds.AddRange(sizeIds);
+        }
+        return this;
+    }
+    
+    public ProductBuilder WithNewSizes(IEnumerable<CreateProductSizeDto> sizes)
     {
         if (sizes != null)
         {
@@ -51,9 +63,9 @@ public class ProductBuilder
         return this;
     }
     
-    public (Product Product, List<Guid> CategoryIds, List<CreateProductSizeDto> Sizes) Build()
+    public (Product Product, List<Guid> CategoryIds, List<CreateProductSizeDto> Sizes, List<Guid> ExistingSizeIds) Build()
     {
-        return (_product, _categoryIds, _sizes);
+        return (_product, _categoryIds, _sizes, _existingSizeIds);
     }
     
     public static ProductBuilder FromDto(CreateProductDto dto)
@@ -64,7 +76,8 @@ public class ProductBuilder
             .WithPrice(dto.Price)
             .WithStock(dto.InStock)
             .WithCategories(dto.CategoryIds)
-            .WithSizes(dto.Sizes);
+            .WithNewSizes(dto.Sizes)
+            .WithExistingSizes(dto.SizeIds);
     }
     
     public static ProductBuilder FromEntity(Product product)
