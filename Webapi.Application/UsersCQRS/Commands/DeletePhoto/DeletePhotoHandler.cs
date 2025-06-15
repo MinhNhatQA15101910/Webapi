@@ -1,5 +1,7 @@
 using CloudinaryDotNet.Actions;
+using MediatR;
 using Microsoft.AspNetCore.Http;
+using Webapi.Application.AuthCQRS.Notifications.UserUpdated;
 using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
@@ -11,7 +13,8 @@ namespace Webapi.Application.UsersCQRS.Commands.DeletePhoto;
 public class DeletePhotoHandler(
     IHttpContextAccessor httpContextAccessor,
     IUnitOfWork unitOfWork,
-    IFileService fileService
+    IFileService fileService,
+    IMediator mediator
 ) : ICommandHandler<DeletePhotoCommand, bool>
 {
     public async Task<bool> Handle(DeletePhotoCommand request, CancellationToken cancellationToken)
@@ -34,6 +37,8 @@ public class DeletePhotoHandler(
         user.Photos.Remove(photo);
 
         if (await unitOfWork.CompleteAsync()) return true;
+
+        await mediator.Publish(new UserUpdatedNotification(user), cancellationToken);
 
         throw new BadRequestException("Problem deleting photo");
     }

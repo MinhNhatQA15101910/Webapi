@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Caching.Memory;
-
 namespace Webapi.Domain.Interfaces;
 
 public interface ICacheService

@@ -1,7 +1,7 @@
 using MediatR;
 using Webapi.Domain.Interfaces;
 
-namespace Webapi.Application.AuthCQRS.UserAdded;
+namespace Webapi.Application.AuthCQRS.Notifications.UserAdded;
 
 public class UserAddedHandler(ICacheService cacheService) : INotificationHandler<UserAddedNotification>
 {

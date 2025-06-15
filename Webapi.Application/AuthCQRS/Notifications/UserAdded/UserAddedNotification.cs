@@ -1,5 +1,5 @@
 using MediatR;
 
-namespace Webapi.Application.AuthCQRS.UserAdded;
+namespace Webapi.Application.AuthCQRS.Notifications.UserAdded;
 
 public record UserAddedNotification : INotification;

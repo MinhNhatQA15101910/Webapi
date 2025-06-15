@@ -1,8 +1,7 @@
 using MediatR;
-using Microsoft.Extensions.Options;
 using Webapi.Domain.Interfaces;
 
-namespace Webapi.Application.AuthCQRS.UserUpdated;
+namespace Webapi.Application.AuthCQRS.Notifications.UserUpdated;
 
 public class UserUpdatedHandler(
     ICacheService cacheService

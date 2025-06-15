@@ -1,6 +1,8 @@
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Webapi.Application.AuthCQRS.Notifications.UserAdded;
 using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Helpers;
@@ -16,7 +18,8 @@ public class VerifyPincodeHandler(
     IMapper mapper,
     UserManager<User> userManager,
     ITokenService tokenService,
-    IHttpContextAccessor httpContextAccessor
+    IHttpContextAccessor httpContextAccessor,
+    IMediator mediator
 ) : ICommandHandler<VerifyPincodeCommand, object>
 {
     public async Task<object> Handle(VerifyPincodeCommand request, CancellationToken cancellationToken)
@@ -52,6 +55,8 @@ public class VerifyPincodeHandler(
             {
                 throw new IdentityErrorException(roleResult.Errors);
             }
+
+            await mediator.Publish(new UserAddedNotification(), cancellationToken);
 
             var userDto = mapper.Map<UserDto>(user);
             userDto.Token = await tokenService.CreateTokenAsync(user);

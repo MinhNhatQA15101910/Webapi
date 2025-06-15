@@ -1,7 +1,7 @@
 using MediatR;
 using Webapi.Domain.Interfaces;
 
-namespace Webapi.Application.AuthCQRS.UserDeleted;
+namespace Webapi.Application.AuthCQRS.Notifications.UserDeleted;
 
 public class UserDeletedHandler(ICacheService cacheService) : INotificationHandler<UserDeletedNotification>
 {
