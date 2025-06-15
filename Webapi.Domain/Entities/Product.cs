@@ -10,8 +10,6 @@ public class Product
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<ProductPhoto> Photos { get; set; } = [];
-    public ICollection<CartItem> CartItems { get; set; } = [];
-    public ICollection<OrderProduct> Orders { get; set; } = [];
     public ICollection<ProductCategory> Categories { get; set; } = [];
     public ICollection<ProductSize> Sizes { get; set; } = [];
 }
