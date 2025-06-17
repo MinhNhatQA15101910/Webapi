@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Webapi.Domain.Entities;
+using Webapi.Domain.Interfaces;
 
 namespace Webapi.Infrastructure.Persistence.Data;
 
@@ -56,5 +57,32 @@ public class Seed
 
             index++;
         }
+    }
+
+    public static async Task SeedProductsAsync(
+        IUnitOfWork unitOfWork
+    )
+    {
+        if (await unitOfWork.ProductRepository.AnyAsync()) return;
+
+        var productData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/ProductSeedData.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var products = JsonSerializer.Deserialize<List<Product>>(productData, options);
+
+        if (products == null) return;
+
+        foreach (var product in products)
+        {
+            Console.WriteLine($"Adding product: {product.Name}");
+
+            unitOfWork.ProductRepository.Add(product);
+        }
+
+        await unitOfWork.CompleteAsync();
     }
 }

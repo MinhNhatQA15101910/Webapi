@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
-using Webapi.Infrastructure.Persistence.Data;
 using Webapi.SharedKernel.Helpers;
 using Webapi.SharedKernel.Params;
 
@@ -76,7 +75,7 @@ public class ProductRepository(AppDbContext context) : IProductRepository
         {
             // Execute the query to get the data without ordering
             var products = await query.ToListAsync(cancellationToken);
-            
+
             // Then sort in memory
             if (productParams.SortBy?.ToLower() == "desc")
             {
@@ -86,7 +85,7 @@ public class ProductRepository(AppDbContext context) : IProductRepository
             {
                 products = products.OrderBy(p => p.Price).ToList();
             }
-            
+
             // Create paged list from memory collection
             return PagedList<Product>.Create(
                 products,
@@ -99,14 +98,14 @@ public class ProductRepository(AppDbContext context) : IProductRepository
             // For other fields, let the database handle the sorting
             query = productParams.OrderBy?.ToLower() switch
             {
-                "name" => productParams.SortBy?.ToLower() == "desc" 
-                    ? query.OrderByDescending(p => p.Name) 
+                "name" => productParams.SortBy?.ToLower() == "desc"
+                    ? query.OrderByDescending(p => p.Name)
                     : query.OrderBy(p => p.Name),
-                "created" => productParams.SortBy?.ToLower() == "desc" 
-                    ? query.OrderByDescending(p => p.CreatedAt) 
+                "created" => productParams.SortBy?.ToLower() == "desc"
+                    ? query.OrderByDescending(p => p.CreatedAt)
                     : query.OrderBy(p => p.CreatedAt),
-                _ => productParams.SortBy?.ToLower() == "desc" 
-                    ? query.OrderByDescending(p => p.Name) 
+                _ => productParams.SortBy?.ToLower() == "desc"
+                    ? query.OrderByDescending(p => p.Name)
                     : query.OrderBy(p => p.Name),
             };
 
@@ -216,13 +215,13 @@ public class ProductRepository(AppDbContext context) : IProductRepository
     {
         // Set the ProductId
         photo.ProductId = productId;
-        
+
         // If this is the first photo, make it main
         if (!await _context.ProductPhotos.AnyAsync(p => p.ProductId == productId, cancellationToken))
         {
             photo.IsMain = true;
         }
-        
+
         _context.ProductPhotos.Add(photo);
         await _context.SaveChangesAsync(cancellationToken);
     }
@@ -280,7 +279,7 @@ public class ProductRepository(AppDbContext context) : IProductRepository
     public async Task UpdateStockAsync(Guid productId, int quantity, CancellationToken cancellationToken = default)
     {
         var product = await _context.Products.FindAsync(new object[] { productId }, cancellationToken);
-        
+
         if (product != null)
         {
             product.InStock = quantity;
@@ -323,17 +322,17 @@ public class ProductRepository(AppDbContext context) : IProductRepository
         // Apply sorting
         query = productParams.OrderBy?.ToLower() switch
         {
-            "name" => productParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(p => p.Name) 
+            "name" => productParams.SortBy?.ToLower() == "desc"
+                ? query.OrderByDescending(p => p.Name)
                 : query.OrderBy(p => p.Name),
-            "price" => productParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(p => p.Price) 
+            "price" => productParams.SortBy?.ToLower() == "desc"
+                ? query.OrderByDescending(p => p.Price)
                 : query.OrderBy(p => p.Price),
-            "created" => productParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(p => p.CreatedAt) 
+            "created" => productParams.SortBy?.ToLower() == "desc"
+                ? query.OrderByDescending(p => p.CreatedAt)
                 : query.OrderBy(p => p.CreatedAt),
-            _ => productParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(p => p.Name) 
+            _ => productParams.SortBy?.ToLower() == "desc"
+                ? query.OrderByDescending(p => p.Name)
                 : query.OrderBy(p => p.Name),
         };
 
@@ -408,7 +407,7 @@ public class ProductRepository(AppDbContext context) : IProductRepository
     {
         // Set the ProductId
         size.ProductId = productId;
-        
+
         _context.ProductSizes.Add(size);
         await _context.SaveChangesAsync(cancellationToken);
     }
@@ -416,13 +415,13 @@ public class ProductRepository(AppDbContext context) : IProductRepository
     public async Task UpdateSizeAsync(Guid sizeId, string sizeName, int quantity, CancellationToken cancellationToken = default)
     {
         var size = await _context.ProductSizes.FindAsync(new object[] { sizeId }, cancellationToken);
-        
+
         if (size != null)
         {
             size.Size = sizeName;
             size.Quantity = quantity;
             size.UpdatedAt = DateTime.UtcNow;
-            
+
             await _context.SaveChangesAsync(cancellationToken);
         }
     }
@@ -430,12 +429,17 @@ public class ProductRepository(AppDbContext context) : IProductRepository
     public async Task DeleteSizeAsync(Guid sizeId, CancellationToken cancellationToken = default)
     {
         var size = await _context.ProductSizes.FindAsync(new object[] { sizeId }, cancellationToken);
-        
+
         if (size != null)
         {
             _context.ProductSizes.Remove(size);
             await _context.SaveChangesAsync(cancellationToken);
         }
+    }
+
+    public async Task<bool> AnyAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Products.AnyAsync(cancellationToken);
     }
 
     #endregion
