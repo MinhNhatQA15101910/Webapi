@@ -44,6 +44,7 @@ try
     await Seed.SeedUsersAsync(userManager, roleManager);
     await Seed.SeedProductsAsync(unitOfWork);
     await Seed.SeedCategoriesAsync(unitOfWork);
+    await Seed.SeedProductCategoriesAsync(unitOfWork);
 
     await unitOfWork.CompleteAsync();
 }

@@ -108,4 +108,34 @@ public class Seed
             unitOfWork.CategoryRepository.Add(category);
         }
     }
+
+    public static async Task SeedProductCategoriesAsync(
+        IUnitOfWork unitOfWork
+    )
+    {
+        var productCategoriesData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/ProductCategorySeedData.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var productCategories = JsonSerializer.Deserialize<List<ProductCategory>>(productCategoriesData, options);
+
+        if (productCategories == null) return;
+
+        foreach (var productCategory in productCategories)
+        {
+            var product = await unitOfWork.ProductRepository.GetByIdAsync(productCategory.ProductId);
+            if (product == null)
+            {
+                Console.WriteLine($"Product with ID {productCategory.ProductId} not found. Skipping.");
+                continue;
+            }
+
+            Console.WriteLine($"Adding product category: {productCategory.CategoryId} to product: {product.Name}");
+
+            product.Categories.Add(productCategory);
+        }
+    }
 }
