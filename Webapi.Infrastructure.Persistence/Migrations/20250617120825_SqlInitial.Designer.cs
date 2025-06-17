@@ -11,7 +11,7 @@ using Webapi.Infrastructure.Persistence;
 namespace Webapi.Infrastructure.Persistence.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-[Migration("20250511133747_SqlInitial")]
+[Migration("20250617120825_SqlInitial")]
 partial class SqlInitial
 {
     /// <inheritdoc />
@@ -106,13 +106,14 @@ partial class SqlInitial
 
         modelBuilder.Entity("Webapi.Domain.Entities.CartItem", b =>
             {
-                b.Property<Guid>("UserId")
-                    .HasColumnType("TEXT");
-
-                b.Property<Guid>("ProductId")
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
                     .HasColumnType("TEXT");
 
                 b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
+
+                b.Property<Guid>("ProductSizeId")
                     .HasColumnType("TEXT");
 
                 b.Property<int>("Quantity")
@@ -121,9 +122,14 @@ partial class SqlInitial
                 b.Property<DateTime>("UpdatedAt")
                     .HasColumnType("TEXT");
 
-                b.HasKey("UserId", "ProductId");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("TEXT");
 
-                b.HasIndex("ProductId");
+                b.HasKey("Id");
+
+                b.HasIndex("ProductSizeId");
+
+                b.HasIndex("UserId");
 
                 b.ToTable("CartItems");
             });
@@ -232,7 +238,7 @@ partial class SqlInitial
                 b.Property<Guid>("OrderId")
                     .HasColumnType("TEXT");
 
-                b.Property<Guid>("ProductId")
+                b.Property<Guid>("ProductSizeId")
                     .HasColumnType("TEXT");
 
                 b.Property<DateTime>("CreatedAt")
@@ -241,9 +247,9 @@ partial class SqlInitial
                 b.Property<int>("Quantity")
                     .HasColumnType("INTEGER");
 
-                b.HasKey("OrderId", "ProductId");
+                b.HasKey("OrderId", "ProductSizeId");
 
-                b.HasIndex("ProductId");
+                b.HasIndex("ProductSizeId");
 
                 b.ToTable("OrderProducts");
             });
@@ -324,7 +330,7 @@ partial class SqlInitial
                 b.Property<bool>("IsMain")
                     .HasColumnType("INTEGER");
 
-                b.Property<Guid?>("ProductId")
+                b.Property<Guid>("ProductId")
                     .HasColumnType("TEXT");
 
                 b.Property<string>("PublicId")
@@ -334,7 +340,7 @@ partial class SqlInitial
                     .IsRequired()
                     .HasColumnType("TEXT");
 
-                b.Property<Guid>("UserId")
+                b.Property<Guid?>("UserId")
                     .HasColumnType("TEXT");
 
                 b.HasKey("Id");
@@ -344,6 +350,35 @@ partial class SqlInitial
                 b.HasIndex("UserId");
 
                 b.ToTable("ProductPhotos");
+            });
+
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
+
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
+
+                b.Property<Guid>("ProductId")
+                    .HasColumnType("TEXT");
+
+                b.Property<int>("Quantity")
+                    .HasColumnType("INTEGER");
+
+                b.Property<string>("Size")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
+
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
+
+                b.HasKey("Id");
+
+                b.HasIndex("ProductId");
+
+                b.ToTable("ProductSizes");
             });
 
         modelBuilder.Entity("Webapi.Domain.Entities.Review", b =>
@@ -591,9 +626,9 @@ partial class SqlInitial
 
         modelBuilder.Entity("Webapi.Domain.Entities.CartItem", b =>
             {
-                b.HasOne("Webapi.Domain.Entities.Product", "Product")
+                b.HasOne("Webapi.Domain.Entities.ProductSize", "ProductSize")
                     .WithMany("CartItems")
-                    .HasForeignKey("ProductId")
+                    .HasForeignKey("ProductSizeId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
@@ -603,7 +638,7 @@ partial class SqlInitial
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.Navigation("Product");
+                b.Navigation("ProductSize");
 
                 b.Navigation("User");
             });
@@ -638,15 +673,15 @@ partial class SqlInitial
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.HasOne("Webapi.Domain.Entities.Product", "Product")
+                b.HasOne("Webapi.Domain.Entities.ProductSize", "ProductSize")
                     .WithMany("Orders")
-                    .HasForeignKey("ProductId")
+                    .HasForeignKey("ProductSizeId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
                 b.Navigation("Order");
 
-                b.Navigation("Product");
+                b.Navigation("ProductSize");
             });
 
         modelBuilder.Entity("Webapi.Domain.Entities.OrderVoucher", b =>
@@ -689,17 +724,30 @@ partial class SqlInitial
 
         modelBuilder.Entity("Webapi.Domain.Entities.ProductPhoto", b =>
             {
-                b.HasOne("Webapi.Domain.Entities.Product", null)
+                b.HasOne("Webapi.Domain.Entities.Product", "Product")
                     .WithMany("Photos")
-                    .HasForeignKey("ProductId");
-
-                b.HasOne("Webapi.Domain.Entities.User", "User")
-                    .WithMany()
-                    .HasForeignKey("UserId")
+                    .HasForeignKey("ProductId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
+                b.HasOne("Webapi.Domain.Entities.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId");
+
+                b.Navigation("Product");
+
                 b.Navigation("User");
+            });
+
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.Product", "Product")
+                    .WithMany("Sizes")
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Product");
             });
 
         modelBuilder.Entity("Webapi.Domain.Entities.Review", b =>
@@ -765,13 +813,18 @@ partial class SqlInitial
 
         modelBuilder.Entity("Webapi.Domain.Entities.Product", b =>
             {
-                b.Navigation("CartItems");
-
                 b.Navigation("Categories");
 
-                b.Navigation("Orders");
-
                 b.Navigation("Photos");
+
+                b.Navigation("Sizes");
+            });
+
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
+            {
+                b.Navigation("CartItems");
+
+                b.Navigation("Orders");
             });
 
         modelBuilder.Entity("Webapi.Domain.Entities.Role", b =>

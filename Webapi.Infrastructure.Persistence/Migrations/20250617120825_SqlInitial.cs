@@ -276,33 +276,6 @@ public partial class SqlInitial : Migration
             });
 
         migrationBuilder.CreateTable(
-            name: "CartItems",
-            columns: table => new
-            {
-                UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
-                Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_CartItems", x => new { x.UserId, x.ProductId });
-                table.ForeignKey(
-                    name: "FK_CartItems_AspNetUsers_UserId",
-                    column: x => x.UserId,
-                    principalTable: "AspNetUsers",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_CartItems_Products_ProductId",
-                    column: x => x.ProductId,
-                    principalTable: "Products",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Cascade);
-            });
-
-        migrationBuilder.CreateTable(
             name: "ProductCategories",
             columns: table => new
             {
@@ -335,8 +308,8 @@ public partial class SqlInitial : Migration
                 Url = table.Column<string>(type: "TEXT", nullable: false),
                 PublicId = table.Column<string>(type: "TEXT", nullable: true),
                 IsMain = table.Column<bool>(type: "INTEGER", nullable: false),
-                UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                ProductId = table.Column<Guid>(type: "TEXT", nullable: true)
+                ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
+                UserId = table.Column<Guid>(type: "TEXT", nullable: true)
             },
             constraints: table =>
             {
@@ -345,13 +318,35 @@ public partial class SqlInitial : Migration
                     name: "FK_ProductPhotos_AspNetUsers_UserId",
                     column: x => x.UserId,
                     principalTable: "AspNetUsers",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Cascade);
+                    principalColumn: "Id");
                 table.ForeignKey(
                     name: "FK_ProductPhotos_Products_ProductId",
                     column: x => x.ProductId,
                     principalTable: "Products",
-                    principalColumn: "Id");
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProductSizes",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                Size = table.Column<string>(type: "TEXT", nullable: false),
+                Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
+                CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProductSizes", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_ProductSizes_Products_ProductId",
+                    column: x => x.ProductId,
+                    principalTable: "Products",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
             });
 
         migrationBuilder.CreateTable(
@@ -385,32 +380,6 @@ public partial class SqlInitial : Migration
             });
 
         migrationBuilder.CreateTable(
-            name: "OrderProducts",
-            columns: table => new
-            {
-                OrderId = table.Column<Guid>(type: "TEXT", nullable: false),
-                ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
-                Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_OrderProducts", x => new { x.OrderId, x.ProductId });
-                table.ForeignKey(
-                    name: "FK_OrderProducts_Orders_OrderId",
-                    column: x => x.OrderId,
-                    principalTable: "Orders",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_OrderProducts_Products_ProductId",
-                    column: x => x.ProductId,
-                    principalTable: "Products",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Cascade);
-            });
-
-        migrationBuilder.CreateTable(
             name: "OrderVouchers",
             columns: table => new
             {
@@ -431,6 +400,60 @@ public partial class SqlInitial : Migration
                     name: "FK_OrderVouchers_Vouchers_VoucherId",
                     column: x => x.VoucherId,
                     principalTable: "Vouchers",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "CartItems",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                ProductSizeId = table.Column<Guid>(type: "TEXT", nullable: false),
+                Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_CartItems", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_CartItems_AspNetUsers_UserId",
+                    column: x => x.UserId,
+                    principalTable: "AspNetUsers",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_CartItems_ProductSizes_ProductSizeId",
+                    column: x => x.ProductSizeId,
+                    principalTable: "ProductSizes",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "OrderProducts",
+            columns: table => new
+            {
+                OrderId = table.Column<Guid>(type: "TEXT", nullable: false),
+                ProductSizeId = table.Column<Guid>(type: "TEXT", nullable: false),
+                Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_OrderProducts", x => new { x.OrderId, x.ProductSizeId });
+                table.ForeignKey(
+                    name: "FK_OrderProducts_Orders_OrderId",
+                    column: x => x.OrderId,
+                    principalTable: "Orders",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_OrderProducts_ProductSizes_ProductSizeId",
+                    column: x => x.ProductSizeId,
+                    principalTable: "ProductSizes",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
             });
@@ -473,9 +496,14 @@ public partial class SqlInitial : Migration
             unique: true);
 
         migrationBuilder.CreateIndex(
-            name: "IX_CartItems_ProductId",
+            name: "IX_CartItems_ProductSizeId",
             table: "CartItems",
-            column: "ProductId");
+            column: "ProductSizeId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_CartItems_UserId",
+            table: "CartItems",
+            column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_Notifications_ReceiverId",
@@ -483,9 +511,9 @@ public partial class SqlInitial : Migration
             column: "ReceiverId");
 
         migrationBuilder.CreateIndex(
-            name: "IX_OrderProducts_ProductId",
+            name: "IX_OrderProducts_ProductSizeId",
             table: "OrderProducts",
-            column: "ProductId");
+            column: "ProductSizeId");
 
         migrationBuilder.CreateIndex(
             name: "IX_Orders_OwnerId",
@@ -511,6 +539,11 @@ public partial class SqlInitial : Migration
             name: "IX_ProductPhotos_UserId",
             table: "ProductPhotos",
             column: "UserId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_ProductSizes_ProductId",
+            table: "ProductSizes",
+            column: "ProductId");
 
         migrationBuilder.CreateIndex(
             name: "IX_Reviews_OwnerId",
@@ -572,6 +605,9 @@ public partial class SqlInitial : Migration
 
         migrationBuilder.DropTable(
             name: "AspNetRoles");
+
+        migrationBuilder.DropTable(
+            name: "ProductSizes");
 
         migrationBuilder.DropTable(
             name: "Orders");

@@ -7,838 +7,843 @@ using Webapi.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace Webapi.Infrastructure.Persistence.Migrations
+namespace Webapi.Infrastructure.Persistence.Migrations;
+
+[DbContext(typeof(AppDbContext))]
+partial class AppDbContextModelSnapshot : ModelSnapshot
 {
-    [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    protected override void BuildModel(ModelBuilder modelBuilder)
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
-        {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
+        modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("TEXT");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("TEXT");
+                b.Property<Guid>("RoleId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
+                b.ToTable("AspNetRoleClaims", (string)null);
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
+                b.ToTable("AspNetUserClaims", (string)null);
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            {
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ProviderKey")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ProviderDisplayName")
+                    .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
+                b.ToTable("AspNetUserLogins", (string)null);
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            {
+                b.Property<Guid>("UserId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Name")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Value")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
+                b.ToTable("AspNetUserTokens", (string)null);
+            });
 
-            modelBuilder.Entity("Webapi.Domain.Entities.CartItem", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.CartItem", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ProductSizeId")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<Guid>("ProductSizeId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
+                b.Property<int>("Quantity")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("UserId", "ProductSizeId");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("ProductSizeId");
+                b.HasKey("Id");
 
-                    b.ToTable("CartItems");
-                });
+                b.HasIndex("ProductSizeId");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Category", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("UserId");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.ToTable("CartItems");
+            });
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.Category", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Size")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.Property<string>("Type")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("Categories");
-                });
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Notification", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasKey("Id");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.ToTable("Categories");
+            });
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.Notification", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ReceiverId")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<Guid>("ReceiverId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("ReceiverId");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("Notifications");
-                });
+                b.HasKey("Id");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("ReceiverId");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.ToTable("Notifications");
+            });
 
-                    b.Property<string>("OrderStatus")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.Order", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<double>("ShippingCost")
-                        .HasColumnType("REAL");
+                b.Property<string>("OrderStatus")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("ShippingType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<Guid>("OwnerId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("REAL");
+                b.Property<double>("ShippingCost")
+                    .HasColumnType("REAL");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<string>("ShippingType")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.Property<double>("TotalPrice")
+                    .HasColumnType("REAL");
 
-                    b.HasIndex("OwnerId");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("Orders");
-                });
+                b.HasKey("Id");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.OrderProduct", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
+                b.HasIndex("OwnerId");
 
-                    b.Property<Guid>("ProductSizeId")
-                        .HasColumnType("TEXT");
+                b.ToTable("Orders");
+            });
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.OrderProduct", b =>
+            {
+                b.Property<Guid>("OrderId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
+                b.Property<Guid>("ProductSizeId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("OrderId", "ProductSizeId");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("ProductSizeId");
+                b.Property<int>("Quantity")
+                    .HasColumnType("INTEGER");
 
-                    b.ToTable("OrderProducts");
-                });
+                b.HasKey("OrderId", "ProductSizeId");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.OrderVoucher", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
+                b.HasIndex("ProductSizeId");
 
-                    b.Property<Guid>("VoucherId")
-                        .HasColumnType("TEXT");
+                b.ToTable("OrderProducts");
+            });
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.OrderVoucher", b =>
+            {
+                b.Property<Guid>("OrderId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("OrderId", "VoucherId");
+                b.Property<Guid>("VoucherId")
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("VoucherId");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("OrderVouchers");
-                });
+                b.HasKey("OrderId", "VoucherId");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Product", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("VoucherId");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.ToTable("OrderVouchers");
+            });
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.Product", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<int>("InStock")
-                        .HasColumnType("INTEGER");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
+                b.Property<int>("InStock")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.Property<decimal>("Price")
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("Products");
-                });
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.ProductCategory", b =>
-                {
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                b.HasKey("Id");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("TEXT");
+                b.ToTable("Products");
+            });
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductCategory", b =>
+            {
+                b.Property<Guid>("ProductId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("ProductId", "CategoryId");
+                b.Property<Guid>("CategoryId")
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("CategoryId");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("ProductCategories");
-                });
+                b.HasKey("ProductId", "CategoryId");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.ProductPhoto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("CategoryId");
 
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("INTEGER");
+                b.ToTable("ProductCategories");
+            });
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductPhoto", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("PublicId")
-                        .HasColumnType("TEXT");
+                b.Property<bool>("IsMain")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<Guid>("ProductId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
+                b.Property<string>("PublicId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.Property<string>("Url")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("ProductId");
+                b.Property<Guid?>("UserId")
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("UserId");
+                b.HasKey("Id");
 
-                    b.ToTable("ProductPhotos");
-                });
+                b.HasIndex("ProductId");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("UserId");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.ToTable("ProductPhotos");
+            });
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Size")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<Guid>("ProductId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<int>("Quantity")
+                    .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                b.Property<string>("Size")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("ProductId");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("ProductSizes");
-                });
+                b.HasKey("Id");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Review", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("ProductId");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.ToTable("ProductSizes");
+            });
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.Review", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Content")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("REAL");
+                b.Property<Guid>("OwnerId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<Guid>("ProductId")
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<float>("Rating")
+                    .HasColumnType("REAL");
 
-                    b.HasKey("Id");
+                b.Property<string>("Title")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("OwnerId");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("ProductId");
+                b.HasKey("Id");
 
-                    b.ToTable("Reviews");
-                });
+                b.HasIndex("OwnerId");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("ProductId");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+                b.ToTable("Reviews");
+            });
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.Role", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.Property<string>("Name")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("AspNetRoles", (string)null);
-                });
+                b.HasKey("Id");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasDatabaseName("RoleNameIndex");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("INTEGER");
+                b.ToTable("AspNetRoles", (string)null);
+            });
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.User", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<int>("AccessFailedCount")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("TEXT");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
+                b.Property<string>("Email")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
+                b.Property<bool>("EmailConfirmed")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<bool>("LockoutEnabled")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<DateTimeOffset?>("LockoutEnd")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("TEXT");
+                b.Property<string>("NormalizedEmail")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("TEXT");
+                b.Property<string>("NormalizedUserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
+                b.Property<string>("PasswordHash")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("TEXT");
+                b.Property<string>("PhoneNumber")
+                    .HasColumnType("TEXT");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
+                b.Property<bool>("PhoneNumberConfirmed")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<string>("SecurityStamp")
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
+                b.Property<bool>("TwoFactorEnabled")
+                    .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                b.Property<string>("UserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                b.HasKey("Id");
 
-                    b.ToTable("AspNetUsers", (string)null);
-                });
+                b.HasIndex("NormalizedEmail")
+                    .HasDatabaseName("EmailIndex");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.UserPhoto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("NormalizedUserName")
+                    .IsUnique()
+                    .HasDatabaseName("UserNameIndex");
 
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("INTEGER");
+                b.ToTable("AspNetUsers", (string)null);
+            });
 
-                    b.Property<string>("PublicId")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.UserPhoto", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<bool>("IsMain")
+                    .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                b.Property<string>("PublicId")
+                    .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                b.Property<string>("Url")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("UserId");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("UserPhotos");
-                });
+                b.HasKey("Id");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.UserRole", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                b.HasIndex("UserId");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("TEXT");
+                b.ToTable("UserPhotos");
+            });
 
-                    b.HasKey("UserId", "RoleId");
+        modelBuilder.Entity("Webapi.Domain.Entities.UserRole", b =>
+            {
+                b.Property<Guid>("UserId")
+                    .HasColumnType("TEXT");
 
-                    b.HasIndex("RoleId");
+                b.Property<Guid>("RoleId")
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
+                b.HasKey("UserId", "RoleId");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Voucher", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                b.HasIndex("RoleId");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                b.ToTable("AspNetUserRoles", (string)null);
+            });
 
-                    b.Property<DateTime>("ExpiredAt")
-                        .HasColumnType("TEXT");
+        modelBuilder.Entity("Webapi.Domain.Entities.Voucher", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                b.Property<DateTime>("CreatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
+                b.Property<DateTime>("ExpiredAt")
+                    .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("TEXT");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("TEXT");
 
-                    b.Property<double>("Value")
-                        .HasColumnType("REAL");
+                b.Property<int>("Quantity")
+                    .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
 
-                    b.ToTable("Vouchers");
-                });
+                b.Property<double>("Value")
+                    .HasColumnType("REAL");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.HasKey("Id");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.ToTable("Vouchers");
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.Role", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.User", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-            modelBuilder.Entity("Webapi.Domain.Entities.CartItem", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.ProductSize", "ProductSize")
-                        .WithMany("CartItems")
-                        .HasForeignKey("ProductSizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.User", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-                    b.HasOne("Webapi.Domain.Entities.User", "User")
-                        .WithMany("CartItems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.User", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
-                    b.Navigation("ProductSize");
+        modelBuilder.Entity("Webapi.Domain.Entities.CartItem", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.ProductSize", "ProductSize")
+                    .WithMany("CartItems")
+                    .HasForeignKey("ProductSizeId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.HasOne("Webapi.Domain.Entities.User", "User")
+                    .WithMany("CartItems")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Notification", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.User", "Receiver")
-                        .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("ProductSize");
 
-                    b.Navigation("Receiver");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Order", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.User", "Owner")
-                        .WithMany("Orders")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Webapi.Domain.Entities.Notification", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.User", "Receiver")
+                    .WithMany()
+                    .HasForeignKey("ReceiverId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Owner");
-                });
+                b.Navigation("Receiver");
+            });
 
-            modelBuilder.Entity("Webapi.Domain.Entities.OrderProduct", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.Order", "Order")
-                        .WithMany("Products")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Webapi.Domain.Entities.Order", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.User", "Owner")
+                    .WithMany("Orders")
+                    .HasForeignKey("OwnerId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Webapi.Domain.Entities.ProductSize", "ProductSize")
-                        .WithMany("Orders")
-                        .HasForeignKey("ProductSizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("Owner");
+            });
 
-                    b.Navigation("Order");
+        modelBuilder.Entity("Webapi.Domain.Entities.OrderProduct", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.Order", "Order")
+                    .WithMany("Products")
+                    .HasForeignKey("OrderId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("ProductSize");
-                });
+                b.HasOne("Webapi.Domain.Entities.ProductSize", "ProductSize")
+                    .WithMany("Orders")
+                    .HasForeignKey("ProductSizeId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-            modelBuilder.Entity("Webapi.Domain.Entities.OrderVoucher", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.Order", "Order")
-                        .WithMany("Vouchers")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("Order");
 
-                    b.HasOne("Webapi.Domain.Entities.Voucher", "Voucher")
-                        .WithMany("Orders")
-                        .HasForeignKey("VoucherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("ProductSize");
+            });
 
-                    b.Navigation("Order");
+        modelBuilder.Entity("Webapi.Domain.Entities.OrderVoucher", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.Order", "Order")
+                    .WithMany("Vouchers")
+                    .HasForeignKey("OrderId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Voucher");
-                });
+                b.HasOne("Webapi.Domain.Entities.Voucher", "Voucher")
+                    .WithMany("Orders")
+                    .HasForeignKey("VoucherId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-            modelBuilder.Entity("Webapi.Domain.Entities.ProductCategory", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("Order");
 
-                    b.HasOne("Webapi.Domain.Entities.Product", "Product")
-                        .WithMany("Categories")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("Voucher");
+            });
 
-                    b.Navigation("Category");
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductCategory", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.Category", "Category")
+                    .WithMany("Products")
+                    .HasForeignKey("CategoryId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Product");
-                });
+                b.HasOne("Webapi.Domain.Entities.Product", "Product")
+                    .WithMany("Categories")
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-            modelBuilder.Entity("Webapi.Domain.Entities.ProductPhoto", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.Product", "Product")
-                        .WithMany("Photos")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("Category");
 
-                    b.HasOne("Webapi.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                b.Navigation("Product");
+            });
 
-                    b.Navigation("Product");
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductPhoto", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.Product", "Product")
+                    .WithMany("Photos")
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.HasOne("Webapi.Domain.Entities.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.Product", "Product")
-                        .WithMany("Sizes")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("Product");
 
-                    b.Navigation("Product");
-                });
+                b.Navigation("User");
+            });
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Review", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.Product", "Product")
+                    .WithMany("Sizes")
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Webapi.Domain.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("Product");
+            });
 
-                    b.Navigation("Owner");
+        modelBuilder.Entity("Webapi.Domain.Entities.Review", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.User", "Owner")
+                    .WithMany()
+                    .HasForeignKey("OwnerId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Product");
-                });
+                b.HasOne("Webapi.Domain.Entities.Product", "Product")
+                    .WithMany()
+                    .HasForeignKey("ProductId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-            modelBuilder.Entity("Webapi.Domain.Entities.UserPhoto", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.User", "User")
-                        .WithMany("Photos")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("Owner");
 
-                    b.Navigation("User");
-                });
+                b.Navigation("Product");
+            });
 
-            modelBuilder.Entity("Webapi.Domain.Entities.UserRole", b =>
-                {
-                    b.HasOne("Webapi.Domain.Entities.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+        modelBuilder.Entity("Webapi.Domain.Entities.UserPhoto", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.User", "User")
+                    .WithMany("Photos")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Webapi.Domain.Entities.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.Navigation("User");
+            });
 
-                    b.Navigation("Role");
+        modelBuilder.Entity("Webapi.Domain.Entities.UserRole", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.Role", "Role")
+                    .WithMany("UserRoles")
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("User");
-                });
+                b.HasOne("Webapi.Domain.Entities.User", "User")
+                    .WithMany("UserRoles")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
+                b.Navigation("Role");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Order", b =>
-                {
-                    b.Navigation("Products");
+                b.Navigation("User");
+            });
 
-                    b.Navigation("Vouchers");
-                });
+        modelBuilder.Entity("Webapi.Domain.Entities.Category", b =>
+            {
+                b.Navigation("Products");
+            });
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Product", b =>
-                {
-                    b.Navigation("Categories");
+        modelBuilder.Entity("Webapi.Domain.Entities.Order", b =>
+            {
+                b.Navigation("Products");
 
-                    b.Navigation("Photos");
+                b.Navigation("Vouchers");
+            });
 
-                    b.Navigation("Sizes");
-                });
+        modelBuilder.Entity("Webapi.Domain.Entities.Product", b =>
+            {
+                b.Navigation("Categories");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
-                {
-                    b.Navigation("CartItems");
+                b.Navigation("Photos");
 
-                    b.Navigation("Orders");
-                });
+                b.Navigation("Sizes");
+            });
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Role", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
+        modelBuilder.Entity("Webapi.Domain.Entities.ProductSize", b =>
+            {
+                b.Navigation("CartItems");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.User", b =>
-                {
-                    b.Navigation("CartItems");
+                b.Navigation("Orders");
+            });
 
-                    b.Navigation("Orders");
+        modelBuilder.Entity("Webapi.Domain.Entities.Role", b =>
+            {
+                b.Navigation("UserRoles");
+            });
 
-                    b.Navigation("Photos");
+        modelBuilder.Entity("Webapi.Domain.Entities.User", b =>
+            {
+                b.Navigation("CartItems");
 
-                    b.Navigation("UserRoles");
-                });
+                b.Navigation("Orders");
 
-            modelBuilder.Entity("Webapi.Domain.Entities.Voucher", b =>
-                {
-                    b.Navigation("Orders");
-                });
+                b.Navigation("Photos");
+
+                b.Navigation("UserRoles");
+            });
+
+        modelBuilder.Entity("Webapi.Domain.Entities.Voucher", b =>
+            {
+                b.Navigation("Orders");
+            });
 #pragma warning restore 612, 618
-        }
     }
 }

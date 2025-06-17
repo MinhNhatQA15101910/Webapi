@@ -44,21 +44,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .HasForeignKey(x => x.RoleId)
             .IsRequired();
 
-        builder.Entity<CartItem>()
-            .HasKey(x => new { x.UserId, x.ProductSizeId });
-
-        builder.Entity<User>()
-            .HasMany(x => x.CartItems)
-            .WithOne(x => x.User)
-            .HasForeignKey(x => x.UserId)
-            .IsRequired();
-
-        builder.Entity<ProductSize>()
-            .HasMany(x => x.CartItems)
-            .WithOne(x => x.ProductSize)
-            .HasForeignKey(x => x.ProductSizeId)
-            .IsRequired();
-
         builder.Entity<OrderProduct>()
             .HasKey(x => new { x.OrderId, x.ProductSizeId });
 
