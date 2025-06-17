@@ -82,7 +82,30 @@ public class Seed
 
             unitOfWork.ProductRepository.Add(product);
         }
+    }
 
-        await unitOfWork.CompleteAsync();
+    public static async Task SeedCategoriesAsync(
+        IUnitOfWork unitOfWork
+    )
+    {
+        if (await unitOfWork.CategoryRepository.AnyAsync()) return;
+
+        var categoryData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/CategorySeedData.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var categories = JsonSerializer.Deserialize<List<Category>>(categoryData, options);
+
+        if (categories == null) return;
+
+        foreach (var category in categories)
+        {
+            Console.WriteLine($"Adding category: {category.Name}");
+
+            unitOfWork.CategoryRepository.Add(category);
+        }
     }
 }

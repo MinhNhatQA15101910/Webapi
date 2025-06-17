@@ -1,0 +1,58 @@
+[
+  {
+    "Id": "f49c0b5a-5df5-4f0f-8a2e-6c1c8eeb8d09",
+    "Name": "Firm Ground Cleats",
+    "Description": "Soccer cleats optimized for natural grass surfaces.",
+    "Size": "",
+    "Type": "Surface"
+  },
+  {
+    "Id": "c78b96e6-2db6-4291-9d9d-f0b9f5de79d0",
+    "Name": "Turf Shoes",
+    "Description": "Shoes designed for artificial turf with rubber soles.",
+    "Size": "",
+    "Type": "Surface"
+  },
+  {
+    "Id": "df9f1b61-45ee-420d-bde7-4edb5c96c32a",
+    "Name": "Indoor Soccer Shoes",
+    "Description": "Shoes for indoor courts and futsal play.",
+    "Size": "",
+    "Type": "Surface"
+  },
+  {
+    "Id": "b9fd11e5-9e7e-49d2-8671-6c9c9373701d",
+    "Name": "Elite Tier",
+    "Description": "Top-tier Nike cleats used by professional players.",
+    "Size": "",
+    "Type": "Tier"
+  },
+  {
+    "Id": "d06fd01a-56e3-4b9b-91cb-061a6c914fcd",
+    "Name": "Academy Tier",
+    "Description": "Mid-level cleats offering great performance at a lower cost.",
+    "Size": "",
+    "Type": "Tier"
+  },
+  {
+    "Id": "47f3c04f-3fbe-4c73-9a0a-c30a0fc29a32",
+    "Name": "Pro Tier",
+    "Description": "High-performance cleats with advanced features for semi-professional players.",
+    "Size": "",
+    "Type": "Tier"
+  },
+  {
+    "Id": "3b0a0ac7-cad0-487e-85cf-b8d470f5283c",
+    "Name": "Men’s Soccer Shoes",
+    "Description": "Soccer shoes designed for male players.",
+    "Size": "6-13 US",
+    "Type": "Gender"
+  },
+  {
+    "Id": "649b2ea3-61a6-4380-b7a2-f0709c16ec7a",
+    "Name": "Women’s Soccer Shoes",
+    "Description": "Soccer shoes designed for female players.",
+    "Size": "5-11 US",
+    "Type": "Gender"
+  }
+]

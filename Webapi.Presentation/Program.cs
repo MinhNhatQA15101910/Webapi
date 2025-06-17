@@ -43,6 +43,9 @@ try
     await context.Database.MigrateAsync();
     await Seed.SeedUsersAsync(userManager, roleManager);
     await Seed.SeedProductsAsync(unitOfWork);
+    await Seed.SeedCategoriesAsync(unitOfWork);
+
+    await unitOfWork.CompleteAsync();
 }
 catch (Exception ex)
 {
