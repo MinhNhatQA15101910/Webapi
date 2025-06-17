@@ -9,5 +9,5 @@ public interface IUnitOfWork
     IProductSizeRepository ProductSizeRepository { get; }
     ICartItemRepository CartItemRepository { get; }
     
-    Task<bool> CompleteAsync();
+    Task<bool> CompleteAsync(CancellationToken cancellationToken = default);
 }

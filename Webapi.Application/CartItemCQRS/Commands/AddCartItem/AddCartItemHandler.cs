@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Webapi.Application.Common.Exceptions.CartItem;
-using Webapi.Application.Common.Exceptions.Product;
+using Webapi.Application.Common.Exceptions;
+using Webapi.Application.Common.Exceptions.ProductSize;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Domain.Entities;
@@ -18,73 +18,34 @@ public class AddCartItemHandler(
 {
     public async Task<CartItemDto> Handle(AddCartItemCommand request, CancellationToken cancellationToken)
     {
-        try
+        var userId = httpContextAccessor.HttpContext.User.GetUserId();
+
+        var productSize = await unitOfWork.ProductSizeRepository
+            .GetByIdAsync(request.AddCartItemDto.ProductSizeId, cancellationToken)
+            ?? throw new ProductSizeNotFoundException(request.AddCartItemDto.ProductSizeId);
+
+        var cartItem = await unitOfWork.CartItemRepository.GetCartItemAsync(userId, productSize.Id, cancellationToken);
+        if (cartItem != null)
         {
-            var userId = httpContextAccessor.HttpContext.User.GetUserId();
-            
-            // Verify product exists
-            var product = await unitOfWork.ProductRepository.GetByIdAsync(request.CartItemDto.ProductId, cancellationToken)
-                ?? throw new ProductNotFoundException(request.CartItemDto.ProductId);
-                
-            // Check if the product is in stock
-            if (!await unitOfWork.ProductRepository.IsInStockAsync(request.CartItemDto.ProductId, request.CartItemDto.Quantity, cancellationToken))
-            {
-                throw new CartItemCreateException($"Product {request.CartItemDto.ProductId} is not available in the requested quantity");
-            }
-            
-            // Check if item already exists in cart
-            var existingCartItem = await unitOfWork.CartItemRepository.GetCartItemAsync(userId, request.CartItemDto.ProductId, cancellationToken);
-            
-            if (existingCartItem != null)
-            {
-                // Update quantity instead of creating new
-                existingCartItem.Quantity += request.CartItemDto.Quantity;
-                existingCartItem.UpdatedAt = DateTime.UtcNow;
-                
-                unitOfWork.CartItemRepository.Update(existingCartItem);
-                await unitOfWork.CompleteAsync();
-                
-                return mapper.Map<CartItemDto>(existingCartItem);
-            }
-            
-            // Create new cart item
-            var cartItem = new CartItem
+            cartItem.Quantity += request.AddCartItemDto.Quantity;
+        }
+        else
+        {
+            cartItem = new CartItem
             {
                 UserId = userId,
-                ProductId = request.CartItemDto.ProductId,
-                Quantity = request.CartItemDto.Quantity,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                ProductSizeId = productSize.Id,
+                Quantity = request.AddCartItemDto.Quantity
             };
-            
+
             unitOfWork.CartItemRepository.Add(cartItem);
-            await unitOfWork.CompleteAsync();
-            
-            // Get the cart item with product details
-            var addedCartItem = await unitOfWork.CartItemRepository.GetCartItemWithDetailsAsync(userId, request.CartItemDto.ProductId, cancellationToken)
-                ?? throw new CartItemNotFoundException(userId, request.CartItemDto.ProductId);
-            
-            return mapper.Map<CartItemDto>(addedCartItem);
         }
-        catch (ProductNotFoundException)
+
+        if (!await unitOfWork.CompleteAsync(cancellationToken))
         {
-            // Rethrow specific exceptions
-            throw;
+            throw new BadRequestException("Failed to add item to cart.");
         }
-        catch (CartItemNotFoundException)
-        {
-            // Rethrow specific exceptions
-            throw;
-        }
-        catch (CartItemCreateException)
-        {
-            // Rethrow specific exceptions
-            throw;
-        }
-        catch (Exception ex)
-        {
-            // Wrap other exceptions
-            throw new CartItemCreateException($"An unexpected error occurred: {ex.Message}");
-        }
+
+        return mapper.Map<CartItemDto>(cartItem);
     }
 }

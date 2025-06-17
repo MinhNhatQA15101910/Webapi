@@ -3,7 +3,7 @@ using Webapi.Domain.Interfaces;
 namespace Webapi.Infrastructure.Persistence.Repositories;
 
 public class UnitOfWork(
-    AppDbContext dbContext, 
+    AppDbContext dbContext,
     IUserRepository userRepository,
     IProductRepository productRepository,
     IProductPhotoRepository productPhotoRepository,
@@ -14,14 +14,14 @@ public class UnitOfWork(
 {
     public IUserRepository UserRepository => userRepository;
     public IProductRepository ProductRepository => productRepository;
-    
+
     public ICategoryRepository CategoryRepository => categoryRepository;
     public IProductPhotoRepository ProductPhotoRepository => productPhotoRepository;
     public IProductSizeRepository ProductSizeRepository => productSizeRepository;
     public ICartItemRepository CartItemRepository => cartItemRepository;
 
-    public async Task<bool> CompleteAsync()
+    public async Task<bool> CompleteAsync(CancellationToken cancellationToken = default)
     {
-        return await dbContext.SaveChangesAsync() > 0;
+        return await dbContext.SaveChangesAsync(cancellationToken) > 0;
     }
 }

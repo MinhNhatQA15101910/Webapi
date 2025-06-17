@@ -6,39 +6,32 @@ using Webapi.SharedKernel.Params;
 
 namespace Webapi.Infrastructure.Persistence.Repositories;
 
-public class ProductSizeRepository : IProductSizeRepository
+public class ProductSizeRepository(AppDbContext context) : IProductSizeRepository
 {
-    private readonly AppDbContext _context;
-
-    public ProductSizeRepository(AppDbContext context)
-    {
-        _context = context;
-    }
-
     public async Task<ProductSize?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.ProductSizes
-            .Include(ps => ps.Product)
+        return await context.ProductSizes
+            .Include(ps => ps.Product).ThenInclude(p => p.Photos)
             .FirstOrDefaultAsync(ps => ps.Id == id, cancellationToken);
     }
 
     public async Task<IEnumerable<ProductSize>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.ProductSizes
+        return await context.ProductSizes
             .Include(ps => ps.Product)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<ProductSize>> GetByProductIdAsync(Guid productId, CancellationToken cancellationToken = default)
     {
-        return await _context.ProductSizes
+        return await context.ProductSizes
             .Where(ps => ps.ProductId == productId)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<PagedList<ProductSize>> GetProductSizesAsync(ProductSizeParams productSizeParams, CancellationToken cancellationToken = default)
     {
-        var query = _context.ProductSizes
+        var query = context.ProductSizes
             .Include(ps => ps.Product)
             .AsQueryable();
 
@@ -80,26 +73,26 @@ public class ProductSizeRepository : IProductSizeRepository
 
     public void Add(ProductSize productSize)
     {
-        _context.ProductSizes.Add(productSize);
+        context.ProductSizes.Add(productSize);
     }
 
     public void Update(ProductSize productSize)
     {
-        _context.Entry(productSize).State = EntityState.Modified;
+        context.Entry(productSize).State = EntityState.Modified;
     }
 
     public void Remove(ProductSize productSize)
     {
-        _context.ProductSizes.Remove(productSize);
+        context.ProductSizes.Remove(productSize);
     }
 
     public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _context.ProductSizes.AnyAsync(ps => ps.Id == id, cancellationToken);
+        return await context.ProductSizes.AnyAsync(ps => ps.Id == id, cancellationToken);
     }
 
     public async Task<bool> AnyAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.ProductSizes.AnyAsync(cancellationToken);
+        return await context.ProductSizes.AnyAsync(cancellationToken);
     }
 }

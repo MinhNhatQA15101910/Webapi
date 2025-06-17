@@ -60,21 +60,21 @@ public class AutoMapperProfile : Profile
                     src.Photos != null ? src.Photos : new List<ProductPhoto>()))
             .ForMember(
                 dest => dest.Sizes,
-                opt => opt.MapFrom(src => 
-                    src.Sizes != null ? src.Sizes : new List<ProductSize>()));
+                opt => opt.MapFrom(src =>
+                    src.Sizes ?? new List<ProductSize>()));
 
         CreateMap<CartItem, CartItemDto>()
             .ForMember(
                 dest => dest.ProductName,
-                opt => opt.MapFrom(src => src.Product.Name))
+                opt => opt.MapFrom(src => src.ProductSize.Product.Name))
             .ForMember(
                 dest => dest.ProductPrice,
-                opt => opt.MapFrom(src => src.Product.Price))
+                opt => opt.MapFrom(src => src.ProductSize.Product.Price))
             .ForMember(
                 dest => dest.ProductPhotoUrl,
                 opt => opt.MapFrom(src => 
-                    src.Product.Photos != null && src.Product.Photos.Any(p => p.IsMain) ? 
-                    src.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url : 
+                    src.ProductSize.Product.Photos != null && src.ProductSize.Product.Photos.Any(p => p.IsMain) ? 
+                    src.ProductSize.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url : 
                     null));
     }
 }

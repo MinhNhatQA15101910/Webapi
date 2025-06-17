@@ -45,7 +45,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .IsRequired();
 
         builder.Entity<CartItem>()
-            .HasKey(x => new { x.UserId, x.ProductId });
+            .HasKey(x => new { x.UserId, x.ProductSizeId });
 
         builder.Entity<User>()
             .HasMany(x => x.CartItems)

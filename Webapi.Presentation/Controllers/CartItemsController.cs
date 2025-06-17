@@ -25,9 +25,9 @@ public class CartItemsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CartItemDto>> AddCartItem(CreateCartItemDto createCartItemDto)
+    public async Task<ActionResult<CartItemDto>> AddCartItem(AddCartItemDto addCartItemDto)
     {
-        var command = new AddCartItemCommand(createCartItemDto);
+        var command = new AddCartItemCommand(addCartItemDto);
         var result = await mediator.Send(command);
         return CreatedAtAction(nameof(GetCartItems), result);
     }
