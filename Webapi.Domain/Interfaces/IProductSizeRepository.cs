@@ -14,4 +14,5 @@ public interface IProductSizeRepository
     void Update(ProductSize productSize);
     void Remove(ProductSize productSize);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<bool> AnyAsync(CancellationToken cancellationToken = default);
 }

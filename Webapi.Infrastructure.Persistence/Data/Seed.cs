@@ -113,6 +113,8 @@ public class Seed
         IUnitOfWork unitOfWork
     )
     {
+        if (await unitOfWork.ProductRepository.AnyAsync()) return;
+
         var productCategoriesData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/ProductCategorySeedData.json");
 
         var options = new JsonSerializerOptions
@@ -136,6 +138,31 @@ public class Seed
             Console.WriteLine($"Adding product category: {productCategory.CategoryId} to product: {product.Name}");
 
             product.Categories.Add(productCategory);
+        }
+    }
+
+    public static async Task SeedProductSizesAsync(
+        IUnitOfWork unitOfWork
+    )
+    {
+        if (await unitOfWork.ProductSizeRepository.AnyAsync()) return;
+
+        var productSizeData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/ProductSizeSeedData.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var productSizes = JsonSerializer.Deserialize<List<ProductSize>>(productSizeData, options);
+
+        if (productSizes == null) return;
+
+        foreach (var productSize in productSizes)
+        {
+            Console.WriteLine($"Adding product size for product: {productSize.ProductId}, size: {productSize.Size}");
+
+            unitOfWork.ProductSizeRepository.Add(productSize);
         }
     }
 }

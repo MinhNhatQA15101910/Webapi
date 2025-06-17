@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
-using Webapi.Infrastructure.Persistence.Data;
 using Webapi.SharedKernel.Helpers;
 using Webapi.SharedKernel.Params;
 
@@ -57,17 +56,17 @@ public class ProductSizeRepository : IProductSizeRepository
         // Apply sorting
         query = productSizeParams.OrderBy?.ToLower() switch
         {
-            "size" => productSizeParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(ps => ps.Size) 
+            "size" => productSizeParams.SortBy?.ToLower() == "desc"
+                ? query.OrderByDescending(ps => ps.Size)
                 : query.OrderBy(ps => ps.Size),
-            "quantity" => productSizeParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(ps => ps.Quantity) 
+            "quantity" => productSizeParams.SortBy?.ToLower() == "desc"
+                ? query.OrderByDescending(ps => ps.Quantity)
                 : query.OrderBy(ps => ps.Quantity),
-            "created" => productSizeParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(ps => ps.CreatedAt) 
+            "created" => productSizeParams.SortBy?.ToLower() == "desc"
+                ? query.OrderByDescending(ps => ps.CreatedAt)
                 : query.OrderBy(ps => ps.CreatedAt),
-            _ => productSizeParams.SortBy?.ToLower() == "desc" 
-                ? query.OrderByDescending(ps => ps.Size) 
+            _ => productSizeParams.SortBy?.ToLower() == "desc"
+                ? query.OrderByDescending(ps => ps.Size)
                 : query.OrderBy(ps => ps.Size),
         };
 
@@ -97,5 +96,10 @@ public class ProductSizeRepository : IProductSizeRepository
     public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.ProductSizes.AnyAsync(ps => ps.Id == id, cancellationToken);
+    }
+
+    public async Task<bool> AnyAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.ProductSizes.AnyAsync(cancellationToken);
     }
 }
