@@ -11,7 +11,7 @@ using Webapi.Infrastructure.Persistence;
 namespace Webapi.Infrastructure.Persistence.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-[Migration("20250618110750_SqlInitial")]
+[Migration("20250618124710_SqlInitial")]
 partial class SqlInitial
 {
     /// <inheritdoc />
@@ -220,8 +220,8 @@ partial class SqlInitial
                     .IsRequired()
                     .HasColumnType("TEXT");
 
-                b.Property<double>("TotalPrice")
-                    .HasColumnType("REAL");
+                b.Property<decimal>("TotalPrice")
+                    .HasColumnType("TEXT");
 
                 b.Property<DateTime>("UpdatedAt")
                     .HasColumnType("TEXT");

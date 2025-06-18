@@ -5,7 +5,7 @@ namespace Webapi.Domain.Entities;
 public class Order
 {
     public Guid Id { get; set; }
-    public double TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
     public string ShippingType { get; set; } = string.Empty;
     public double ShippingCost { get; set; }
     public string OrderState { get; set; } = OrderStates.Pending.ToString();

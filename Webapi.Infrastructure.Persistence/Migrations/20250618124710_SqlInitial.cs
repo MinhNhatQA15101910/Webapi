@@ -235,7 +235,7 @@ public partial class SqlInitial : Migration
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                TotalPrice = table.Column<double>(type: "REAL", nullable: false),
+                TotalPrice = table.Column<decimal>(type: "TEXT", nullable: false),
                 ShippingType = table.Column<string>(type: "TEXT", nullable: false),
                 ShippingCost = table.Column<double>(type: "REAL", nullable: false),
                 OrderState = table.Column<string>(type: "TEXT", nullable: false),

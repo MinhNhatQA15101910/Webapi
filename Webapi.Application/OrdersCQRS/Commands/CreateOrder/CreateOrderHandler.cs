@@ -52,7 +52,7 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
         }
 
         // Calculate total price and shipping cost
-        double totalPrice = cartItems.Sum(ci => (double)ci.ProductSize.Product.Price * ci.Quantity);
+        var totalPrice = cartItems.Sum(ci => ci.ProductSize.Product.Price * ci.Quantity);
 
         var orderId = Guid.NewGuid();
         var order = new Order

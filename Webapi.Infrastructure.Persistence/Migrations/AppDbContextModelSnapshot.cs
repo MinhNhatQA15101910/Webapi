@@ -217,8 +217,8 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .IsRequired()
                     .HasColumnType("TEXT");
 
-                b.Property<double>("TotalPrice")
-                    .HasColumnType("REAL");
+                b.Property<decimal>("TotalPrice")
+                    .HasColumnType("TEXT");
 
                 b.Property<DateTime>("UpdatedAt")
                     .HasColumnType("TEXT");
