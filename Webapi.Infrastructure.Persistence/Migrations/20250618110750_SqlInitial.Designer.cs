@@ -11,7 +11,7 @@ using Webapi.Infrastructure.Persistence;
 namespace Webapi.Infrastructure.Persistence.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-[Migration("20250617120825_SqlInitial")]
+[Migration("20250618110750_SqlInitial")]
 partial class SqlInitial
 {
     /// <inheritdoc />
@@ -206,7 +206,7 @@ partial class SqlInitial
                 b.Property<DateTime>("CreatedAt")
                     .HasColumnType("TEXT");
 
-                b.Property<string>("OrderStatus")
+                b.Property<string>("OrderState")
                     .IsRequired()
                     .HasColumnType("TEXT");
 

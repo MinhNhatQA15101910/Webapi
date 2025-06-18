@@ -8,6 +8,7 @@ public interface IUnitOfWork
     ICategoryRepository CategoryRepository { get; }
     IProductSizeRepository ProductSizeRepository { get; }
     ICartItemRepository CartItemRepository { get; }
+    IOrderRepository OrderRepository { get; }
     
     Task<bool> CompleteAsync(CancellationToken cancellationToken = default);
 }

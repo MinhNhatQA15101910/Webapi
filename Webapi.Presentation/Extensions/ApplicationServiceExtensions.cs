@@ -71,6 +71,7 @@ public static class ApplicationServiceExtensions
         });
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<UserRepository>();
+        services.AddScoped<OrderRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IProductPhotoRepository, ProductPhotoRepository>();
@@ -78,7 +79,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ICartItemRepository, CartItemRepository>();
 
         services.AddScoped<IUserRepository, UserProxy>();
-        
+        services.AddScoped<IOrderRepository, OrderProxy>();
+
         return services;
     }
 }

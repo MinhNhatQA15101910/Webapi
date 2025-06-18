@@ -72,4 +72,12 @@ public class CartItemRepository(AppDbContext context) : ICartItemRepository
             .Where(ci => ci.UserId == userId)
             .SumAsync(ci => ci.ProductSize.Product.Price * ci.Quantity, cancellationToken);
     }
+
+    public async Task<CartItem?> GetCartItemByIdAsync(Guid cartItemId, CancellationToken cancellationToken = default)
+    {
+        return await context.CartItems
+            .Include(ci => ci.ProductSize)
+                .ThenInclude(ps => ps.Product)
+            .FirstOrDefaultAsync(ci => ci.Id == cartItemId, cancellationToken);
+    }
 }

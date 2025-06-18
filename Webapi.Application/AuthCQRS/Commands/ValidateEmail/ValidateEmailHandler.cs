@@ -54,14 +54,9 @@ public class ValidateEmailHandler : ICommandHandler<ValidateEmailCommand, object
 
     private void Subscribe(IEmailValidatedListener listener)
     {
-        if (listener is null)
-        {
-            throw new ArgumentNullException(nameof(listener));
-        }
-
         _listeners.Add(listener);
     }
-    
+
     private async Task NotifyListenersAsync(string email, string pincode, CancellationToken cancellationToken)
     {
         foreach (var listener in _listeners)

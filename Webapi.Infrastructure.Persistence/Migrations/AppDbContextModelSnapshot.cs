@@ -203,7 +203,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<DateTime>("CreatedAt")
                     .HasColumnType("TEXT");
 
-                b.Property<string>("OrderStatus")
+                b.Property<string>("OrderState")
                     .IsRequired()
                     .HasColumnType("TEXT");
 

@@ -6,9 +6,9 @@ public class CartItemNotFoundException : NotFoundException
         : base($"The cart item for user {userId} and product {productId} was not found.")
     {
     }
-    
-    public CartItemNotFoundException(string message)
-        : base(message)
+
+    public CartItemNotFoundException(Guid cartItemId)
+        : base($"The cart item with ID {cartItemId} was not found.")
     {
     }
 }
