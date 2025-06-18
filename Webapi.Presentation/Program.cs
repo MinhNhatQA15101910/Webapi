@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Webapi.Domain.Entities;
+using Webapi.Domain.Interfaces;
 using Webapi.Infrastructure.Persistence;
 using Webapi.Infrastructure.Persistence.Data;
 using Webapi.Presentation.Extensions;
@@ -25,7 +26,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(policy => policy
     .AllowAnyHeader()
     .AllowAnyMethod()
-    .WithOrigins("http://localhost:3000") 
+    .WithOrigins("http://localhost:3000")
     .AllowCredentials());
 
 app.MapControllers();
@@ -37,9 +38,16 @@ try
     var context = services.GetRequiredService<AppDbContext>();
     var userManager = services.GetRequiredService<UserManager<User>>();
     var roleManager = services.GetRequiredService<RoleManager<Role>>();
+    var unitOfWork = services.GetRequiredService<IUnitOfWork>();
 
     await context.Database.MigrateAsync();
     await Seed.SeedUsersAsync(userManager, roleManager);
+    await Seed.SeedProductsAsync(unitOfWork);
+    await Seed.SeedCategoriesAsync(unitOfWork);
+    await Seed.SeedProductCategoriesAsync(unitOfWork);
+    await Seed.SeedProductSizesAsync(unitOfWork);
+
+    await unitOfWork.CompleteAsync();
 }
 catch (Exception ex)
 {

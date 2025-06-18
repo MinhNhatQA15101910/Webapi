@@ -3,6 +3,7 @@ using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Domain.Entities;
 using Webapi.SharedKernel.DTOs;
 using Webapi.SharedKernel.DTOs.CartItem;
+using Webapi.SharedKernel.DTOs.Orders;
 using Webapi.SharedKernel.DTOs.Product;
 using Webapi.SharedKernel.DTOs.ProductPhoto;
 using Webapi.SharedKernel.DTOs.ProductSize;
@@ -26,9 +27,9 @@ public class AutoMapperProfile : Profile
                     src => src.Photos.FirstOrDefault(
                         p => p.IsMain)!.Url));
         CreateMap<ValidateSignupDto, User>();
-        
+
         CreateMap<ProductPhoto, ProductPhotoDto>();
-        
+
         // Fix the circular reference issue
         CreateMap<Category, CategoryDto>()
             .ForMember(dest => dest.Products, opt => opt.Ignore()); // Ignore Products to prevent circular mapping
@@ -36,45 +37,61 @@ public class AutoMapperProfile : Profile
         CreateMap<ProductSize, ProductSizeDto>();
         CreateMap<CreateProductSizeDto, ProductSize>();
         CreateMap<UpdateProductSizeDto, ProductSize>();
-        
+
         CreateMap<Product, ProductDto>()
             .ForMember(
                 dest => dest.Categories,
-                opt => opt.MapFrom(src => 
-                    src.Categories != null ? 
-                    src.Categories.Select(pc => new CategoryDto { 
-                        Id = pc.Category.Id, 
-                        Name = pc.Category.Name 
+                opt => opt.MapFrom(src =>
+                    src.Categories != null ?
+                    src.Categories.Select(pc => new CategoryDto
+                    {
+                        Id = pc.Category.Id,
+                        Name = pc.Category.Name
                         // Don't include Products here to avoid circular reference
-                    }).ToList() : 
+                    }).ToList() :
                     new List<CategoryDto>()))
             .ForMember(
                 dest => dest.MainPhotoUrl,
-                opt => opt.MapFrom(src => 
-                    src.Photos != null && src.Photos.Any(p => p.IsMain) ? 
-                    src.Photos.FirstOrDefault(p => p.IsMain)!.Url : 
+                opt => opt.MapFrom(src =>
+                    src.Photos != null && src.Photos.Any(p => p.IsMain) ?
+                    src.Photos.FirstOrDefault(p => p.IsMain)!.Url :
                     null))
             .ForMember(
                 dest => dest.Photos,
-                opt => opt.MapFrom(src => 
-                    src.Photos != null ? src.Photos : new List<ProductPhoto>()))
+                opt => opt.MapFrom(src =>
+                    src.Photos ?? new List<ProductPhoto>()))
             .ForMember(
                 dest => dest.Sizes,
-                opt => opt.MapFrom(src => 
-                    src.Sizes != null ? src.Sizes : new List<ProductSize>()));
+                opt => opt.MapFrom(src =>
+                    src.Sizes ?? new List<ProductSize>()));
 
         CreateMap<CartItem, CartItemDto>()
             .ForMember(
                 dest => dest.ProductName,
-                opt => opt.MapFrom(src => src.Product.Name))
+                opt => opt.MapFrom(src => src.ProductSize.Product.Name))
             .ForMember(
                 dest => dest.ProductPrice,
-                opt => opt.MapFrom(src => src.Product.Price))
+                opt => opt.MapFrom(src => src.ProductSize.Product.Price))
             .ForMember(
                 dest => dest.ProductPhotoUrl,
-                opt => opt.MapFrom(src => 
-                    src.Product.Photos != null && src.Product.Photos.Any(p => p.IsMain) ? 
-                    src.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url : 
+                opt => opt.MapFrom(src =>
+                    src.ProductSize.Product.Photos != null && src.ProductSize.Product.Photos.Any(p => p.IsMain) ?
+                    src.ProductSize.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url :
                     null));
+
+        CreateMap<OrderProduct, OrderProductDto>()
+            .ForMember(
+                dest => dest.ProductName,
+                opt => opt.MapFrom(src => src.ProductSize.Product.Name))
+            .ForMember(
+                dest => dest.ProductPrice,
+                opt => opt.MapFrom(src => src.ProductSize.Product.Price))
+            .ForMember(
+                dest => dest.ProductPhotoUrl,
+                opt => opt.MapFrom(src =>
+                    src.ProductSize.Product.Photos != null && src.ProductSize.Product.Photos.Any(p => p.IsMain) ?
+                    src.ProductSize.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url :
+                    null));
+        CreateMap<Order, OrderDto>();
     }
 }

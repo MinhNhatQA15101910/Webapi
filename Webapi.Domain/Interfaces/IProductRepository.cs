@@ -52,6 +52,7 @@ public interface IProductRepository
     Task AddSizeAsync(Guid productId, ProductSize size, CancellationToken cancellationToken = default);
     Task UpdateSizeAsync(Guid sizeId, string sizeName, int quantity, CancellationToken cancellationToken = default);
     Task DeleteSizeAsync(Guid sizeId, CancellationToken cancellationToken = default);
+    Task<bool> AnyAsync(CancellationToken cancellationToken = default);
 
     #endregion
 }

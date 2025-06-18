@@ -1,12 +1,14 @@
+using Webapi.Domain.Enums;
+
 namespace Webapi.Domain.Entities;
 
 public class Order
 {
     public Guid Id { get; set; }
-    public double TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
     public string ShippingType { get; set; } = string.Empty;
     public double ShippingCost { get; set; }
-    public string OrderStatus { get; set; } = string.Empty;
+    public string OrderState { get; set; } = OrderStates.Pending.ToString();
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<OrderProduct> Products { get; set; } = [];

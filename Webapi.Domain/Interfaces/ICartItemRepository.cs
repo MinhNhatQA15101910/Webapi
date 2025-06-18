@@ -4,8 +4,9 @@ namespace Webapi.Domain.Interfaces;
 
 public interface ICartItemRepository
 {
-    Task<CartItem?> GetCartItemAsync(Guid userId, Guid productId, CancellationToken cancellationToken = default);
-    Task<CartItem?> GetCartItemWithDetailsAsync(Guid userId, Guid productId, CancellationToken cancellationToken = default);
+    Task<CartItem?> GetCartItemAsync(Guid userId, Guid productSizeId, CancellationToken cancellationToken = default);
+    Task<CartItem?> GetCartItemByIdAsync(Guid cartItemId, CancellationToken cancellationToken = default);
+    Task<CartItem?> GetCartItemWithDetailsAsync(Guid userId, Guid productSizeId, CancellationToken cancellationToken = default);
     Task<IEnumerable<CartItem>> GetCartItemsAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<IEnumerable<CartItem>> GetCartItemsWithDetailsAsync(Guid userId, CancellationToken cancellationToken = default);
     void Add(CartItem cartItem);

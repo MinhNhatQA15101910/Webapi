@@ -1,0 +1,219 @@
+[
+  {
+    "Id": "b8d98542-e4e7-4c9d-8a6e-66d59f5eb9c1",
+    "Size": "8",
+    "Quantity": 20,
+    "ProductId": "f1a2d69b-0874-43c3-bf2a-dc9c04253cb8"
+  },
+  {
+    "Id": "e62dbb83-775f-4c56-9465-ffb1d5a912c2",
+    "Size": "9",
+    "Quantity": 32,
+    "ProductId": "f1a2d69b-0874-43c3-bf2a-dc9c04253cb8"
+  },
+  {
+    "Id": "c2de7a16-fb16-4ad5-a63f-3c5c3195d46e",
+    "Size": "10",
+    "Quantity": 15,
+    "ProductId": "f1a2d69b-0874-43c3-bf2a-dc9c04253cb8"
+  },
+  {
+    "Id": "d142a4fb-8c0c-4f36-8dc7-3bb8302c81c9",
+    "Size": "11",
+    "Quantity": 28,
+    "ProductId": "f1a2d69b-0874-43c3-bf2a-dc9c04253cb8"
+  },
+
+  {
+    "Id": "6d4879d4-42e4-4b2b-b41d-28196b4933fd",
+    "Size": "7",
+    "Quantity": 22,
+    "ProductId": "9eab926e-d8cb-4f33-a567-e199a9de4e3a"
+  },
+  {
+    "Id": "e87a4464-d8f6-46e7-89d6-91b5d604d065",
+    "Size": "8",
+    "Quantity": 35,
+    "ProductId": "9eab926e-d8cb-4f33-a567-e199a9de4e3a"
+  },
+  {
+    "Id": "0e6262cb-e6fd-4f7d-97e9-36cdde75e9c6",
+    "Size": "9",
+    "Quantity": 30,
+    "ProductId": "9eab926e-d8cb-4f33-a567-e199a9de4e3a"
+  },
+  {
+    "Id": "ad193c16-65a2-4fa5-a137-800253b6ec2a",
+    "Size": "10",
+    "Quantity": 18,
+    "ProductId": "9eab926e-d8cb-4f33-a567-e199a9de4e3a"
+  },
+
+  {
+    "Id": "c7790e5b-f095-4c8e-9e12-3a35e33f9ed6",
+    "Size": "8",
+    "Quantity": 16,
+    "ProductId": "13e9a3e7-6d4c-4c80-91ec-bbff2e1d9be9"
+  },
+  {
+    "Id": "c1a73bb2-ef5a-4ed0-b17b-84038d80f97e",
+    "Size": "9",
+    "Quantity": 26,
+    "ProductId": "13e9a3e7-6d4c-4c80-91ec-bbff2e1d9be9"
+  },
+  {
+    "Id": "3a1b540f-e13c-4a1c-91d7-3cd1e83fa72a",
+    "Size": "10",
+    "Quantity": 24,
+    "ProductId": "13e9a3e7-6d4c-4c80-91ec-bbff2e1d9be9"
+  },
+  {
+    "Id": "f52b8e84-d2a3-4602-b80d-343fb6bc6a47",
+    "Size": "11",
+    "Quantity": 12,
+    "ProductId": "13e9a3e7-6d4c-4c80-91ec-bbff2e1d9be9"
+  },
+
+  {
+    "Id": "c02abf29-80f7-44ed-83c2-9df23a09876c",
+    "Size": "7",
+    "Quantity": 19,
+    "ProductId": "2c4e14df-4d36-4424-9c49-d3b1c197f9de"
+  },
+  {
+    "Id": "55b64e87-9022-4b7b-bff5-f3e4d8e44b62",
+    "Size": "8",
+    "Quantity": 25,
+    "ProductId": "2c4e14df-4d36-4424-9c49-d3b1c197f9de"
+  },
+  {
+    "Id": "6713be55-7c71-4e41-a759-3a62fbd3b251",
+    "Size": "9",
+    "Quantity": 29,
+    "ProductId": "2c4e14df-4d36-4424-9c49-d3b1c197f9de"
+  },
+  {
+    "Id": "d5db390c-7993-43e4-a272-c57fa843663f",
+    "Size": "10",
+    "Quantity": 22,
+    "ProductId": "2c4e14df-4d36-4424-9c49-d3b1c197f9de"
+  },
+  {
+    "Id": "6dff8c5b-bb68-4c7d-8a2f-67b755d94ee3",
+    "Size": "6",
+    "Quantity": 10,
+    "ProductId": "bd47aa0b-59e6-419b-85c0-e367cf267f8f"
+  },
+  {
+    "Id": "dc96748a-9347-4a09-a0d2-6bb53d0d10ef",
+    "Size": "7",
+    "Quantity": 8,
+    "ProductId": "bd47aa0b-59e6-419b-85c0-e367cf267f8f"
+  },
+  {
+    "Id": "e53b0d40-ef07-4629-9cbb-832ce1633a5c",
+    "Size": "8",
+    "Quantity": 12,
+    "ProductId": "bd47aa0b-59e6-419b-85c0-e367cf267f8f"
+  },
+  {
+    "Id": "4e4be36e-2b1c-46f8-b264-5be85ad2a3de",
+    "Size": "9",
+    "Quantity": 6,
+    "ProductId": "bd47aa0b-59e6-419b-85c0-e367cf267f8f"
+  },
+  {
+    "Id": "28f189d2-f94a-4624-b7b4-cc66f25bcf89",
+    "Size": "7",
+    "Quantity": 25,
+    "ProductId": "7e10e76c-6b3a-4e24-9e71-8327e9e3152a"
+  },
+  {
+    "Id": "c1dcaa49-b25a-4130-8d61-2db17265c3de",
+    "Size": "8",
+    "Quantity": 30,
+    "ProductId": "7e10e76c-6b3a-4e24-9e71-8327e9e3152a"
+  },
+  {
+    "Id": "e7382ff9-452a-4d79-a826-7c0e1f8fd89f",
+    "Size": "9",
+    "Quantity": 25,
+    "ProductId": "7e10e76c-6b3a-4e24-9e71-8327e9e3152a"
+  },
+
+  {
+    "Id": "9c54c96a-6d44-4e20-a5b2-7aa326e6221e",
+    "Size": "8",
+    "Quantity": 22,
+    "ProductId": "4425378c-ece5-49e5-bf2e-ccc88c650e1e"
+  },
+  {
+    "Id": "a7b7e3f2-e94c-42f6-bddb-9bbf1de997cf",
+    "Size": "9",
+    "Quantity": 35,
+    "ProductId": "4425378c-ece5-49e5-bf2e-ccc88c650e1e"
+  },
+  {
+    "Id": "6fa1171a-cd85-4d63-b4ed-37ce4b87915b",
+    "Size": "10",
+    "Quantity": 28,
+    "ProductId": "4425378c-ece5-49e5-bf2e-ccc88c650e1e"
+  },
+
+  {
+    "Id": "2d8ad0f8-d2ee-463a-9c99-702989ff9973",
+    "Size": "7",
+    "Quantity": 18,
+    "ProductId": "af69a4da-2b76-4f7e-bc9e-3408cba67679"
+  },
+  {
+    "Id": "fb6d5942-7d56-42cf-a5f1-f34edbd9fa7e",
+    "Size": "8",
+    "Quantity": 25,
+    "ProductId": "af69a4da-2b76-4f7e-bc9e-3408cba67679"
+  },
+  {
+    "Id": "bb1b832e-3a7d-4765-843e-2e3f43d40073",
+    "Size": "9",
+    "Quantity": 22,
+    "ProductId": "af69a4da-2b76-4f7e-bc9e-3408cba67679"
+  },
+
+  {
+    "Id": "8895c57a-8c01-4e77-93df-206e98a89b6e",
+    "Size": "8",
+    "Quantity": 40,
+    "ProductId": "abef42b6-bf36-4ac9-9250-5f0128b78e3f"
+  },
+  {
+    "Id": "f9c8ed13-83f3-47ec-84d3-21ad88590918",
+    "Size": "9",
+    "Quantity": 60,
+    "ProductId": "abef42b6-bf36-4ac9-9250-5f0128b78e3f"
+  },
+  {
+    "Id": "407d7c3f-2550-405f-8a64-8fef9c117607",
+    "Size": "10",
+    "Quantity": 50,
+    "ProductId": "abef42b6-bf36-4ac9-9250-5f0128b78e3f"
+  },
+
+  {
+    "Id": "3ed1677d-958e-4c79-8e57-e3fba08a69bb",
+    "Size": "7",
+    "Quantity": 28,
+    "ProductId": "93e6d4a3-fbd1-4565-83d4-b168fe9d5c91"
+  },
+  {
+    "Id": "a3f9a498-8fc6-4a46-bf66-405bf1614fcf",
+    "Size": "8",
+    "Quantity": 30,
+    "ProductId": "93e6d4a3-fbd1-4565-83d4-b168fe9d5c91"
+  },
+  {
+    "Id": "7852b20d-e00a-4261-9939-99806c146ba9",
+    "Size": "9",
+    "Quantity": 35,
+    "ProductId": "93e6d4a3-fbd1-4565-83d4-b168fe9d5c91"
+  }
+]

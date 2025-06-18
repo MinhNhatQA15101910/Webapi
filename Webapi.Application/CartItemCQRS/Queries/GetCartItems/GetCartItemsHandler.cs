@@ -16,10 +16,10 @@ public class GetCartItemsHandler(
     public async Task<IEnumerable<CartItemDto>> Handle(GetCartItemsQuery request, CancellationToken cancellationToken)
     {
         var userId = httpContextAccessor.HttpContext.User.GetUserId();
-        
+
         // Get cart items with product details
         var cartItems = await unitOfWork.CartItemRepository.GetCartItemsWithDetailsAsync(userId, cancellationToken);
-        
+
         // Map to DTOs
         return mapper.Map<IEnumerable<CartItemDto>>(cartItems);
     }
