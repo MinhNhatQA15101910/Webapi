@@ -7,6 +7,7 @@ using Webapi.SharedKernel.DTOs.Orders;
 using Webapi.SharedKernel.DTOs.Product;
 using Webapi.SharedKernel.DTOs.ProductPhoto;
 using Webapi.SharedKernel.DTOs.ProductSize;
+using Webapi.SharedKernel.DTOs.Voucher;
 
 namespace Webapi.Application.Common.Mappings;
 
@@ -93,5 +94,9 @@ public class AutoMapperProfile : Profile
                     src.ProductSize.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url :
                     null));
         CreateMap<Order, OrderDto>();
+
+        CreateMap<Voucher, VoucherDto>();
+        CreateMap<CreateVoucherDto, Voucher>();
+        CreateMap<UpdateVoucherDto, Voucher>();
     }
 }

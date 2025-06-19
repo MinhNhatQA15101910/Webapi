@@ -3,13 +3,16 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Webapi.Application;
 using Webapi.Application.Common.Helpers;
+using Webapi.Application.Common.Interfaces.Factories;
 using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Domain.Interfaces;
 using Webapi.Infrastructure.Persistence;
 using Webapi.Infrastructure.Persistence.Proxies;
 using Webapi.Infrastructure.Persistence.Repositories;
 using Webapi.Infrastructure.Repositories;
+using Webapi.Infrastructure.Services.Adapters;
 using Webapi.Infrastructure.Services.Configurations;
+using Webapi.Infrastructure.Services.Factories;
 using Webapi.Infrastructure.Services.Services;
 using Webapi.Presentation.Middlewares;
 
@@ -60,6 +63,13 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<ICacheService, CacheService>();
 
+        // Register voucher import services
+        services.AddScoped<JsonVoucherImport>();
+        services.AddScoped<XlsVoucherImport>();
+        services.AddScoped<XlsVoucherImportAdapter>();
+
+        services.AddScoped<IVoucherImportFactory, VoucherImportFactory>();
+
         return services;
     }
 
@@ -77,6 +87,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IProductPhotoRepository, ProductPhotoRepository>();
         services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
         services.AddScoped<ICartItemRepository, CartItemRepository>();
+        services.AddScoped<IVoucherRepository, VoucherRepository>();
+
 
         services.AddScoped<IUserRepository, UserProxy>();
         services.AddScoped<IOrderRepository, OrderProxy>();
