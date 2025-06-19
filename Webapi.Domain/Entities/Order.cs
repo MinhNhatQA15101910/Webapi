@@ -1,9 +1,11 @@
 using Webapi.Domain.Enums;
+using Webapi.Domain.Interfaces.States;
 
 namespace Webapi.Domain.Entities;
 
 public class Order
 {
+    #region Properties
     public Guid Id { get; set; }
     public decimal TotalPrice { get; set; }
     public string ShippingType { get; set; } = string.Empty;
@@ -17,4 +19,27 @@ public class Order
     // Navigation properties
     public Guid OwnerId { get; set; }
     public User Owner { get; set; } = null!;
+    #endregion
+
+    private IOrderState _state = new PendingState();
+
+    public void SetState(IOrderState state)
+    {
+        _state = state;
+    }
+
+    public void NextState()
+    {
+        _state.Next(this);
+    }
+
+    public void Cancel()
+    {
+        _state.Cancel(this);
+    }
+
+    public OrderStates GetStatus()
+    {
+        return _state.GetStatus();
+    }
 }
