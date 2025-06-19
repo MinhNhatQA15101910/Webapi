@@ -15,13 +15,13 @@ public enum OrderStates
 
 public static class OrderStateFactory
 {
-    public static IOrderState Create(OrderStates status)
+    public static IOrderState Create(OrderStates orderState, OrderContext orderContext)
     {
-        return status switch
+        return orderState switch
         {
-            OrderStates.Pending => new PendingState(),
-            OrderStates.Packaged => new PackagedState(),
-            OrderStates.InDelivery => new InDeliveryState(),
+            OrderStates.Pending => new PendingState(orderContext),
+            OrderStates.Packaged => new PackagedState(orderContext),
+            OrderStates.InDelivery => new InDeliveryState(orderContext),
             OrderStates.Undelivered => new UndeliveredState(),
             OrderStates.Completed => new CompletedState(),
             OrderStates.Cancelled => new CancelledState(),
@@ -29,11 +29,11 @@ public static class OrderStateFactory
         };
     }
 
-    public static IOrderState Create(string status)
+    public static IOrderState Create(string status, OrderContext orderContext)
     {
         if (Enum.TryParse<OrderStates>(status, out var orderState))
         {
-            return Create(orderState);
+            return Create(orderState, orderContext);
         }
         throw new ArgumentException($"Invalid order state: {status}");
     }

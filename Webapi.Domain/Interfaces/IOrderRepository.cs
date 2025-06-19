@@ -10,4 +10,5 @@ public interface IOrderRepository
     void Add(Order order);
     Task<Order?> GetOrderByIdAsync(Guid orderId, CancellationToken cancellationToken);
     Task<PagedList<OrderDto>> GetOrdersAsync(Guid? userId, OrderParams orderParams, CancellationToken cancellationToken = default);
+    void Update(Order order);
 }

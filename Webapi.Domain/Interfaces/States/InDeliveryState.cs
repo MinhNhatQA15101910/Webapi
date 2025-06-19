@@ -3,16 +3,18 @@ using Webapi.Domain.Enums;
 
 namespace Webapi.Domain.Interfaces.States;
 
-public class InDeliveryState : IOrderState
+public class InDeliveryState(OrderContext orderContext) : IOrderState
 {
-    public void Next(OrderContext orderContext)
+    private readonly OrderContext _orderContext = orderContext;
+
+    public void Next()
     {
-        orderContext.SetState(new CompletedState());
+        _orderContext.SetState(new CompletedState());
     }
 
-    public void Cancel(OrderContext orderContext)
+    public void Cancel()
     {
-        orderContext.SetState(new UndeliveredState());
+        _orderContext.SetState(new UndeliveredState());
     }
 
     public OrderStates GetStatus()

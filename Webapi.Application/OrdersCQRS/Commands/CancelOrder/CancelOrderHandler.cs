@@ -20,6 +20,8 @@ public class ProceedOrderHandler(
         var orderContext = new OrderContext(order);
         orderContext.Cancel();
 
+        unitOfWork.OrderRepository.Update(order);
+
         if (!await unitOfWork.CompleteAsync(cancellationToken))
         {
             throw new BadRequestException("Order cannot be cancelled.");

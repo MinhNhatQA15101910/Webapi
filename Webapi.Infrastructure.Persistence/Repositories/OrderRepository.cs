@@ -76,4 +76,10 @@ public class OrderRepository(
             cancellationToken
         );
     }
+
+    public void Update(Order order)
+    {
+        order.UpdatedAt = DateTime.UtcNow;
+        dbContext.Orders.Update(order);
+    }
 }
