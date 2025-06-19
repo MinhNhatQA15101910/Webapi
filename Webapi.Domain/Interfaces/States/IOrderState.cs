@@ -5,7 +5,7 @@ namespace Webapi.Domain.Interfaces.States;
 
 public interface IOrderState
 {
-    void Next(Order order);
-    void Cancel(Order order);
+    void Next(OrderContext orderContext);
+    void Cancel(OrderContext orderContext);
     OrderStates GetStatus();
 }

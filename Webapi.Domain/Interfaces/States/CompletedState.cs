@@ -5,7 +5,7 @@ namespace Webapi.Domain.Interfaces.States;
 
 public class CompletedState : IOrderState
 {
-    public void Cancel(Order order)
+    public void Cancel(OrderContext orderContext)
     {
         Console.WriteLine("Cannot cancel a completed order.");
     }
@@ -15,7 +15,7 @@ public class CompletedState : IOrderState
         return OrderStates.Completed;
     }
 
-    public void Next(Order order)
+    public void Next(OrderContext orderContext)
     {
         Console.WriteLine("Order is already completed. No next state available.");
     }

@@ -2,6 +2,7 @@ using AutoMapper;
 using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Domain.Interfaces;
+using Webapi.Domain.Interfaces.States;
 using Webapi.SharedKernel.DTOs.Orders;
 
 namespace Webapi.Application.OrdersCQRS.Commands.CancelOrder;
@@ -16,7 +17,7 @@ public class ProceedOrderHandler(
         var order = await unitOfWork.OrderRepository.GetOrderByIdAsync(request.OrderId, cancellationToken)
             ?? throw new OrderNotFoundException(request.OrderId);
 
-        order.Cancel();
+        new OrderContext(order).Cancel();
 
         if (!await unitOfWork.CompleteAsync(cancellationToken))
         {

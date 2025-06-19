@@ -5,14 +5,14 @@ namespace Webapi.Domain.Interfaces.States;
 
 public class PendingState : IOrderState
 {
-    public void Next(Order order)
+    public void Next(OrderContext orderContext)
     {
-        order.SetState(new PackagedState());
+        orderContext.SetState(new PackagedState());
     }
 
-    public void Cancel(Order order)
+    public void Cancel(OrderContext orderContext)
     {
-        order.SetState(new CancelledState());
+        orderContext.SetState(new CancelledState());
     }
 
     public OrderStates GetStatus()

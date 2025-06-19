@@ -5,14 +5,14 @@ namespace Webapi.Domain.Interfaces.States;
 
 public class PackagedState : IOrderState
 {
-    public void Next(Order order)
+    public void Next(OrderContext orderContext)
     {
-        order.SetState(new InDeliveryState());
+        orderContext.SetState(new InDeliveryState());
     }
 
-    public void Cancel(Order order)
+    public void Cancel(OrderContext orderContext)
     {
-        order.SetState(new CancelledState());
+        orderContext.SetState(new CancelledState());
     }
 
     public OrderStates GetStatus()

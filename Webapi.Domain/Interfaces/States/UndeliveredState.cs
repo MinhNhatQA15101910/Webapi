@@ -5,7 +5,7 @@ namespace Webapi.Domain.Interfaces.States;
 
 public class UndeliveredState : IOrderState
 {
-    public void Cancel(Order order)
+    public void Cancel(OrderContext orderContext)
     {
         Console.WriteLine("Cannot cancel an undelivered order.");
     }
@@ -15,7 +15,7 @@ public class UndeliveredState : IOrderState
         return OrderStates.Undelivered;
     }
 
-    public void Next(Order order)
+    public void Next(OrderContext orderContext)
     {
         Console.WriteLine("Order is undelivered and cannot proceed to the next state.");
     }

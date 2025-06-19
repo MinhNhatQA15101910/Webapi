@@ -5,12 +5,12 @@ namespace Webapi.Domain.Interfaces.States;
 
 public class CancelledState : IOrderState
 {
-    public void Next(Order order)
+    public void Next(OrderContext orderContext)
     {
         Console.WriteLine("Order is cancelled and cannot proceed to the next state.");
     }
 
-    public void Cancel(Order order)
+    public void Cancel(OrderContext orderContext)
     {
         Console.WriteLine("Order is already cancelled.");
     }
