@@ -28,4 +28,13 @@ public static class OrderStateFactory
             _ => throw new ArgumentOutOfRangeException()
         };
     }
+
+    public static IOrderState Create(string status)
+    {
+        if (Enum.TryParse<OrderStates>(status, out var orderState))
+        {
+            return Create(orderState);
+        }
+        throw new ArgumentException($"Invalid order state: {status}");
+    }
 }

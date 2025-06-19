@@ -21,11 +21,17 @@ public class Order
     public User Owner { get; set; } = null!;
     #endregion
 
-    private IOrderState _state = new PendingState();
+    private IOrderState _state;
+
+    public Order()
+    {
+        _state = OrderStateFactory.Create(OrderState);
+    }
 
     public void SetState(IOrderState state)
     {
         _state = state;
+        OrderState = _state.GetStatus().ToString();
     }
 
     public void NextState()
