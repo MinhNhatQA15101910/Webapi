@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Webapi.Application.OrdersCQRS.Commands.CancelOrder;
 using Webapi.Application.OrdersCQRS.Commands.CreateOrder;
 using Webapi.Application.OrdersCQRS.Commands.ProceedOrder;
 using Webapi.Application.OrdersCQRS.Queries.GetOrderById;
@@ -46,5 +47,12 @@ public class OrdersController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<OrderDto>> ProceedOrder(Guid orderId)
     {
         return await mediator.Send(new ProceedOrderCommand(orderId));
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("cancel/{orderId}")]
+    public async Task<ActionResult<OrderDto>> CancelOrder(Guid orderId)
+    {
+        return await mediator.Send(new CancelOrderCommand(orderId));
     }
 }
