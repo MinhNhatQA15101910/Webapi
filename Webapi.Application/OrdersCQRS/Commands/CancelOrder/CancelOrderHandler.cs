@@ -17,11 +17,12 @@ public class ProceedOrderHandler(
         var order = await unitOfWork.OrderRepository.GetOrderByIdAsync(request.OrderId, cancellationToken)
             ?? throw new OrderNotFoundException(request.OrderId);
 
-        new OrderContext(order).Cancel();
+        var orderContext = new OrderContext(order);
+        orderContext.Cancel();
 
         if (!await unitOfWork.CompleteAsync(cancellationToken))
         {
-            throw new BadRequestException("Error proceeding order.");
+            throw new BadRequestException("Order cannot be cancelled.");
         }
 
         return mapper.Map<OrderDto>(order);

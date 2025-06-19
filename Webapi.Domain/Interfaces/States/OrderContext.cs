@@ -5,12 +5,13 @@ namespace Webapi.Domain.Interfaces.States;
 
 public class OrderContext(Order order)
 {
+    private readonly Order _order = order;
     private IOrderState _state = OrderStateFactory.Create(order.OrderState);
 
     public void SetState(IOrderState state)
     {
         _state = state;
-        order.OrderState = _state.GetStatus().ToString();
+        _order.OrderState = _state.GetStatus().ToString();
     }
 
     public void NextState()
