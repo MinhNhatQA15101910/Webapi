@@ -21,22 +21,29 @@ public class OrderProxy(
 
     public async Task<Order?> GetOrderByIdAsync(Guid orderId, CancellationToken cancellationToken)
     {
-        var cacheKey = $"Orders_/{orderId}";
+        return await orderRepository.GetOrderByIdAsync(orderId, cancellationToken);
+        
+        // var cacheKey = $"Orders_/{orderId}";
 
-        if (!cacheService.TryGetValue(cacheKey, out Order? order))
-        {
-            // Fetch countries from the database.
-            order = await orderRepository.GetOrderByIdAsync(orderId, cancellationToken);
+        // if (!cacheService.TryGetValue(cacheKey, out Order? order))
+        // {
+        //     // Fetch countries from the database.
+        //     order = await orderRepository.GetOrderByIdAsync(orderId, cancellationToken);
 
-            cacheService.Set(cacheKey, order);
-        }
+        //     cacheService.Set(cacheKey, order);
+        // }
 
-        return order;
+        // return order;
     }
 
     public async Task<PagedList<OrderDto>> GetOrdersAsync(Guid? userId, OrderParams orderParams, CancellationToken cancellationToken = default)
     {
         return await orderRepository.GetOrdersAsync(userId, orderParams, cancellationToken);
+    }
+
+    public void Update(Order order)
+    {
+        orderRepository.Update(order);
     }
 
     private void UpdateCacheForOrderAdded()

@@ -18,7 +18,7 @@ public class AddCartItemHandler(
 {
     public async Task<CartItemDto> Handle(AddCartItemCommand request, CancellationToken cancellationToken)
     {
-        var userId = httpContextAccessor.HttpContext.User.GetUserId();
+        var userId = httpContextAccessor.HttpContext!.User.GetUserId();
 
         var productSize = await unitOfWork.ProductSizeRepository
             .GetByIdAsync(request.AddCartItemDto.ProductSizeId, cancellationToken)
@@ -28,6 +28,7 @@ public class AddCartItemHandler(
         if (cartItem != null)
         {
             cartItem.Quantity += request.AddCartItemDto.Quantity;
+            cartItem.UpdatedAt = DateTime.UtcNow;
         }
         else
         {
