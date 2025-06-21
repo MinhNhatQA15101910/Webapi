@@ -35,7 +35,7 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
 
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var userId = _httpContextAccessor.HttpContext.User.GetUserId();
+        var userId = _httpContextAccessor.HttpContext!.User.GetUserId();
 
         List<CartItem> cartItems = [];
         foreach (var cartItemId in request.CreateOrderDto.CartItemIds)

@@ -14,7 +14,7 @@ public class GetOrdersHandler(
 {
     public async Task<PagedList<OrderDto>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
     {
-        var roles = httpContextAccessor.HttpContext.User.GetRoles();
+        var roles = httpContextAccessor.HttpContext!.User.GetRoles();
         if (roles.Contains("Admin"))
         {
             return await unitOfWork.OrderRepository.GetOrdersAsync(null, request.OrderParams, cancellationToken);

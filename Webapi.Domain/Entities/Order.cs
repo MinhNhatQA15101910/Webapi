@@ -1,4 +1,5 @@
 using Webapi.Domain.Enums;
+using Webapi.Domain.Interfaces.States;
 
 namespace Webapi.Domain.Entities;
 
