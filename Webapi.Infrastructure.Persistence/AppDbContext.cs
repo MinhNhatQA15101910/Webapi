@@ -5,8 +5,7 @@ using Webapi.Domain.Entities;
 
 namespace Webapi.Infrastructure.Persistence;
 
-public class AppDbContext(DbContextOptions options) :
-    IdentityDbContext<
+public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<
         User,
         Role,
         Guid,
@@ -24,6 +23,10 @@ public class AppDbContext(DbContextOptions options) :
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Voucher> Vouchers { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<ProductPhoto> ProductPhotos { get; set; }
+    public DbSet<ProductCategory> ProductCategories { get; set; }
+
+    public DbSet<ProductSize> ProductSizes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -41,28 +44,13 @@ public class AppDbContext(DbContextOptions options) :
             .HasForeignKey(x => x.RoleId)
             .IsRequired();
 
-        builder.Entity<CartItem>()
-            .HasKey(x => new { x.UserId, x.ProductId });
-
-        builder.Entity<User>()
-            .HasMany(x => x.CartItems)
-            .WithOne(x => x.User)
-            .HasForeignKey(x => x.UserId)
-            .IsRequired();
-
-        builder.Entity<Product>()
-            .HasMany(x => x.CartItems)
-            .WithOne(x => x.Product)
-            .HasForeignKey(x => x.ProductId)
-            .IsRequired();
-
         builder.Entity<OrderProduct>()
-            .HasKey(x => new { x.OrderId, x.ProductId });
+            .HasKey(x => new { x.OrderId, x.ProductSizeId });
 
-        builder.Entity<Product>()
+        builder.Entity<ProductSize>()
             .HasMany(x => x.Orders)
-            .WithOne(x => x.Product)
-            .HasForeignKey(x => x.ProductId)
+            .WithOne(x => x.ProductSize)
+            .HasForeignKey(x => x.ProductSizeId)
             .IsRequired();
 
         builder.Entity<Order>()

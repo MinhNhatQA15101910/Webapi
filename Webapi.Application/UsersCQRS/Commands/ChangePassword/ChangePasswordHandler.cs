@@ -1,5 +1,7 @@
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Webapi.Application.AuthCQRS.Notifications.UserUpdated;
 using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
@@ -9,7 +11,8 @@ namespace Webapi.Application.UsersCQRS.Commands.ChangePassword;
 
 public class ChangePasswordHandler(
     IHttpContextAccessor httpContextAccessor,
-    UserManager<User> userManager
+    UserManager<User> userManager,
+    IMediator mediator
 ) : ICommandHandler<ChangePasswordCommand, bool>
 {
     public async Task<bool> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
@@ -29,6 +32,8 @@ public class ChangePasswordHandler(
         {
             throw new IdentityErrorException(changePasswordResult.Errors);
         }
+
+        await mediator.Publish(new UserUpdatedNotification(user), cancellationToken);
 
         return true;
     }

@@ -1,0 +1,132 @@
+[
+  {
+    "Id": "f1a2d69b-0874-43c3-bf2a-dc9c04253cb8",
+    "Name": "Nike Mercurial Superfly 9 Elite FG",
+    "Description": "High-performance cleats built for speed with Flyknit upper and Air Zoom unit.",
+    "Price": 299.99,
+    "InStock": 50,
+    "Photos": [
+      {
+        "Url": "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/6a21b16e-6647-45f3-ae73-bc770ab7a7cf/ZOOM+SUPERFLY+9+ELITE+MR+FG.png",
+        "IsMain": true
+      }
+    ]
+  },
+  {
+    "Id": "9eab926e-d8cb-4f33-a567-e199a9de4e3a",
+    "Name": "Nike Phantom GX Elite DF FG",
+    "Description": "Control-focused cleats with Ghost Lace system and Gripknit technology.",
+    "Price": 274.99,
+    "InStock": 40,
+    "Photos": [
+      {
+        "Url": "https://product.hstatic.net/1000385420/product/nike_phantom_gx_elite_df_xanh_1_8e8c79736d44420c924f49b037e4d29e_master.jpeg",
+        "IsMain": true
+      }
+    ]
+  },
+  {
+    "Id": "13e9a3e7-6d4c-4c80-91ec-bbff2e1d9be9",
+    "Name": "Nike Tiempo Legend 10 Pro FG",
+    "Description": "Legendary comfort with premium leather upper and adaptive fit.",
+    "Price": 159.99,
+    "InStock": 65,
+    "Photos": [
+      {
+        "Url": "https://product.hstatic.net/1000061481/product/anh_sp_add77-017770--573_58a6562edf654207ad015cb4bf200ecf_1024x1024.jpg",
+        "IsMain": true
+      }
+    ]
+  },
+  {
+    "Id": "2c4e14df-4d36-4424-9c49-d3b1c197f9de",
+    "Name": "Nike Zoom Mercurial Vapor 15 Academy",
+    "Description": "Entry-level cleats with Air Zoom cushioning for fast-paced play.",
+    "Price": 89.99,
+    "InStock": 120,
+    "Photos": [
+      {
+        "Url": "https://product.hstatic.net/1000061481/product/anh_sp_add77-017770--573_58a6562edf654207ad015cb4bf200ecf_1024x1024.jpg",
+        "IsMain": true
+      }
+    ]
+  },
+  {
+    "Id": "bd47aa0b-59e6-419b-85c0-e367cf267f8f",
+    "Name": "Nike Phantom Luna Elite FG",
+    "Description": "Elite-level women's cleats designed for multidirectional control and comfort.",
+    "Price": 279.99,
+    "InStock": 30,
+    "Photos": [
+      {
+        "Url": "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/ae712493-97b6-4b1a-b7bb-902f3cc2d085/custom-phantom-luna-2-elite-by-you.png",
+        "IsMain": true
+      }
+    ]
+  },
+  {
+    "Id": "7e10e76c-6b3a-4e24-9e71-8327e9e3152a",
+    "Name": "Nike Mercurial Vapor 15 Club IC",
+    "Description": "Indoor soccer shoes with lightweight synthetic upper for quick movements.",
+    "Price": 59.99,
+    "InStock": 80,
+    "Photos": [
+      {
+        "Url": "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/8a7e0cbf-7e52-4e60-afc6-f7e83fe4b74d/VAPOR+15+CLUB+IC.png",
+        "IsMain": true
+      }
+    ]
+  },
+  {
+    "Id": "4425378c-ece5-49e5-bf2e-ccc88c650e1e",
+    "Name": "Nike Tiempo Legend 10 Academy TF",
+    "Description": "Turf soccer shoes with soft upper for durable comfort on artificial surfaces.",
+    "Price": 74.99,
+    "InStock": 95,
+    "Photos": [
+      {
+        "Url": "https://product.hstatic.net/200000278317/product/sal-giay-da-bong-nike-tiempo-legend-10-academy-tf-dv4342-001-xam-bac-1_260de2310ed14e9a9ff683dee041082d_master.jpg",
+        "IsMain": true
+      }
+    ]
+  },
+  {
+    "Id": "af69a4da-2b76-4f7e-bc9e-3408cba67679",
+    "Name": "Nike Zoom Mercurial Superfly 9 Pro FG",
+    "Description": "Mid-cut cleats with responsive Air Zoom unit and dynamic fit collar.",
+    "Price": 209.99,
+    "InStock": 35,
+    "Photos": [
+      {
+        "Url": "https://thumblr.uniid.it/product/256361/cbc5d776882c.jpg?width=3840&format=webp&q=75",
+        "IsMain": true
+      }
+    ]
+  },
+  {
+    "Id": "abef42b6-bf36-4ac9-9250-5f0128b78e3f",
+    "Name": "Nike Phantom GX Academy DF MG",
+    "Description": "Multi-ground cleats offering control and comfort at a budget-friendly price.",
+    "Price": 84.99,
+    "InStock": 150,
+    "Photos": [
+      {
+        "Url": "https://thumblr.uniid.it/product/266289/fd2000cf801c.jpg?width=3840&format=webp&q=75",
+        "IsMain": true
+      }
+    ]
+  },
+  {
+    "Id": "93e6d4a3-fbd1-4565-83d4-b168fe9d5c91",
+    "Name": "Nike Mercurial Superfly 9 Academy TF",
+    "Description": "Turf shoes with Zoom Air and a grippy outsole for high-speed play.",
+    "Price": 99.99,
+    "InStock": 70,
+    "Photos": [
+      {
+        "Url": "https://product.hstatic.net/200000278317/product/-bong-nike-zoom-mercurial-superfly-9-academy-tf-dj5629-700-trang-kem-1_061ae9960229456c91445887372294ec_master.jpg",
+        "IsMain": true
+      }
+    ]
+  }
+]

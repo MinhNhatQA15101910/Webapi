@@ -1,5 +1,7 @@
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Http;
+using Webapi.Application.AuthCQRS.Notifications.UserUpdated;
 using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
@@ -14,7 +16,8 @@ public class AddPhotoHandler(
     IHttpContextAccessor httpContextAccessor,
     IUnitOfWork unitOfWork,
     IFileService fileService,
-    IMapper mapper
+    IMapper mapper,
+    IMediator mediator
 ) : ICommandHandler<AddPhotoCommand, PhotoDto>
 {
     public async Task<PhotoDto> Handle(AddPhotoCommand request, CancellationToken cancellationToken)
@@ -39,6 +42,8 @@ public class AddPhotoHandler(
         {
             return mapper.Map<PhotoDto>(photo);
         }
+        
+        await mediator.Publish(new UserUpdatedNotification(user), cancellationToken);
 
         throw new BadRequestException("Problem adding photo");
     }

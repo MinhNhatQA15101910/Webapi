@@ -5,7 +5,6 @@ using Webapi.Application.Common.Extensions;
 using Webapi.Application.UsersCQRS.Commands.AddPhoto;
 using Webapi.Application.UsersCQRS.Commands.ChangePassword;
 using Webapi.Application.UsersCQRS.Commands.DeletePhoto;
-using Webapi.Application.UsersCQRS.Commands.SetMainPhoto;
 using Webapi.Application.UsersCQRS.Queries.GetCurrentUser;
 using Webapi.Application.UsersCQRS.Queries.GetUserById;
 using Webapi.Application.UsersCQRS.Queries.GetUsers;
@@ -43,7 +42,7 @@ public class UsersController(IMediator mediator) : ControllerBase
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers([FromQuery] UserParams userParams)
     {
@@ -65,15 +64,7 @@ public class UsersController(IMediator mediator) : ControllerBase
             photo
         );
     }
-
-    [HttpPut("set-main-photo/{photoId}")]
-    [Authorize]
-    public async Task<ActionResult> SetMainPhoto(Guid photoId)
-    {
-        await mediator.Send(new SetMainPhotoCommand(photoId));
-        return NoContent();
-    }
-
+    
     [HttpDelete("delete-photo/{photoId}")]
     [Authorize]
     public async Task<IActionResult> DeletePhoto(Guid photoId)

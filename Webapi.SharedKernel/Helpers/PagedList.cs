@@ -29,4 +29,16 @@ public class PagedList<T> : List<T>
         var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken: cancellationToken);
         return new PagedList<T>(items, count, pageNumber, pageSize);
     }
+
+    // Add this method to your PagedList class
+    public static PagedList<T> Create(IEnumerable<T> source, int pageNumber, int pageSize)
+    {
+        var count = source.Count();
+        var items = source
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        return new PagedList<T>(items, count, pageNumber, pageSize);
+    }
 }

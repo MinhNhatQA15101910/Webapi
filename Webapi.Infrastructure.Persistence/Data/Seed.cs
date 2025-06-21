@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Webapi.Domain.Entities;
+using Webapi.Domain.Interfaces;
 
 namespace Webapi.Infrastructure.Persistence.Data;
 
@@ -55,6 +56,113 @@ public class Seed
             }
 
             index++;
+        }
+    }
+
+    public static async Task SeedProductsAsync(
+        IUnitOfWork unitOfWork
+    )
+    {
+        if (await unitOfWork.ProductRepository.AnyAsync()) return;
+
+        var productData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/ProductSeedData.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var products = JsonSerializer.Deserialize<List<Product>>(productData, options);
+
+        if (products == null) return;
+
+        foreach (var product in products)
+        {
+            Console.WriteLine($"Adding product: {product.Name}");
+
+            unitOfWork.ProductRepository.Add(product);
+        }
+    }
+
+    public static async Task SeedCategoriesAsync(
+        IUnitOfWork unitOfWork
+    )
+    {
+        if (await unitOfWork.CategoryRepository.AnyAsync()) return;
+
+        var categoryData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/CategorySeedData.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var categories = JsonSerializer.Deserialize<List<Category>>(categoryData, options);
+
+        if (categories == null) return;
+
+        foreach (var category in categories)
+        {
+            Console.WriteLine($"Adding category: {category.Name}");
+
+            unitOfWork.CategoryRepository.Add(category);
+        }
+    }
+
+    public static async Task SeedProductCategoriesAsync(
+        IUnitOfWork unitOfWork
+    )
+    {
+        if (await unitOfWork.ProductRepository.AnyAsync()) return;
+
+        var productCategoriesData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/ProductCategorySeedData.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var productCategories = JsonSerializer.Deserialize<List<ProductCategory>>(productCategoriesData, options);
+
+        if (productCategories == null) return;
+
+        foreach (var productCategory in productCategories)
+        {
+            var product = await unitOfWork.ProductRepository.GetByIdAsync(productCategory.ProductId);
+            if (product == null)
+            {
+                Console.WriteLine($"Product with ID {productCategory.ProductId} not found. Skipping.");
+                continue;
+            }
+
+            Console.WriteLine($"Adding product category: {productCategory.CategoryId} to product: {product.Name}");
+
+            product.Categories.Add(productCategory);
+        }
+    }
+
+    public static async Task SeedProductSizesAsync(
+        IUnitOfWork unitOfWork
+    )
+    {
+        if (await unitOfWork.ProductSizeRepository.AnyAsync()) return;
+
+        var productSizeData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/ProductSizeSeedData.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var productSizes = JsonSerializer.Deserialize<List<ProductSize>>(productSizeData, options);
+
+        if (productSizes == null) return;
+
+        foreach (var productSize in productSizes)
+        {
+            Console.WriteLine($"Adding product size for product: {productSize.ProductId}, size: {productSize.Size}");
+
+            unitOfWork.ProductSizeRepository.Add(productSize);
         }
     }
 }

@@ -19,6 +19,16 @@ public static class ClaimsPrincipalExtensions
         return email;
     }
 
+    public static List<string> GetRoles(this ClaimsPrincipal user)
+    {
+        var roles = user.FindAll(ClaimTypes.Role).Select(role => role.Value).ToList();
+        if (roles.Count == 0)
+        {
+            throw new Exception("Cannot get roles from token");
+        }
+        return roles;
+    }
+
     public static PincodeAction GetAction(this ClaimsPrincipal user)
     {
         var actionString = user.FindFirstValue("action")

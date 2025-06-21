@@ -3,11 +3,16 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Webapi.Application;
 using Webapi.Application.Common.Helpers;
+using Webapi.Application.Common.Interfaces.Factories;
 using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Domain.Interfaces;
 using Webapi.Infrastructure.Persistence;
+using Webapi.Infrastructure.Persistence.Proxies;
 using Webapi.Infrastructure.Persistence.Repositories;
+using Webapi.Infrastructure.Repositories;
+using Webapi.Infrastructure.Services.Adapters;
 using Webapi.Infrastructure.Services.Configurations;
+using Webapi.Infrastructure.Services.Factories;
 using Webapi.Infrastructure.Services.Services;
 using Webapi.Presentation.Middlewares;
 
@@ -18,9 +23,13 @@ public static class ApplicationServiceExtensions
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddControllers();
+        services.AddMemoryCache();
         services.AddHttpContextAccessor();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+
+        // Add CORS services
+        services.AddCors();
 
         services.AddScoped<ExceptionHandlingMiddleware>();
 
@@ -47,10 +56,19 @@ public static class ApplicationServiceExtensions
     {
         services.Configure<EmailSenderSettings>(config.GetSection(nameof(EmailSenderSettings)));
         services.Configure<CloudinarySettings>(config.GetSection(nameof(CloudinarySettings)));
+        services.Configure<CacheSettings>(config.GetSection(nameof(CacheSettings)));
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<ICacheService, CacheService>();
+
+        // Register voucher import services
+        services.AddScoped<JsonVoucherImport>();
+        services.AddScoped<XlsVoucherImport>();
+        services.AddScoped<XlsVoucherImportAdapter>();
+
+        services.AddScoped<IVoucherImportFactory, VoucherImportFactory>();
 
         return services;
     }
@@ -62,7 +80,18 @@ public static class ApplicationServiceExtensions
             options.UseSqlite(config.GetConnectionString("DefaultConnection"));
         });
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<UserRepository>();
+        services.AddScoped<OrderRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IProductPhotoRepository, ProductPhotoRepository>();
+        services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
+        services.AddScoped<ICartItemRepository, CartItemRepository>();
+        services.AddScoped<IVoucherRepository, VoucherRepository>();
+
+
+        services.AddScoped<IUserRepository, UserProxy>();
+        services.AddScoped<IOrderRepository, OrderProxy>();
 
         return services;
     }

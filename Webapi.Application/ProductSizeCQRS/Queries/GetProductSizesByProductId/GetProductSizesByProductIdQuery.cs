@@ -1,0 +1,7 @@
+using Webapi.Application.Common.Interfaces.MediatR;
+using Webapi.SharedKernel.DTOs;
+using Webapi.SharedKernel.DTOs.ProductSize;
+
+namespace Webapi.Application.ProductSizeCQRS.Queries.GetProductSizesByProductId;
+
+public record GetProductSizesByProductIdQuery(Guid ProductId) : IQuery<IEnumerable<ProductSizeDto>>;
