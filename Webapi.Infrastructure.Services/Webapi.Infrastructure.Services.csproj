@@ -9,12 +9,14 @@
   <ItemGroup>
     <ProjectReference Include="..\Webapi.Application\Webapi.Application.csproj" />
     <ProjectReference Include="..\Webapi.Domain\Webapi.Domain.csproj" />
+    <ProjectReference Include="..\Webapi.Infrastructure.Persistence\Webapi.Infrastructure.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="4.12.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+    <PackageReference Include="Stripe.net" Version="48.2.0" />
   </ItemGroup>
 
 </Project>
