@@ -100,9 +100,14 @@ public class AutoMapperProfile : Profile
                     src.ProductSize.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url :
                     null));
         CreateMap<Address, AddressDto>();
-        CreateMap<Order, OrderDto>();
+        CreateMap<Order, OrderDto>()
+            .ForMember(
+                dest => dest.Vouchers,
+                opt => opt.MapFrom(
+                    src => src.Vouchers.Select(v => v.Voucher)));
 
         CreateMap<Voucher, VoucherDto>();
+        CreateMap<Voucher, OrderVoucherDto>();
         CreateMap<CreateVoucherDto, Voucher>();
         CreateMap<UpdateVoucherDto, Voucher>();
         CreateMap<Review, ReviewDto>()

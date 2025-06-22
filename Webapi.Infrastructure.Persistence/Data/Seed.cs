@@ -165,4 +165,29 @@ public class Seed
             unitOfWork.ProductSizeRepository.Add(productSize);
         }
     }
+
+    public static async Task SeedVouchersAsync(
+        IUnitOfWork unitOfWork
+    )
+    {
+        if (await unitOfWork.VoucherRepository.AnyAsync()) return;
+
+        var voucherData = await File.ReadAllTextAsync("../Webapi.Infrastructure.Persistence/Data/VoucherSeedData.json");
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var vouchers = JsonSerializer.Deserialize<List<Voucher>>(voucherData, options);
+
+        if (vouchers == null) return;
+
+        foreach (var voucher in vouchers)
+        {
+            Console.WriteLine($"Adding voucher: {voucher.Name}");
+
+            unitOfWork.VoucherRepository.Add(voucher);
+        }
+    }
 }

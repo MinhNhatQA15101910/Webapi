@@ -26,6 +26,8 @@ public class OrderRepository(
                 .ThenInclude(op => op.ProductSize)
                     .ThenInclude(ps => ps.Product)
                         .ThenInclude(p => p.Photos)
+            .Include(o => o.Vouchers)
+                .ThenInclude(v => v.Voucher)
             .FirstOrDefaultAsync(o => o.Id == orderId, cancellationToken);
     }
 

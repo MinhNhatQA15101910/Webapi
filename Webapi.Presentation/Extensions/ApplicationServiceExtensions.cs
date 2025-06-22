@@ -87,11 +87,11 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IProductPhotoRepository, ProductPhotoRepository>();
         services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
         services.AddScoped<ICartItemRepository, CartItemRepository>();
-        services.AddScoped<IVoucherRepository, VoucherRepository>();
-
+        services.AddScoped<VoucherRepository>();
 
         services.AddScoped<IUserRepository, UserProxy>();
         services.AddScoped<IOrderRepository, OrderProxy>();
+        services.AddScoped<IVoucherRepository, VoucherProxy>();
 
         return services;
     }

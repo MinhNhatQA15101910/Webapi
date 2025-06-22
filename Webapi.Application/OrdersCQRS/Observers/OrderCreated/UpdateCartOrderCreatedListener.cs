@@ -1,13 +1,12 @@
-
 using Webapi.Application.Common.Exceptions;
 using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
 
-namespace Webapi.Application.OrdersCQRS.Observers;
+namespace Webapi.Application.OrdersCQRS.Observers.OrderCreated;
 
 public class UpdateCartOrderCreatedListener(IUnitOfWork unitOfWork) : IOrderCreatedListener
 {
-    public async Task UpdateAsync(List<CartItem> cartItems, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Order order, List<CartItem> cartItems, List<Voucher> vouchers, CancellationToken cancellationToken = default)
     {
         foreach (var cartItem in cartItems)
         {
