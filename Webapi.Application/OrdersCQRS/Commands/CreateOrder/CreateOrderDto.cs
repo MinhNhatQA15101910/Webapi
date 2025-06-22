@@ -4,4 +4,7 @@ public class CreateOrderDto
 {
     public List<Guid> CartItemIds { get; set; } = [];
     public string ShippingType { get; set; } = string.Empty;
+    public string ReceiverName { get; set; } = string.Empty;
+    public string ReceiverEmail { get; set; } = string.Empty;
+    public string DetailAddress { get; set; } = string.Empty;
 }
