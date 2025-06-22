@@ -13,9 +13,16 @@ public class GetVoucherByIdHandler(
 {
     public async Task<VoucherDto> Handle(GetVoucherByIdQuery request, CancellationToken cancellationToken)
     {
-        var voucher = await unitOfWork.VoucherRepository.GetByIdAsync(request.VoucherId, cancellationToken)
+        var voucher = await unitOfWork.VoucherRepository.GetVoucherWithDetailsAsync(request.VoucherId, cancellationToken)
             ?? throw new BadRequestException($"Voucher with ID {request.VoucherId} not found");
-            
-        return mapper.Map<VoucherDto>(voucher);
+        
+        var voucherDto = mapper.Map<VoucherDto>(voucher);
+        
+        // Calculate available quantity based on unused items
+        // Get voucherItems with same VoucherId - make sure to await the async call
+        var items = await unitOfWork.VoucherItemRepository.GetByVoucherIdAsync(voucher.Id, cancellationToken);
+        voucherDto.AvailableQuantity = items.Count(i => i.Status);
+        
+        return voucherDto;
     }
 }

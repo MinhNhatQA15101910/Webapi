@@ -70,12 +70,12 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
                 ?? throw new VoucherNotFoundException(voucherId);
 
             if (voucher.Quantity <= 0)
-                throw new BadRequestException($"Voucher {voucher.Name} is out of stock.");
+                throw new BadRequestException($"Voucher {voucher.Type.Name} is out of stock.");
 
             if (voucher.ExpiredAt < DateTime.UtcNow)
-                throw new BadRequestException($"Voucher {voucher.Name} has expired.");
+                throw new BadRequestException($"Voucher {voucher.Type.Name} has expired.");
 
-            totalPrice -= totalPrice * (decimal)(voucher.Value / 100);
+            totalPrice -= totalPrice * (decimal)(voucher.Type.Value / 100);
 
             vouchers.Add(voucher);
         }
