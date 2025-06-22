@@ -1,19 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Webapi.Application.Common.Exceptions;
-using Webapi.Application.Common.Interfaces.Services;
+using Webapi.Application.Common.Models;
+using Webapi.Application.Common.Utils.Momo;
+using Webapi.Application.OrdersCQRS.Commands.CancelOrder;
+using Webapi.Application.OrdersCQRS.Commands.ProceedOrder;
 using Webapi.Application.Payment.DTOs;
+using Webapi.Domain.Enums;
 using Webapi.Domain.Interfaces;
+using Webapi.Domain.Interfaces.States;
 using Webapi.Infrastructure.Persistence;
 using Webapi.Infrastructure.Services.Configurations;
 
 namespace Webapi.Infrastructure.Services.Services.Payment;
 
-public class MomoPaymentStrategy(AppDbContext dbContext, IOptions<MomoSettings> config) : IPaymentStrategy
+public class MomoPaymentStrategy(
+    AppDbContext dbContext,
+    IOptions<MomoSettings> config,
+    IMediator mediator
+) : IPaymentStrategy
 {
     private readonly HttpClient _httpClient = new HttpClient();
 
@@ -40,58 +49,46 @@ public class MomoPaymentStrategy(AppDbContext dbContext, IOptions<MomoSettings> 
         var requestType = config.Value.RequestType;
         var lang = config.Value.Lang;
 
-        var rawSignature = "accessKey=" + accessKey
-                                   + "&amount=" + amount
-                                   + "&extraData=" + extraData
-                                   + "&ipnUrl=" + ipnUrl
-                                   + "&orderId=" + orderId
-                                   + "&orderInfo=" + orderInfo
-                                   + "&partnerCode=" + partnerCode
-                                   + "&redirectUrl=" + redirectUrl
-                                   + "&requestId=" + requestId
-                                   + "&requestType=" + requestType;
-
-        // Payload
-        var payload = new
+        var payload = new MomoCreatePaymenyRequestDTO
         {
-            partnerCode,
-            storeId,
-            requestId,
-            amount,
-            orderId,
-            orderInfo,
-            redirectUrl,
-            ipnUrl,
-            requestType,
-            extraData,
-            lang,
-            signature = GetSignature(rawSignature, secretKey),
+            PartnerCode = partnerCode,
+            StoreId = storeId,
+            RequestId = requestId.ToString(),
+            Amount = (long)(amount * 100),
+            OrderId = orderId.ToString(),
+            OrderInfo = orderInfo,
+            RedirectUrl = redirectUrl,
+            IpnUrl = ipnUrl,
+            RequestType = requestType,
+            ExtraData = extraData,
+            Lang = lang,
         };
+
+        var payloadString = MomoUtils.GenerateStringPayload(payload);
+
+        payload.Signature = MomoUtils.GetSignature(payloadString, secretKey);
+
 
         // Chuyển payload thành JSON
         var json = JsonSerializer.Serialize(payload);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         // Gửi yêu cầu POST
-        var response = await _httpClient.PostAsync(url, content);
+        var response = await _httpClient.PostAsync(url, content, cancellationToken);
 
         // Kiểm tra trạng thái phản hồi
         if (response.IsSuccessStatusCode)
         {
             // Đọc kết quả phản hồi
             var responseContent = await response.Content.ReadAsStringAsync();
-            var momoResponse = JsonSerializer.Deserialize<MomoResponse>(responseContent) 
+            var momoResponse = JsonSerializer.Deserialize<MomoCreatePaymentResponseDTO>(responseContent)
                 ?? throw new Application.Common.Exceptions.ApplicationException(
                         "Lỗi hệ thống",
                         "Có lỗi xảy ra khi đọc dữ liệu trả về từ Momo"
                 );
 
-            Console.WriteLine(responseContent);
-            return new PaymentResponseDTO(orderId, SharedKernel.Enums.PaymentEnum.MoMo, momoResponse.PayUrl, momoResponse.ResultCode);
+            return new PaymentResponseDTO(orderId, SharedKernel.Enums.PaymentMethodEnum.MoMo, momoResponse.PayUrl, momoResponse.ResultCode);
         }
-
-        Console.WriteLine(response.StatusCode);
-        Console.WriteLine(response.Content);
 
         throw new Application.Common.Exceptions.ApplicationException(
             "Lỗi hệ thống",
@@ -99,50 +96,26 @@ public class MomoPaymentStrategy(AppDbContext dbContext, IOptions<MomoSettings> 
         );
     }
 
-    private string GetSignature(String text, String key)
+    public async Task<IpnResponse> IpnConfirmAsync(object dto, IQueryCollection query, CancellationToken cancellationToken = default)
     {
-        // change according to your needs, an UTF8Encoding
-        // could be more suitable in certain situations
-        ASCIIEncoding encoding = new ASCIIEncoding();
+        var request = dto as MomoCreatePaymentResponseDTO;
 
-        Byte[] textBytes = encoding.GetBytes(text);
-        Byte[] keyBytes = encoding.GetBytes(key);
+        var oderId = request.OrderId;
 
-        Byte[] hashBytes;
+        var order = await dbContext.Orders.FirstOrDefaultAsync(x => x.Id.ToString() == oderId, cancellationToken) ?? throw new NotFoundException($"Order {oderId} not found");
 
-        using (HMACSHA256 hash = new HMACSHA256(keyBytes))
-            hashBytes = hash.ComputeHash(textBytes);
+        var orderContext = new OrderContext(order);
 
-        return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+
+        if (request.ResultCode != 0)
+        {
+            await mediator.Send(new CancelOrderCommand(order.Id), cancellationToken);
+
+            return new IpnResponse("00", "Confirm success");
+        }
+
+        await mediator.Send(new ProceedOrderCommand(order.Id), cancellationToken);
+
+        return new IpnResponse("00", "Confirm success");
     }
-}
-
-internal class MomoResponse
-{
-    [JsonPropertyName("partnerCode")]
-    public string PartnerCode { get; set; }
-
-    [JsonPropertyName("orderId")]
-    public string OrderId { get; set; }
-
-    [JsonPropertyName("requestId")]
-    public string RequestId { get; set; }
-
-    [JsonPropertyName("amount")]
-    public int Amount { get; set; }
-
-    [JsonPropertyName("responseTime")]
-    public long ResponseTime { get; set; }
-
-    [JsonPropertyName("message")]
-    public string Message { get; set; }
-
-    [JsonPropertyName("resultCode")]
-    public int ResultCode { get; set; }
-
-    [JsonPropertyName("payUrl")]
-    public string PayUrl { get; set; }
-
-    [JsonPropertyName("shortLink")]
-    public string ShortLink { get; set; }
 }

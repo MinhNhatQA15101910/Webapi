@@ -9,11 +9,11 @@ namespace Webapi.Application.Payment.DTOs;
 
 public class PaymentResponseDTO
 {
-    Guid OrderId { get; set; }
-    PaymentEnum PaymentMethod { get; set; }
-    string PaymentUrl { get; set; } = string.Empty;
-    int Result { get; set; }
-    public PaymentResponseDTO(Guid orderId, PaymentEnum paymentMethod, string paymentUrl, int result)
+    public Guid OrderId { get; set; }
+    public PaymentMethodEnum PaymentMethod { get; set; }
+    public string PaymentUrl { get; set; } = string.Empty;
+    public int Result { get; set; }
+    public PaymentResponseDTO(Guid orderId, PaymentMethodEnum paymentMethod, string paymentUrl, int result)
     {
         OrderId = orderId;
         PaymentMethod = paymentMethod;

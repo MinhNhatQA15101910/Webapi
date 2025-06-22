@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Payment.Services.VnPay;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Webapi.Application.Common.Utils.VNPay;
 
-public class Utils
+public class VNPayUtils
 {
     public static string HmacSha512(string key, string inputData)
     {
@@ -31,9 +30,9 @@ public class Utils
             : context.Connection.RemoteIpAddress?.MapToIPv4().ToString() ?? "N/A";
     }
 
-    public static bool CheckSignature(Provider pay, string hashSecret)
+    public static bool CheckSignature(VNPayProvider pay, string hashSecret)
     {
-        string vnpSecureHash = pay.GetResponseData(Parameters.VnpSecureHash);
+        string vnpSecureHash = pay.GetResponseData(VNPayParameters.VnpSecureHash);
         return pay.ValidateSignature(vnpSecureHash, hashSecret);
     }
 }

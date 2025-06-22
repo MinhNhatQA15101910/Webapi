@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Webapi.SharedKernel.Enums;
 
-public enum PaymentEnum
+public enum PaymentMethodEnum
 {
     VNPay,
     MoMo,
-    Stripe
+    //Stripe
 }

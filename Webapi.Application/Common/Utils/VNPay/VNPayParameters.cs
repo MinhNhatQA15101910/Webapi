@@ -1,6 +1,6 @@
-﻿namespace Payment.Services.VnPay;
+﻿namespace Webapi.Application.Common.Utils.VNPay;
 
-public class Parameters
+public class VNPayParameters
 {
     /// <summary>
     /// Version of VnPay API, current version is 2.1.0.

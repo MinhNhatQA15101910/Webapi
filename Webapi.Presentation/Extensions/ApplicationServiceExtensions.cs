@@ -14,6 +14,7 @@ using Webapi.Infrastructure.Services.Adapters;
 using Webapi.Infrastructure.Services.Configurations;
 using Webapi.Infrastructure.Services.Factories;
 using Webapi.Infrastructure.Services.Services;
+using Webapi.Infrastructure.Services.Services.Payment;
 using Webapi.Presentation.Middlewares;
 
 namespace Webapi.Presentation.Extensions;
@@ -57,11 +58,18 @@ public static class ApplicationServiceExtensions
         services.Configure<EmailSenderSettings>(config.GetSection(nameof(EmailSenderSettings)));
         services.Configure<CloudinarySettings>(config.GetSection(nameof(CloudinarySettings)));
         services.Configure<CacheSettings>(config.GetSection(nameof(CacheSettings)));
+        services.Configure<MomoSettings>(config.GetSection(nameof(MomoSettings)));
+        services.Configure<VNPaySettings>(config.GetSection(nameof(VNPaySettings)));
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<IPaymentService, PaymentService>();
+
+
+        services.AddScoped<VNPayPaymentStrategy>();
+        services.AddScoped<MomoPaymentStrategy>();
 
         // Register voucher import services
         services.AddScoped<JsonVoucherImport>();

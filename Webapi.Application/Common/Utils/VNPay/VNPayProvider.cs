@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Webapi.Application.Common.Utils.VNPay;
 
-public class PaymentComparer : IComparer<string>
+internal class VNPayPaymentComparer : IComparer<string>
 {
     public int Compare(string x, string y)
     {
@@ -17,10 +17,10 @@ public class PaymentComparer : IComparer<string>
     }
 }
 
-public class Provider
+public class VNPayProvider
 {
-    private readonly SortedList<string, string> _requestData = new(new PaymentComparer());
-    private readonly SortedList<string, string> _responseData = new(new PaymentComparer());
+    private readonly SortedList<string, string> _requestData = new(new VNPayPaymentComparer());
+    private readonly SortedList<string, string> _responseData = new(new VNPayPaymentComparer());
 
     public void AddRequestData(string key, string value)
     {
@@ -50,7 +50,7 @@ public class Provider
             signData = signData.Remove(data.Length - 1, 1);
         }
 
-        string vnpSecureHash = Utils.HmacSha512(vnpHashSecret, signData);
+        string vnpSecureHash = VNPayUtils.HmacSha512(vnpHashSecret, signData);
         baseUrl += "vnp_SecureHash=" + vnpSecureHash;
 
         return baseUrl;
@@ -113,7 +113,7 @@ public class Provider
     public bool ValidateSignature(string inputHash, string secretKey)
     {
         string rspRaw = GetResponseData();
-        string myChecksum = Utils.HmacSha512(secretKey, rspRaw);
+        string myChecksum = VNPayUtils.HmacSha512(secretKey, rspRaw);
         return myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);
     }
 }

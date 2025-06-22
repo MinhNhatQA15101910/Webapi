@@ -4,6 +4,9 @@ public class OrderDto
 {
     public Guid Id { get; set; }
     public Guid OwnerId { get; set; }
+    public string OwnerName { get; set; } = string.Empty;
+    public string OwnerAvatar { get; set; } = string.Empty;
+    public string OwnerEmail { get; set; } = string.Empty;
     public decimal TotalPrice { get; set; }
     public string ShippingType { get; set; } = string.Empty;
     public double ShippingCost { get; set; }
