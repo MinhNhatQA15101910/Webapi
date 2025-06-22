@@ -8,9 +8,12 @@ using Webapi.Application.ProductCQRS.Queries.GetProductPhotos;
 using Webapi.Application.ProductCQRS.Queries.GetProducts;
 using Webapi.Application.ProductCQRS.Commands.CreateProduct;
 using Webapi.Application.ProductCQRS.Commands.UpdateProduct;
+using Webapi.Application.ProductCQRS.Queries.GetAllProductRatings;
+using Webapi.Application.ProductCQRS.Queries.GetProductRating;
 using Webapi.Presentation.Extensions;
 using Webapi.SharedKernel.DTOs.Product;
 using Webapi.SharedKernel.DTOs.ProductPhoto;
+using Webapi.SharedKernel.Helpers;
 using Webapi.SharedKernel.Params;
 
 namespace Webapi.Presentation.Controllers;
@@ -97,5 +100,21 @@ public class ProductsController(IMediator mediator) : ControllerBase
     {
         var photo = await mediator.Send(new SetMainProductPhotoCommand(id, photoId));
         return Ok(photo);
+    }
+
+    // GET: api/Product/{id}/rating
+    [HttpGet("{id}/rating")]
+    public async Task<ActionResult<ProductRatingDto>> GetProductRating(Guid id)
+    {
+        return await mediator.Send(new GetProductRatingQuery(id));
+    }
+
+    // GET: api/Product/ratings
+    [HttpGet("ratings")]
+    public async Task<ActionResult<PagedList<ProductRatingDto>>> GetAllProductRatings([FromQuery] ProductParams productParams)
+    {
+        var result = await mediator.Send(new GetAllProductRatingsQuery(productParams));
+
+        return Ok(result);
     }
 }
