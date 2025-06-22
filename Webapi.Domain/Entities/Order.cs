@@ -1,5 +1,5 @@
 using Webapi.Domain.Enums;
-using Webapi.Domain.Interfaces.States;
+using Webapi.Domain.ValueObjects;
 
 namespace Webapi.Domain.Entities;
 
@@ -10,6 +10,7 @@ public class Order
     public string ShippingType { get; set; } = string.Empty;
     public double ShippingCost { get; set; }
     public string OrderState { get; set; } = OrderStates.Pending.ToString();
+    public Address Address { get; set; } = new Address();
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public ICollection<OrderProduct> Products { get; set; } = [];

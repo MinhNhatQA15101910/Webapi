@@ -1,6 +1,7 @@
 using AutoMapper;
 using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Domain.Entities;
+using Webapi.Domain.ValueObjects;
 using Webapi.SharedKernel.DTOs;
 using Webapi.SharedKernel.DTOs.CartItem;
 using Webapi.SharedKernel.DTOs.Orders;
@@ -39,7 +40,7 @@ public class AutoMapperProfile : Profile
         CreateMap<ProductSize, ProductSizeDto>()
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
             .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.Price))
-            .ForMember(dest => dest.ProductMainPhotoUrl, opt => opt.MapFrom(src => 
+            .ForMember(dest => dest.ProductMainPhotoUrl, opt => opt.MapFrom(src =>
                 src.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url));
         CreateMap<CreateProductSizeDto, ProductSize>();
         CreateMap<UpdateProductSizeDto, ProductSize>();
@@ -98,15 +99,15 @@ public class AutoMapperProfile : Profile
                     src.ProductSize.Product.Photos != null && src.ProductSize.Product.Photos.Any(p => p.IsMain) ?
                     src.ProductSize.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url :
                     null));
+        CreateMap<Address, AddressDto>();
         CreateMap<Order, OrderDto>();
 
         CreateMap<Voucher, VoucherDto>();
         CreateMap<CreateVoucherDto, Voucher>();
         CreateMap<UpdateVoucherDto, Voucher>();
-                CreateMap<Review, ReviewDto>()
+        CreateMap<Review, ReviewDto>()
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
             .ForMember(dest => dest.OwnerName, opt => opt.MapFrom(src => src.Owner.Email))
-            .ForMember(dest => dest.OwnerEmail, opt => opt.MapFrom(src => src.Owner.Email)); 
-
+            .ForMember(dest => dest.OwnerEmail, opt => opt.MapFrom(src => src.Owner.Email));
     }
 }

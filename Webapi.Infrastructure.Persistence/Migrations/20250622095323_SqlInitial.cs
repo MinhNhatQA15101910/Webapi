@@ -239,6 +239,9 @@ public partial class SqlInitial : Migration
                 ShippingType = table.Column<string>(type: "TEXT", nullable: false),
                 ShippingCost = table.Column<double>(type: "REAL", nullable: false),
                 OrderState = table.Column<string>(type: "TEXT", nullable: false),
+                Address_ReceiverName = table.Column<string>(type: "TEXT", nullable: false),
+                Address_ReceiverEmail = table.Column<string>(type: "TEXT", nullable: false),
+                Address_DetailAddress = table.Column<string>(type: "TEXT", nullable: false),
                 CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                 UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                 OwnerId = table.Column<Guid>(type: "TEXT", nullable: false)
