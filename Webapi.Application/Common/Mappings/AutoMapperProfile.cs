@@ -1,12 +1,14 @@
 using AutoMapper;
 using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Domain.Entities;
+using Webapi.Domain.ValueObjects;
 using Webapi.SharedKernel.DTOs;
 using Webapi.SharedKernel.DTOs.CartItem;
 using Webapi.SharedKernel.DTOs.Orders;
 using Webapi.SharedKernel.DTOs.Product;
 using Webapi.SharedKernel.DTOs.ProductPhoto;
 using Webapi.SharedKernel.DTOs.ProductSize;
+using Webapi.SharedKernel.DTOs.Review;
 using Webapi.SharedKernel.DTOs.Voucher;
 
 namespace Webapi.Application.Common.Mappings;
@@ -35,7 +37,11 @@ public class AutoMapperProfile : Profile
         CreateMap<Category, CategoryDto>()
             .ForMember(dest => dest.Products, opt => opt.Ignore()); // Ignore Products to prevent circular mapping
 
-        CreateMap<ProductSize, ProductSizeDto>();
+        CreateMap<ProductSize, ProductSizeDto>()
+            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+            .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.Price))
+            .ForMember(dest => dest.ProductMainPhotoUrl, opt => opt.MapFrom(src =>
+                src.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url));
         CreateMap<CreateProductSizeDto, ProductSize>();
         CreateMap<UpdateProductSizeDto, ProductSize>();
 
@@ -96,6 +102,7 @@ public class AutoMapperProfile : Profile
                     src.ProductSize.Product.Photos != null && src.ProductSize.Product.Photos.Any(p => p.IsMain) ?
                     src.ProductSize.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url :
                     null));
+        CreateMap<Address, AddressDto>();
 
         CreateMap<Order, OrderDto>()
             .ForMember(
@@ -113,5 +120,9 @@ public class AutoMapperProfile : Profile
         CreateMap<Voucher, VoucherDto>();
         CreateMap<CreateVoucherDto, Voucher>();
         CreateMap<UpdateVoucherDto, Voucher>();
+        CreateMap<Review, ReviewDto>()
+            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+            .ForMember(dest => dest.OwnerName, opt => opt.MapFrom(src => src.Owner.Email))
+            .ForMember(dest => dest.OwnerEmail, opt => opt.MapFrom(src => src.Owner.Email));
     }
 }

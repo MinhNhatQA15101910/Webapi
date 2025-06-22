@@ -44,6 +44,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .HasForeignKey(x => x.RoleId)
             .IsRequired();
 
+        builder.Entity<Order>()
+            .OwnsOne(x => x.Address);
+
         builder.Entity<OrderProduct>()
             .HasKey(x => new { x.OrderId, x.ProductSizeId });
 

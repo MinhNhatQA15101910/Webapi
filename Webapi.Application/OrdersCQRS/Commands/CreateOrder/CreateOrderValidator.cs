@@ -13,5 +13,18 @@ public class CreateOrderValidator : AbstractValidator<CreateOrderCommand>
         RuleFor(x => x.CreateOrderDto.ShippingType)
             .NotEmpty()
             .WithMessage("Shipping type cannot be empty.");
+
+        RuleFor(x => x.CreateOrderDto.ReceiverName)
+            .NotEmpty()
+            .WithMessage("Receiver name cannot be empty.");
+
+        RuleFor(x => x.CreateOrderDto.ReceiverEmail)
+            .NotEmpty()
+            .EmailAddress()
+            .WithMessage("Receiver email must be a valid email address.");
+
+        RuleFor(x => x.CreateOrderDto.DetailAddress)
+            .NotEmpty()
+            .WithMessage("Detail address cannot be empty.");
     }
 }

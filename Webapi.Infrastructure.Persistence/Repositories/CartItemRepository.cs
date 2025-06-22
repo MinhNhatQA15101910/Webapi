@@ -29,9 +29,10 @@ public class CartItemRepository(AppDbContext context) : ICartItemRepository
     public async Task<IEnumerable<CartItem>> GetCartItemsWithDetailsAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         return await context.CartItems
-            .Include(ci => ci.ProductSize)
-                .ThenInclude(p => p.Product).ThenInclude(p => p.Photos)
             .Where(ci => ci.UserId == userId)
+            .Include(ci => ci.ProductSize)
+                .ThenInclude(ps => ps.Product)
+                    .ThenInclude(p => p.Photos)
             .ToListAsync(cancellationToken);
     }
 

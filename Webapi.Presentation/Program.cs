@@ -22,7 +22,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Add CORS middleware
+// Add CORS middleware - this should come before authentication and authorization
 app.UseCors(policy => policy
     .AllowAnyHeader()
     .AllowAnyMethod()

@@ -7,6 +7,7 @@ using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Application.OrdersCQRS.Observers;
 using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
+using Webapi.Domain.ValueObjects;
 using Webapi.SharedKernel.DTOs.Orders;
 
 namespace Webapi.Application.OrdersCQRS.Commands.CreateOrder;
@@ -61,6 +62,12 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
             OwnerId = userId,
             TotalPrice = totalPrice,
             ShippingType = request.CreateOrderDto.ShippingType,
+            Address = new Address
+            {
+                ReceiverName = request.CreateOrderDto.ReceiverName,
+                ReceiverEmail = request.CreateOrderDto.ReceiverEmail,
+                DetailAddress = request.CreateOrderDto.DetailAddress
+            },
             Products = [.. cartItems.Select(ci => new OrderProduct
             {
                 OrderId = orderId,

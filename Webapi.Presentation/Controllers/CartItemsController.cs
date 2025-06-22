@@ -18,7 +18,6 @@ public class CartItemsController(IMediator mediator) : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CartItemDto>>> GetCartItems()
     {
-        Console.WriteLine("GetCartItems called");
         var query = new GetCartItemsQuery();
         var result = await mediator.Send(query);
         return Ok(result);
@@ -32,18 +31,18 @@ public class CartItemsController(IMediator mediator) : ControllerBase
         return CreatedAtAction(nameof(GetCartItems), result);
     }
 
-    [HttpPut("{productId}")]
-    public async Task<ActionResult<CartItemDto>> UpdateCartItem(Guid productId, UpdateCartItemDto updateCartItemDto)
+    [HttpPut("{id}")]
+    public async Task<ActionResult<CartItemDto>> UpdateCartItem(Guid id, UpdateCartItemDto updateCartItemDto)
     {
-        var command = new UpdateCartItemCommand(productId, updateCartItemDto);
+        var command = new UpdateCartItemCommand(id, updateCartItemDto);
         var result = await mediator.Send(command);
         return Ok(result);
     }
 
-    [HttpDelete("{productId}")]
-    public async Task<ActionResult<CartItemDto>> RemoveCartItem(Guid productId)
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<CartItemDto>> RemoveCartItem(Guid id)
     {
-        var command = new RemoveCartItemCommand(productId);
+        var command = new RemoveCartItemCommand(id);
         var result = await mediator.Send(command);
         return Ok(result);
     }

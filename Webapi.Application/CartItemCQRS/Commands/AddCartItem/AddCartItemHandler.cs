@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Webapi.Application.Common.Exceptions;
+using Webapi.Application.Common.Exceptions.Product;
 using Webapi.Application.Common.Exceptions.ProductSize;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
@@ -23,6 +24,12 @@ public class AddCartItemHandler(
         var productSize = await unitOfWork.ProductSizeRepository
             .GetByIdAsync(request.AddCartItemDto.ProductSizeId, cancellationToken)
             ?? throw new ProductSizeNotFoundException(request.AddCartItemDto.ProductSizeId);
+
+        // Verify the product exists and is properly loaded
+        if (productSize.Product == null)
+        {
+            throw new ProductNotFoundException(productSize.ProductId);
+        }
 
         var cartItem = await unitOfWork.CartItemRepository.GetCartItemAsync(userId, productSize.Id, cancellationToken);
         if (cartItem != null)

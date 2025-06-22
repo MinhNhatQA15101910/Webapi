@@ -23,6 +23,7 @@ public class UnitOfWork(
     public ICartItemRepository CartItemRepository => cartItemRepository;
     public IOrderRepository OrderRepository => orderRepository;
     public IVoucherRepository VoucherRepository => voucherRepository;
+    public IReviewRepository ReviewRepository => new ReviewRepository(dbContext);
 
     public async Task<bool> CompleteAsync(CancellationToken cancellationToken = default)
     {

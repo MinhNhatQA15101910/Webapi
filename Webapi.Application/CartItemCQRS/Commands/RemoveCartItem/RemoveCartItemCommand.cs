@@ -3,4 +3,4 @@ using Webapi.SharedKernel.DTOs.CartItem;
 
 namespace Webapi.Application.CartItemCQRS.Commands.RemoveCartItem;
 
-public record RemoveCartItemCommand(Guid ProductId) : ICommand<CartItemDto>;
+public record RemoveCartItemCommand(Guid CartItemId) : ICommand<CartItemDto>;
