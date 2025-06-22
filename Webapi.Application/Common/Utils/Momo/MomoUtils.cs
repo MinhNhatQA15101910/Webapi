@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Options;
 using System.Buffers.Text;
 using System.Net;
 using System.Security.Cryptography;
@@ -33,29 +34,19 @@ public static class MomoUtils
         return internalSignature.Equals(signature, StringComparison.InvariantCultureIgnoreCase);
     }
 
-    public static string GenerateStringPayload(MomoCreatePaymenyRequestDTO dto)
+    public static string GenerateStringPayload(MomoCreatePaymenyRequestDTO dto, string accessKey)
     {
-        var data = new StringBuilder();
-        foreach (var kv in dto.GetType().GetProperties())
-        {
-            var value = kv.GetValue(dto)?.ToString();
-            var key = kv.Name;
-            if (!string.IsNullOrEmpty(value) && key != null)
-            {
-                data
-                    .Append(WebUtility.UrlEncode(key))
-                    .Append('=')
-                    .Append(WebUtility.UrlEncode(value))
-                    .Append('&');
-            }
-        }
+        var rawSignature = "accessKey=" + accessKey
+                          + "&amount=" + dto.Amount
+                          + "&extraData=" + dto.ExtraData
+                          + "&ipnUrl=" + dto.IpnUrl
+                          + "&orderId=" + dto.OrderId
+                          + "&orderInfo=" + dto.OrderInfo
+                          + "&partnerCode=" + dto.PartnerCode
+                          + "&redirectUrl=" + dto.RedirectUrl
+                          + "&requestId=" + dto.RequestId
+                          + "&requestType=" + dto.RequestType;
 
-        string queryString = data.ToString();
-        if (queryString.Length > 0)
-        {
-            queryString = queryString.Remove(data.Length - 1, 1);
-        }
-
-        return queryString;
+        return rawSignature;
     }
 }

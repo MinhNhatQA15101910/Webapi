@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Stripe;
 using System.Text;
 using System.Text.Json;
 using Webapi.Application.Common.Exceptions;
@@ -37,9 +38,9 @@ public class MomoPaymentStrategy(
 
         // Data for rawSignature
         var amount = order.TotalPrice;
-        var orderId = order.Id;
+        var orderId = $"{DateTime.UtcNow:yyyyMMddHHmmssfff}_{order.Id}";
         var orderInfo = order.Id.ToString();
-        var requestId = order.Id;
+        var requestId = orderId;
 
         var storeId = config.Value.StoreId;
         var ipnUrl = config.Value.IpnUrl;
@@ -54,7 +55,7 @@ public class MomoPaymentStrategy(
             PartnerCode = partnerCode,
             StoreId = storeId,
             RequestId = requestId.ToString(),
-            Amount = (long)(amount * 100),
+            Amount = (long)(amount * 26128), //convert $ to VND
             OrderId = orderId.ToString(),
             OrderInfo = orderInfo,
             RedirectUrl = redirectUrl,
@@ -64,10 +65,10 @@ public class MomoPaymentStrategy(
             Lang = lang,
         };
 
-        var payloadString = MomoUtils.GenerateStringPayload(payload);
+
+        var payloadString = MomoUtils.GenerateStringPayload(payload, accessKey);
 
         payload.Signature = MomoUtils.GetSignature(payloadString, secretKey);
-
 
         // Chuyển payload thành JSON
         var json = JsonSerializer.Serialize(payload);
@@ -87,7 +88,7 @@ public class MomoPaymentStrategy(
                         "Có lỗi xảy ra khi đọc dữ liệu trả về từ Momo"
                 );
 
-            return new PaymentResponseDTO(orderId, SharedKernel.Enums.PaymentMethodEnum.MoMo, momoResponse.PayUrl, momoResponse.ResultCode);
+            return new PaymentResponseDTO(order.Id, SharedKernel.Enums.PaymentMethodEnum.MoMo, momoResponse.PayUrl, momoResponse.ResultCode);
         }
 
         throw new Application.Common.Exceptions.ApplicationException(
@@ -100,7 +101,7 @@ public class MomoPaymentStrategy(
     {
         var request = dto as MomoCreatePaymentResponseDTO;
 
-        var oderId = request.OrderId;
+        var oderId = request.OrderId.Split("_")[1];
 
         var order = await dbContext.Orders.FirstOrDefaultAsync(x => x.Id.ToString() == oderId, cancellationToken) ?? throw new NotFoundException($"Order {oderId} not found");
 

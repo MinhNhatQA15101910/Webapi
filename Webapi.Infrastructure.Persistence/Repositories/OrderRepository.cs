@@ -33,7 +33,11 @@ public class OrderRepository(
 
     public async Task<PagedList<OrderDto>> GetOrdersAsync(Guid? userId, OrderParams orderParams, CancellationToken cancellationToken = default)
     {
-        var query = dbContext.Orders.AsQueryable();
+        var query = dbContext.Orders
+            .Include(x => x.Address)
+            .Include(x => x.Products)
+            .Include(x => x.Vouchers)
+            .AsQueryable();
 
         // Filter by userId if provided
         if (userId != null)

@@ -42,6 +42,8 @@ public class VNPayPaymentStrategy(
         var orderType = "other"; //trang phục thể thao
         var ipAddress = config.Value.RemoteIpAddress ?? "127.0.0.1"; // Extract IP address
 
+        var hashedOrderId = $"{DateTime.UtcNow:yyyyMMddHHmmssfff}_{order.Id}";
+
         // Create instance of VnPayLib to handle request URL creation
         var pay = new VNPayProvider();
 
@@ -49,7 +51,7 @@ public class VNPayPaymentStrategy(
         pay.AddRequestData(VNPayParameters.VnpVersion, vnpVersion);
         pay.AddRequestData(VNPayParameters.VnpCommand, vnpCommand);
         pay.AddRequestData(VNPayParameters.VnpMerchantCode, vnpTmnCode);
-        pay.AddRequestData(VNPayParameters.VnpAmount, ((int)(amount * 100)).ToString()); // Multiply by 100 to match VNPay amount format
+        pay.AddRequestData(VNPayParameters.VnpAmount, ((int)(amount * 26128)).ToString()); // Multiply by 100 to match VNPay amount format
 
         var createDate = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"));     // Vietnam time
         pay.AddRequestData(VNPayParameters.VnpCreateDate, createDate.ToString("yyyyMMddHHmmss"));
@@ -63,7 +65,7 @@ public class VNPayPaymentStrategy(
 
         pay.AddRequestData(VNPayParameters.VnpExpireDate, createDate.AddMinutes(10).ToString("yyyyMMddHHmmss"));
 
-        pay.AddRequestData(VNPayParameters.VnpOrderId, order.Id.ToString());
+        pay.AddRequestData(VNPayParameters.VnpOrderId, hashedOrderId);
 
         // Generate the payment URL using VnPayLib
         var payUrl = pay.CreateRequestUrl(vnpUrl, vnpHashSecret);
@@ -97,7 +99,7 @@ public class VNPayPaymentStrategy(
             if (order == null) return new IpnResponse("01", "Order not found");
 
             long vnpAmount = Convert.ToInt64(pay.GetResponseData(VNPayParameters.VnpAmount));
-            if ((long)(order.TotalPrice * 100) != vnpAmount)
+            if ((long)(order.TotalPrice * 26128) != vnpAmount)
             {
                 return new IpnResponse("04", "Invalid amount");
             }
