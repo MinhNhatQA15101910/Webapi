@@ -1,0 +1,142 @@
+[
+  {
+    "Id": "a8d798aa-4b95-4e50-b199-d6d2e07a9384",
+    "Name": "WELCOME10",
+    "Value": 10.0,
+    "ExpiredAt": "2025-12-31T23:59:59Z",
+    "Quantity": 100
+  },
+  {
+    "Id": "b8ecb07d-9d2c-4b9e-9f77-6637e8a1e711",
+    "Name": "SUMMER15",
+    "Value": 15.0,
+    "ExpiredAt": "2025-08-31T23:59:59Z",
+    "Quantity": 60
+  },
+  {
+    "Id": "1f2559a1-0606-4a6c-90b5-d15511a0c65c",
+    "Name": "FREESHIP5",
+    "Value": 5.0,
+    "ExpiredAt": "2025-07-31T23:59:59Z",
+    "Quantity": 200
+  },
+  {
+    "Id": "2a2e1c30-01c7-4b27-beb4-c1f1f1fe660a",
+    "Name": "VIP25",
+    "Value": 25.0,
+    "ExpiredAt": "2026-01-01T00:00:00Z",
+    "Quantity": 20
+  },
+  {
+    "Id": "39c4a09a-060b-4d2a-9f4f-7fda91a9b6e5",
+    "Name": "BLACKFRIDAY50",
+    "Value": 50.0,
+    "ExpiredAt": "2025-11-29T23:59:59Z",
+    "Quantity": 10
+  },
+  {
+    "Id": "26fcd7ff-6b10-4260-a7be-f99d1263c95a",
+    "Name": "NEWUSER20",
+    "Value": 20.0,
+    "ExpiredAt": "2025-12-31T23:59:59Z",
+    "Quantity": 75
+  },
+  {
+    "Id": "48a14245-47b7-4fa9-8a75-9695e0e7fa0e",
+    "Name": "BIRTHDAY30",
+    "Value": 30.0,
+    "ExpiredAt": "2025-10-10T23:59:59Z",
+    "Quantity": 30
+  },
+  {
+    "Id": "bb54b060-2e97-4120-bb7c-0c44aa1b7e77",
+    "Name": "LOVEMOM15",
+    "Value": 15.0,
+    "ExpiredAt": "2025-07-15T23:59:59Z",
+    "Quantity": 120
+  },
+  {
+    "Id": "d5db83a7-624a-4cf8-98ed-3ff4d9780a42",
+    "Name": "XMAS40",
+    "Value": 40.0,
+    "ExpiredAt": "2025-12-26T23:59:59Z",
+    "Quantity": 25
+  },
+  {
+    "Id": "92433c79-1f6d-4f23-8d2f-c9e9bda82ac7",
+    "Name": "FLASH10",
+    "Value": 10.0,
+    "ExpiredAt": "2025-07-01T23:59:59Z",
+    "Quantity": 500
+  },
+  {
+    "Id": "8d654a82-0ae2-48f0-8b84-2559a03d49aa",
+    "Name": "HOTDEAL20",
+    "Value": 20.0,
+    "ExpiredAt": "2025-09-30T23:59:59Z",
+    "Quantity": 100
+  },
+  {
+    "Id": "fcf775f2-f3a2-4788-9a08-ecdc3eac6173",
+    "Name": "WOMENDAY25",
+    "Value": 25.0,
+    "ExpiredAt": "2025-03-08T23:59:59Z",
+    "Quantity": 80
+  },
+  {
+    "Id": "cbcf1799-d4be-4be3-a2e0-fcbb91e5b239",
+    "Name": "STUDENT10",
+    "Value": 10.0,
+    "ExpiredAt": "2026-01-31T23:59:59Z",
+    "Quantity": 90
+  },
+  {
+    "Id": "188dc93a-4a2d-43b2-a4f6-53d617b6ed69",
+    "Name": "FALLSALE35",
+    "Value": 35.0,
+    "ExpiredAt": "2025-10-31T23:59:59Z",
+    "Quantity": 40
+  },
+  {
+    "Id": "f6de3046-f057-4adf-a005-032de6adf060",
+    "Name": "ANNIVERSARY20",
+    "Value": 20.0,
+    "ExpiredAt": "2025-09-09T23:59:59Z",
+    "Quantity": 60
+  },
+  {
+    "Id": "04ee3d43-3b41-4452-a82d-8ae013893a1e",
+    "Name": "THANKYOU5",
+    "Value": 5.0,
+    "ExpiredAt": "2025-12-01T23:59:59Z",
+    "Quantity": 150
+  },
+  {
+    "Id": "c35077b2-1734-462e-94a4-7b0ac2a34738",
+    "Name": "HALLOWEEN30",
+    "Value": 30.0,
+    "ExpiredAt": "2025-10-31T23:59:59Z",
+    "Quantity": 35
+  },
+  {
+    "Id": "2671ff38-f70a-40d4-b9b4-bc3d63d09073",
+    "Name": "WINTERSALE40",
+    "Value": 40.0,
+    "ExpiredAt": "2026-01-15T23:59:59Z",
+    "Quantity": 45
+  },
+  {
+    "Id": "6cd7a4b7-c9ec-41c1-bb65-469dbb26e0ff",
+    "Name": "SPRING20",
+    "Value": 20.0,
+    "ExpiredAt": "2026-03-31T23:59:59Z",
+    "Quantity": 70
+  },
+  {
+    "Id": "037d0976-0644-4de6-9405-07cc2d4634eb",
+    "Name": "LASTMINUTE15",
+    "Value": 15.0,
+    "ExpiredAt": "2025-06-30T23:59:59Z",
+    "Quantity": 25
+  }
+]

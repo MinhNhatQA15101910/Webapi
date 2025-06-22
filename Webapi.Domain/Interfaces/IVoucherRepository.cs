@@ -10,4 +10,5 @@ public interface IVoucherRepository
     void Add(Voucher voucher);
     void Update(Voucher voucher);
     void Remove(Voucher voucher);
+    Task<bool> AnyAsync(CancellationToken cancellationToken = default);
 }

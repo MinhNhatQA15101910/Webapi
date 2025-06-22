@@ -46,6 +46,7 @@ try
     await Seed.SeedCategoriesAsync(unitOfWork);
     await Seed.SeedProductCategoriesAsync(unitOfWork);
     await Seed.SeedProductSizesAsync(unitOfWork);
+    await Seed.SeedVouchersAsync(unitOfWork);
 
     await unitOfWork.CompleteAsync();
 }
