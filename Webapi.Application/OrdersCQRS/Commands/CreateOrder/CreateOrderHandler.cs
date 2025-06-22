@@ -4,6 +4,7 @@ using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Exceptions.CartItem;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
+using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Application.OrdersCQRS.Observers.OrderCreated;
 using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
@@ -22,6 +23,7 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
     public CreateOrderHandler(
         IHttpContextAccessor httpContextAccessor,
         IUnitOfWork unitOfWork,
+        IEmailService emailService,
         IMapper mapper
     )
     {
@@ -33,6 +35,7 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
         Subscribe(new UpdateProductQuantityOrderCreatedListener(unitOfWork));
         Subscribe(new UpdateCartOrderCreatedListener(unitOfWork));
         Subscribe(new UpdateVoucherQuantityOrderCreatedListener(unitOfWork));
+        Subscribe(new SendEmailOrderCreatedListener(httpContextAccessor, unitOfWork, emailService));
     }
 
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -109,7 +112,7 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
         if (!await _unitOfWork.CompleteAsync(cancellationToken))
             throw new BadRequestException("Failed to complete order creation.");
 
-        await NotifyListenersAsync(cartItems, vouchers, cancellationToken);
+        await NotifyListenersAsync(order, cartItems, vouchers, cancellationToken);
 
         var savedOrder = await _unitOfWork.OrderRepository.GetOrderByIdAsync(orderId, cancellationToken)
             ?? throw new OrderNotFoundException(orderId);
@@ -122,11 +125,11 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
         _listeners.Add(listener);
     }
 
-    private async Task NotifyListenersAsync(List<CartItem> cartItemIds, List<Voucher> vouchers, CancellationToken cancellationToken)
+    private async Task NotifyListenersAsync(Order order, List<CartItem> cartItemIds, List<Voucher> vouchers, CancellationToken cancellationToken)
     {
         foreach (var listener in _listeners)
         {
-            await listener.UpdateAsync(cartItemIds, vouchers, cancellationToken);
+            await listener.UpdateAsync(order, cartItemIds, vouchers, cancellationToken);
         }
     }
 }

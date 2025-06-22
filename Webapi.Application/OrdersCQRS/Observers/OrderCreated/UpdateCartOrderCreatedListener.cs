@@ -6,7 +6,7 @@ namespace Webapi.Application.OrdersCQRS.Observers.OrderCreated;
 
 public class UpdateCartOrderCreatedListener(IUnitOfWork unitOfWork) : IOrderCreatedListener
 {
-    public async Task UpdateAsync(List<CartItem> cartItems, List<Voucher> vouchers, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(Order order, List<CartItem> cartItems, List<Voucher> vouchers, CancellationToken cancellationToken = default)
     {
         foreach (var cartItem in cartItems)
         {

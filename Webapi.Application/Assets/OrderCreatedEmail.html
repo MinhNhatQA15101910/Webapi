@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmation</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f7;
+        margin: 0;
+        padding: 0;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .email-header {
+        background-color: #4caf50;
+        color: #ffffff;
+        padding: 20px;
+        text-align: center;
+      }
+      .email-body {
+        padding: 30px;
+      }
+      .email-body h2 {
+        color: #333333;
+      }
+      .email-body p {
+        color: #555555;
+        line-height: 1.6;
+      }
+      .order-details {
+        margin-top: 20px;
+        background-color: #f0f0f0;
+        padding: 15px;
+        border-radius: 5px;
+      }
+      .btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #4caf50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+      }
+      .email-footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 12px;
+        color: #888888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="email-header">
+        <h1>Order Confirmation</h1>
+      </div>
+      <div class="email-body">
+        <h2>Hello {{UserName}},</h2>
+        <p>
+          Thank you for your order! We're happy to let you know that your order
+          <strong>#{{OrderNumber}}</strong> has been created successfully.
+        </p>
+
+        <div class="order-details">
+          <p><strong>Order Number:</strong> {{OrderNumber}}</p>
+          <p><strong>Order Date:</strong> {{OrderDate}}</p>
+          <p><strong>Total Amount:</strong> ${{TotalAmount}}</p>
+        </div>
+
+        <p>
+          If you have any questions or concerns, feel free to reply to this email. We're here to
+          help!
+        </p>
+      </div>
+      <div class="email-footer">&copy; 2025 Nike Clone. All rights reserved.</div>
+    </div>
+  </body>
+</html>
