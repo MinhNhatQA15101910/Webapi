@@ -1,21 +1,32 @@
 using System.Data;
 using ExcelDataReader;
+using Webapi.Application.Common.Interfaces.Services;
 using Webapi.Domain.Entities;
+using Webapi.Domain.Factories;
+using Webapi.SharedKernel.DTOs.Voucher;
 
 namespace Webapi.Infrastructure.Services.Services;
 
-public class XlsVoucherImport
+public class XlsVoucherImport : IVoucherImport
 {
-    public IEnumerable<Voucher> ImportFromExcel(Stream fileStream, string fileName)
+    private readonly VoucherFactory _voucherFactory;
+
+    public XlsVoucherImport(VoucherFactory voucherFactory)
+    {
+        _voucherFactory = voucherFactory;
+    }
+
+    public async Task<IEnumerable<Voucher>> ImportVouchersAsync(Stream fileStream, string fileName)
     {
         if (fileStream == null)
         {
             throw new ArgumentNullException(nameof(fileStream));
         }
         
+        // This makes the code work with Excel on .NET Core
         System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         
-        var vouchers = new List<Voucher>();
+        var importData = new List<Voucher>();
         
         using (var reader = ExcelReaderFactory.CreateReader(fileStream))
         {
@@ -31,21 +42,24 @@ public class XlsVoucherImport
             
             foreach (DataRow row in dataTable.Rows)
             {
-                var voucher = new Voucher
+                DateTime expireDate = DateTime.UtcNow.AddMonths(3);
+                if (DateTime.TryParse(row["ExpiredAt"]?.ToString(), out var parsedDate))
                 {
-                    Id = Guid.NewGuid(),
-                    Name = row["Name"].ToString() ?? string.Empty,
-                    Value = Convert.ToDouble(row["Value"]),
-                    Quantity = Convert.ToInt32(row["Quantity"]),
-                    ExpiredAt = DateTime.Parse(row["ExpiredAt"].ToString() ?? DateTime.UtcNow.AddMonths(3).ToString()),
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                };
+                    expireDate = parsedDate;
+                }
                 
-                vouchers.Add(voucher);
+                string name = row["Name"]?.ToString() ?? string.Empty;
+                double value = Convert.ToDouble(row["Value"] ?? 0);
+                int quantity = Convert.ToInt32(row["Quantity"] ?? 0);
+                
+                // Use the factory to create vouchers using the patterns
+                var voucherType = _voucherFactory.GetVoucherType(name, value, expireDate);
+                var voucher = _voucherFactory.CreateVoucher(voucherType, quantity, expireDate);
+                
+                importData.Add(voucher);
             }
         }
         
-        return vouchers;
+        return await Task.FromResult(importData);
     }
 }
