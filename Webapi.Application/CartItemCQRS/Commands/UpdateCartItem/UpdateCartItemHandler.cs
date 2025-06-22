@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Exceptions.CartItem;
-using Webapi.Application.Common.Exceptions.Product;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
 using Webapi.Domain.Interfaces;
@@ -19,20 +19,23 @@ public class UpdateCartItemHandler(
     {
         try
         {
-            var userId = httpContextAccessor.HttpContext.User.GetUserId();
+            var userId = httpContextAccessor.HttpContext!.User.GetUserId();
             
-            // Get cart item
-            var cartItem = await unitOfWork.CartItemRepository.GetCartItemAsync(userId, request.ProductId, cancellationToken)
-                ?? throw new CartItemNotFoundException(userId, request.ProductId);
+            // Get cart item by its ID instead of product ID
+            var cartItem = await unitOfWork.CartItemRepository.GetCartItemByIdAsync(request.CartItemId, cancellationToken)
+                ?? throw new CartItemNotFoundException(request.CartItemId);
                 
-            // Verify product exists
-            var product = await unitOfWork.ProductRepository.GetByIdAsync(request.ProductId, cancellationToken)
-                ?? throw new ProductNotFoundException(request.ProductId);
-                
-            // Check if the product is in stock
-            if (!await unitOfWork.ProductRepository.IsInStockAsync(request.ProductId, request.CartItemDto.Quantity, cancellationToken))
+            // Verify the cart item belongs to the current user
+            if (cartItem.UserId != userId)
             {
-                throw new CartItemUpdateException(request.ProductId, "Product is not available in the requested quantity");
+                throw new BadRequestException("You can only update items in your own cart");
+            }
+            
+            // Check if the product size is in stock
+            var productSize = await unitOfWork.ProductSizeRepository.GetByIdAsync(cartItem.ProductSizeId, cancellationToken);
+            if (productSize == null || productSize.Quantity < request.CartItemDto.Quantity)
+            {
+                throw new CartItemUpdateException(request.CartItemId, "Product is not available in the requested quantity");
             }
             
             // Update quantity
@@ -40,25 +43,20 @@ public class UpdateCartItemHandler(
             cartItem.UpdatedAt = DateTime.UtcNow;
             
             unitOfWork.CartItemRepository.Update(cartItem);
-            await unitOfWork.CompleteAsync();
+            await unitOfWork.CompleteAsync(cancellationToken);
             
             // Get the updated cart item with product details
-            var updatedCartItem = await unitOfWork.CartItemRepository.GetCartItemWithDetailsAsync(userId, request.ProductId, cancellationToken)
-                ?? throw new CartItemNotFoundException(userId, request.ProductId);
+            var updatedCartItem = await unitOfWork.CartItemRepository.GetCartItemByIdAsync(request.CartItemId, cancellationToken)
+                ?? throw new CartItemNotFoundException(request.CartItemId);
             
             return mapper.Map<CartItemDto>(updatedCartItem);
-        }
-        catch (ProductNotFoundException)
-        {
-            // Rethrow specific exceptions
-            throw;
         }
         catch (CartItemNotFoundException)
         {
             // Rethrow specific exceptions
             throw;
         }
-        catch (CartItemUpdateException)
+        catch (BadRequestException)
         {
             // Rethrow specific exceptions
             throw;
@@ -66,7 +64,7 @@ public class UpdateCartItemHandler(
         catch (Exception ex)
         {
             // Wrap other exceptions
-            throw new CartItemUpdateException(request.ProductId, $"An unexpected error occurred: {ex.Message}");
+            throw new CartItemUpdateException(request.CartItemId, $"An unexpected error occurred: {ex.Message}");
         }
     }
 }
