@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Webapi.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using Webapi.Infrastructure.Persistence;
 namespace Webapi.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250622162725_VoucherEntityUpdate")]
+    partial class VoucherEntityUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
@@ -592,14 +595,18 @@ namespace Webapi.Infrastructure.Persistence.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("VoucherId")
+                    b.Property<string>("VoucherId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("VoucherId1")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VoucherId");
+                    b.HasIndex("VoucherId1");
 
-                    b.ToTable("VoucherItems");
+                    b.ToTable("VoucherItem");
                 });
 
             modelBuilder.Entity("Webapi.Domain.Entities.VoucherType", b =>
@@ -846,9 +853,7 @@ namespace Webapi.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Webapi.Domain.Entities.Voucher", null)
                         .WithMany("Items")
-                        .HasForeignKey("VoucherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VoucherId1");
                 });
 
             modelBuilder.Entity("Webapi.Domain.Entities.Category", b =>

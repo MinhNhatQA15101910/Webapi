@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Interfaces.Factories;
 using Webapi.Application.Common.Interfaces.MediatR;
-using Webapi.Application.Common.Interfaces.Services;
+using Webapi.Domain.Factories;
 using Webapi.Domain.Interfaces;
 
 
@@ -11,7 +11,8 @@ namespace Webapi.Application.VoucherCQRS.Commands.ImportVouchers;
 public class ImportVouchersHandler(
     IHttpContextAccessor httpContextAccessor,
     IUnitOfWork unitOfWork,
-    IVoucherImportFactory importFactory
+    IVoucherImportFactory importFactory,
+    VoucherFactory voucherFactory 
 ) : ICommandHandler<ImportVouchersCommand, int>
 {
     public async Task<int> Handle(ImportVouchersCommand request, CancellationToken cancellationToken)
@@ -28,22 +29,37 @@ public class ImportVouchersHandler(
             
             // Import vouchers
             using var stream = request.ImportDto.File.OpenReadStream();
-            var vouchers = await importer.ImportVouchersAsync(stream, request.ImportDto.File.FileName);
+            var voucherData = await importer.ImportVouchersAsync(stream, request.ImportDto.File.FileName);
             
-            if (vouchers == null || !vouchers.Any())
+            if (voucherData == null || !voucherData.Any())
             {
                 return 0;
             }
             
-            // Save to database
-            foreach (var voucher in vouchers)
+            // Count how many vouchers we're adding
+            int voucherCount = 0;
+            
+            // Use the factory to create vouchers with flyweight pattern
+            foreach (var data in voucherData)
             {
+                // Use flyweight pattern to get voucher type
+                var voucherType = voucherFactory.GetVoucherType(
+                    data.Type.Name,
+                    data.Type.Value,
+                    data.ExpiredAt
+                );
+                
+                // Use prototype pattern to create voucher with items
+                var voucher = voucherFactory.CreateVoucher(voucherType, data.Quantity, data.ExpiredAt);
+                
+                // Add to repository
                 unitOfWork.VoucherRepository.Add(voucher);
+                voucherCount++;
             }
             
             await unitOfWork.CompleteAsync(cancellationToken);
             
-            return vouchers.Count();
+            return voucherCount;
         }
         catch (Exception ex) when (
             ex is not BadRequestException && 

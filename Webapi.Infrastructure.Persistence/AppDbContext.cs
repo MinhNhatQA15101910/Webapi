@@ -27,6 +27,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<ProductCategory> ProductCategories { get; set; }
 
     public DbSet<ProductSize> ProductSizes { get; set; }
+    public DbSet<VoucherItem> VoucherItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
