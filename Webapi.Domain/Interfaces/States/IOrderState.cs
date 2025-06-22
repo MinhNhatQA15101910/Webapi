@@ -1,4 +1,3 @@
-using Webapi.Domain.Entities;
 using Webapi.Domain.Enums;
 
 namespace Webapi.Domain.Interfaces.States;

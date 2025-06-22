@@ -659,6 +659,34 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
+                b.OwnsOne("Webapi.Domain.ValueObjects.Address", "Address", b1 =>
+                    {
+                        b1.Property<Guid>("OrderId")
+                            .HasColumnType("TEXT");
+
+                        b1.Property<string>("DetailAddress")
+                            .IsRequired()
+                            .HasColumnType("TEXT");
+
+                        b1.Property<string>("ReceiverEmail")
+                            .IsRequired()
+                            .HasColumnType("TEXT");
+
+                        b1.Property<string>("ReceiverName")
+                            .IsRequired()
+                            .HasColumnType("TEXT");
+
+                        b1.HasKey("OrderId");
+
+                        b1.ToTable("Orders");
+
+                        b1.WithOwner()
+                            .HasForeignKey("OrderId");
+                    });
+
+                b.Navigation("Address")
+                    .IsRequired();
+
                 b.Navigation("Owner");
             });
 

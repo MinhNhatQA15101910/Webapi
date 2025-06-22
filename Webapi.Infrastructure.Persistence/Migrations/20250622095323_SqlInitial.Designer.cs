@@ -11,7 +11,7 @@ using Webapi.Infrastructure.Persistence;
 namespace Webapi.Infrastructure.Persistence.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-[Migration("20250618124710_SqlInitial")]
+[Migration("20250622095323_SqlInitial")]
 partial class SqlInitial
 {
     /// <inheritdoc />
@@ -660,6 +660,34 @@ partial class SqlInitial
                     .WithMany("Orders")
                     .HasForeignKey("OwnerId")
                     .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.OwnsOne("Webapi.Domain.ValueObjects.Address", "Address", b1 =>
+                    {
+                        b1.Property<Guid>("OrderId")
+                            .HasColumnType("TEXT");
+
+                        b1.Property<string>("DetailAddress")
+                            .IsRequired()
+                            .HasColumnType("TEXT");
+
+                        b1.Property<string>("ReceiverEmail")
+                            .IsRequired()
+                            .HasColumnType("TEXT");
+
+                        b1.Property<string>("ReceiverName")
+                            .IsRequired()
+                            .HasColumnType("TEXT");
+
+                        b1.HasKey("OrderId");
+
+                        b1.ToTable("Orders");
+
+                        b1.WithOwner()
+                            .HasForeignKey("OrderId");
+                    });
+
+                b.Navigation("Address")
                     .IsRequired();
 
                 b.Navigation("Owner");
