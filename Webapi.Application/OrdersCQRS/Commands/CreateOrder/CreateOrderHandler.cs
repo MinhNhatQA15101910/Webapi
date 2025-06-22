@@ -4,7 +4,7 @@ using Webapi.Application.Common.Exceptions;
 using Webapi.Application.Common.Exceptions.CartItem;
 using Webapi.Application.Common.Extensions;
 using Webapi.Application.Common.Interfaces.MediatR;
-using Webapi.Application.OrdersCQRS.Observers;
+using Webapi.Application.OrdersCQRS.Observers.OrderCreated;
 using Webapi.Domain.Entities;
 using Webapi.Domain.Interfaces;
 using Webapi.Domain.ValueObjects;
@@ -32,29 +32,52 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
         // Subscribe to listeners
         Subscribe(new UpdateProductQuantityOrderCreatedListener(unitOfWork));
         Subscribe(new UpdateCartOrderCreatedListener(unitOfWork));
+        Subscribe(new UpdateVoucherQuantityOrderCreatedListener(unitOfWork));
     }
 
     public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
-        var userId = _httpContextAccessor.HttpContext!.User.GetUserId();
+        var httpContext = _httpContextAccessor.HttpContext
+            ?? throw new UnauthorizedAccessException("No HttpContext found.");
 
-        List<CartItem> cartItems = [];
-        foreach (var cartItemId in request.CreateOrderDto.CartItemIds)
+        var userId = httpContext.User.GetUserId();
+
+        var cartItemTasks = request.CreateOrderDto.CartItemIds
+            .Select(id => _unitOfWork.CartItemRepository.GetCartItemByIdAsync(id, cancellationToken))
+            .ToList();
+
+        var cartItems = new List<CartItem>();
+        for (int i = 0; i < cartItemTasks.Count; i++)
         {
-            var cartItem = await _unitOfWork.CartItemRepository.GetCartItemByIdAsync(cartItemId, cancellationToken)
-                ?? throw new CartItemNotFoundException(cartItemId);
+            var cartItem = await cartItemTasks[i] ??
+                throw new CartItemNotFoundException(request.CreateOrderDto.CartItemIds[i]);
 
             if (cartItem.UserId != userId)
-            {
                 throw new ForbiddenAccessException("You do not have permission to access this cart item.");
-            }
 
             cartItems.Add(cartItem);
         }
 
-        // Calculate total price and shipping cost
+        // 2. Calculate total price
         var totalPrice = cartItems.Sum(ci => ci.ProductSize.Product.Price * ci.Quantity);
+        var vouchers = new List<Voucher>();
+        foreach (var voucherId in request.CreateOrderDto.VoucherIds)
+        {
+            var voucher = await _unitOfWork.VoucherRepository.GetByIdAsync(voucherId, cancellationToken)
+                ?? throw new VoucherNotFoundException(voucherId);
 
+            if (voucher.Quantity <= 0)
+                throw new BadRequestException($"Voucher {voucher.Name} is out of stock.");
+
+            if (voucher.ExpiredAt < DateTime.UtcNow)
+                throw new BadRequestException($"Voucher {voucher.Name} has expired.");
+
+            totalPrice -= totalPrice * (decimal)(voucher.Value / 100);
+
+            vouchers.Add(voucher);
+        }
+
+        // 3. Create order with address and products
         var orderId = Guid.NewGuid();
         var order = new Order
         {
@@ -73,23 +96,25 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
                 OrderId = orderId,
                 ProductSizeId = ci.ProductSizeId,
                 Quantity = ci.Quantity,
+            })],
+            Vouchers = [.. request.CreateOrderDto.VoucherIds.Select(voucherId => new OrderVoucher
+            {
+                OrderId = orderId,
+                VoucherId = voucherId
             })]
         };
 
         _unitOfWork.OrderRepository.Add(order);
 
         if (!await _unitOfWork.CompleteAsync(cancellationToken))
-        {
-            throw new BadRequestException("Failed to add products to order.");
-        }
+            throw new BadRequestException("Failed to complete order creation.");
 
-        // Notify updating related
-        await NotifyListenersAsync(cartItems, cancellationToken);
+        await NotifyListenersAsync(cartItems, vouchers, cancellationToken);
 
-        order = await _unitOfWork.OrderRepository.GetOrderByIdAsync(orderId, cancellationToken)
-            ?? throw new OrderNotFoundException(order.Id);
+        var savedOrder = await _unitOfWork.OrderRepository.GetOrderByIdAsync(orderId, cancellationToken)
+            ?? throw new OrderNotFoundException(orderId);
 
-        return _mapper.Map<OrderDto>(order);
+        return _mapper.Map<OrderDto>(savedOrder);
     }
 
     private void Subscribe(IOrderCreatedListener listener)
@@ -97,11 +122,11 @@ public class CreateOrderHandler : ICommandHandler<CreateOrderCommand, OrderDto>
         _listeners.Add(listener);
     }
 
-    private async Task NotifyListenersAsync(List<CartItem> cartItemIds, CancellationToken cancellationToken)
+    private async Task NotifyListenersAsync(List<CartItem> cartItemIds, List<Voucher> vouchers, CancellationToken cancellationToken)
     {
         foreach (var listener in _listeners)
         {
-            await listener.UpdateAsync(cartItemIds, cancellationToken);
+            await listener.UpdateAsync(cartItemIds, vouchers, cancellationToken);
         }
     }
 }

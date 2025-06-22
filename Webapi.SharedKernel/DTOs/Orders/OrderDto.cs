@@ -11,4 +11,5 @@ public class OrderDto
     public AddressDto Address { get; set; } = new AddressDto();
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public List<OrderProductDto> Products { get; set; } = [];
+    public List<OrderVoucherDto> Vouchers { get; set; } = [];
 }
