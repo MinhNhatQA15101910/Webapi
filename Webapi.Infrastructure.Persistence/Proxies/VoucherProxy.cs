@@ -63,6 +63,34 @@ public class VoucherProxy(
         return voucher;
     }
 
+    public async Task<IEnumerable<Voucher>> GetAllWithDetailsAsync(CancellationToken cancellationToken = default)
+    {
+        var cacheKey = "Vouchers_/all/details";
+
+        if (!cacheService.TryGetValue(cacheKey, out IEnumerable<Voucher>? vouchers))
+        {
+            vouchers = await voucherRepository.GetAllWithDetailsAsync(cancellationToken);
+
+            cacheService.Set(cacheKey, vouchers);
+        }
+
+        return vouchers ?? [];
+    }
+
+    public async Task<Voucher?> GetVoucherWithDetailsAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var cacheKey = $"Vouchers_/details/{id}";
+
+        if (!cacheService.TryGetValue(cacheKey, out Voucher? voucher))
+        {
+            voucher = await voucherRepository.GetVoucherWithDetailsAsync(id, cancellationToken);
+
+            cacheService.Set(cacheKey, voucher);
+        }
+
+        return voucher;
+    }
+
     public void Remove(Voucher voucher)
     {
         voucherRepository.Remove(voucher);
@@ -91,7 +119,7 @@ public class VoucherProxy(
         var cacheKeyForSingleWithId = $"Vouchers_/{voucher.Id}";
         cacheService.Set(cacheKeyForSingleWithId, voucher);
 
-        var cacheKeyForSingleWithName = $"Vouchers_/name={voucher.Name}";
+        var cacheKeyForSingleWithName = $"Vouchers_/name={voucher.Type.Name}";
         cacheService.Set(cacheKeyForSingleWithName, voucher);
     }
 
@@ -103,7 +131,7 @@ public class VoucherProxy(
         var cacheKeyForSingleWithId = $"Vouchers_/{voucher.Id}";
         cacheService.Remove(cacheKeyForSingleWithId);
 
-        var cacheKeyForSingleWithName = $"Vouchers_/name={voucher.Name}";
+        var cacheKeyForSingleWithName = $"Vouchers_/name={voucher.Type.Name}";
         cacheService.Remove(cacheKeyForSingleWithName);
     }
 }

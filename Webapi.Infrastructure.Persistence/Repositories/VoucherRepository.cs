@@ -42,6 +42,13 @@ public class VoucherRepository(AppDbContext context) : IVoucherRepository
             .FirstOrDefaultAsync(v => v.Id == id, cancellationToken);
     }
 
+    public async Task<Voucher?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
+    {
+        return await _context.Vouchers
+            .Include(v => v.Type)
+            .FirstOrDefaultAsync(v => v.Type.Name == name, cancellationToken);
+    }
+
     public void Add(Voucher voucher)
     {
         _context.Vouchers.Add(voucher);
