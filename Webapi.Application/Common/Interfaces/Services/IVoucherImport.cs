@@ -1,5 +1,6 @@
 using Webapi.Domain.Entities;
 using System.IO;
+using Webapi.SharedKernel.DTOs.Voucher;
 
 namespace Webapi.Application.Common.Interfaces.Services;
 

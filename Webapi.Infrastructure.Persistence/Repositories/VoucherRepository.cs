@@ -12,6 +12,16 @@ public class VoucherRepository(AppDbContext context) : IVoucherRepository
     public async Task<IEnumerable<Voucher>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Vouchers
+            .Include(v => v.Type)
+            .OrderByDescending(v => v.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
+    
+    public async Task<IEnumerable<Voucher>> GetAllWithDetailsAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Vouchers
+            .Include(v => v.Type)
+            .Include(v => v.Orders)
             .OrderByDescending(v => v.CreatedAt)
             .ToListAsync(cancellationToken);
     }
@@ -19,13 +29,24 @@ public class VoucherRepository(AppDbContext context) : IVoucherRepository
     public async Task<Voucher?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.Vouchers
+            .Include(v => v.Type)
+            .FirstOrDefaultAsync(v => v.Id == id, cancellationToken);
+    }
+    
+    public async Task<Voucher?> GetVoucherWithDetailsAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Vouchers
+            .Include(v => v.Type)
+            .Include(v => v.Items)
+            .Include(v => v.Orders)
             .FirstOrDefaultAsync(v => v.Id == id, cancellationToken);
     }
 
     public async Task<Voucher?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await _context.Vouchers
-            .FirstOrDefaultAsync(v => v.Name == name, cancellationToken);
+            .Include(v => v.Type)
+            .FirstOrDefaultAsync(v => v.Type.Name == name, cancellationToken);
     }
 
     public void Add(Voucher voucher)
@@ -40,6 +61,17 @@ public class VoucherRepository(AppDbContext context) : IVoucherRepository
 
     public void Remove(Voucher voucher)
     {
+        // First remove related items if they exist
+        if (voucher.Items != null && voucher.Items.Any())
+        {
+            _context.VoucherItems.RemoveRange(voucher.Items);
+        }
+        
         _context.Vouchers.Remove(voucher);
+    }
+    
+    public async Task<bool> AnyAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Vouchers.AnyAsync(cancellationToken);
     }
 }

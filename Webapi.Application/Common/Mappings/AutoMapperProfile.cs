@@ -1,7 +1,6 @@
 using AutoMapper;
 using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Domain.Entities;
-using Webapi.Domain.ValueObjects;
 using Webapi.SharedKernel.DTOs;
 using Webapi.SharedKernel.DTOs.CartItem;
 using Webapi.SharedKernel.DTOs.Orders;
@@ -40,7 +39,7 @@ public class AutoMapperProfile : Profile
         CreateMap<ProductSize, ProductSizeDto>()
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
             .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.Price))
-            .ForMember(dest => dest.ProductMainPhotoUrl, opt => opt.MapFrom(src =>
+            .ForMember(dest => dest.ProductMainPhotoUrl, opt => opt.MapFrom(src => 
                 src.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url));
         CreateMap<CreateProductSizeDto, ProductSize>();
         CreateMap<UpdateProductSizeDto, ProductSize>();
@@ -102,7 +101,6 @@ public class AutoMapperProfile : Profile
                     src.ProductSize.Product.Photos != null && src.ProductSize.Product.Photos.Any(p => p.IsMain) ?
                     src.ProductSize.Product.Photos.FirstOrDefault(p => p.IsMain)!.Url :
                     null));
-        CreateMap<Address, AddressDto>();
 
         CreateMap<Order, OrderDto>()
             .ForMember(
@@ -117,12 +115,20 @@ public class AutoMapperProfile : Profile
                 dest => dest.OwnerEmail,
                 opt => opt.MapFrom(src => src.Owner.Email));
 
-        CreateMap<Voucher, VoucherDto>();
-        CreateMap<CreateVoucherDto, Voucher>();
-        CreateMap<UpdateVoucherDto, Voucher>();
-        CreateMap<Review, ReviewDto>()
-            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
-            .ForMember(dest => dest.OwnerName, opt => opt.MapFrom(src => src.Owner.Email))
-            .ForMember(dest => dest.OwnerEmail, opt => opt.MapFrom(src => src.Owner.Email));
+        CreateMap<Voucher, VoucherDto>()
+            .ForMember(dest => dest.TypeName, opt => opt.MapFrom(src => src.Type.Name))
+            .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Type.Value))
+            .ForMember(dest => dest.AvailableQuantity, opt => opt.Ignore()); // Calculated in the handler
+        
+        CreateMap<VoucherItem, VoucherItemDto>();
+        
+        CreateMap<CreateVoucherDto, Voucher>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.TypeId, opt => opt.Ignore())
+            .ForMember(dest => dest.Type, opt => opt.Ignore())
+            .ForMember(dest => dest.Items, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore());
+
     }
 }

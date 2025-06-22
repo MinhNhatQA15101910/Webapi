@@ -5,6 +5,7 @@ using Webapi.Application;
 using Webapi.Application.Common.Helpers;
 using Webapi.Application.Common.Interfaces.Factories;
 using Webapi.Application.Common.Interfaces.Services;
+using Webapi.Domain.Factories;
 using Webapi.Domain.Interfaces;
 using Webapi.Infrastructure.Persistence;
 using Webapi.Infrastructure.Persistence.Proxies;
@@ -77,6 +78,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<XlsVoucherImportAdapter>();
 
         services.AddScoped<IVoucherImportFactory, VoucherImportFactory>();
+        services.AddScoped<VoucherFactory>();
 
         return services;
     }
@@ -96,7 +98,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
         services.AddScoped<ICartItemRepository, CartItemRepository>();
         services.AddScoped<IVoucherRepository, VoucherRepository>();
-
+        services.AddScoped<IVoucherItemRepository, VoucherItemRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>(); // Add this line
 
         services.AddScoped<IUserRepository, UserProxy>();
         services.AddScoped<IOrderRepository, OrderProxy>();
