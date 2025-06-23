@@ -11,7 +11,7 @@ using Webapi.Infrastructure.Persistence;
 namespace Webapi.Infrastructure.Persistence.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-[Migration("20250622095323_SqlInitial")]
+[Migration("20250623022750_SqlInitial")]
 partial class SqlInitial
 {
     /// <inheritdoc />
@@ -570,14 +570,49 @@ partial class SqlInitial
                 b.Property<DateTime>("ExpiredAt")
                     .HasColumnType("TEXT");
 
-                b.Property<string>("Name")
-                    .IsRequired()
-                    .HasColumnType("TEXT");
-
                 b.Property<int>("Quantity")
                     .HasColumnType("INTEGER");
 
+                b.Property<Guid>("TypeId")
+                    .HasColumnType("TEXT");
+
                 b.Property<DateTime>("UpdatedAt")
+                    .HasColumnType("TEXT");
+
+                b.HasKey("Id");
+
+                b.HasIndex("TypeId");
+
+                b.ToTable("Vouchers");
+            });
+
+        modelBuilder.Entity("Webapi.Domain.Entities.VoucherItem", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
+
+                b.Property<bool>("Status")
+                    .HasColumnType("INTEGER");
+
+                b.Property<Guid>("VoucherId")
+                    .HasColumnType("TEXT");
+
+                b.HasKey("Id");
+
+                b.HasIndex("VoucherId");
+
+                b.ToTable("VoucherItems");
+            });
+
+        modelBuilder.Entity("Webapi.Domain.Entities.VoucherType", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("TEXT");
+
+                b.Property<string>("Name")
+                    .IsRequired()
                     .HasColumnType("TEXT");
 
                 b.Property<double>("Value")
@@ -585,7 +620,7 @@ partial class SqlInitial
 
                 b.HasKey("Id");
 
-                b.ToTable("Vouchers");
+                b.ToTable("VoucherTypes");
             });
 
         modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -827,6 +862,26 @@ partial class SqlInitial
                 b.Navigation("User");
             });
 
+        modelBuilder.Entity("Webapi.Domain.Entities.Voucher", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.VoucherType", "Type")
+                    .WithMany()
+                    .HasForeignKey("TypeId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Type");
+            });
+
+        modelBuilder.Entity("Webapi.Domain.Entities.VoucherItem", b =>
+            {
+                b.HasOne("Webapi.Domain.Entities.Voucher", null)
+                    .WithMany("Items")
+                    .HasForeignKey("VoucherId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+
         modelBuilder.Entity("Webapi.Domain.Entities.Category", b =>
             {
                 b.Navigation("Products");
@@ -873,6 +928,8 @@ partial class SqlInitial
 
         modelBuilder.Entity("Webapi.Domain.Entities.Voucher", b =>
             {
+                b.Navigation("Items");
+
                 b.Navigation("Orders");
             });
 #pragma warning restore 612, 618

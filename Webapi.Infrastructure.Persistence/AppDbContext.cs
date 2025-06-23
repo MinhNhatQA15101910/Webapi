@@ -92,5 +92,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .WithOne(x => x.Category)
             .HasForeignKey(x => x.CategoryId)
             .IsRequired();
+
+        builder.Entity<Voucher>()
+            .HasOne(x => x.Type);
     }
 }
