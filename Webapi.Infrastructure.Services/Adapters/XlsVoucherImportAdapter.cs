@@ -17,6 +17,6 @@ public class XlsVoucherImportAdapter : IVoucherImport
     public async Task<IEnumerable<Voucher>> ImportVouchersAsync(Stream fileStream, string fileName)
     {
         // Since the original XLS importer is synchronous, we wrap it in a Task
-        return await _xlsImporter.ImportVouchersAsync(fileStream, fileName);
+        return await _xlsImporter.ImportFromXlsAsync(fileStream, fileName);
     }
 }   

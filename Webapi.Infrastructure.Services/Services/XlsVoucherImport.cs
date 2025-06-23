@@ -7,7 +7,7 @@ using Webapi.SharedKernel.DTOs.Voucher;
 
 namespace Webapi.Infrastructure.Services.Services;
 
-public class XlsVoucherImport : IVoucherImport
+public class XlsVoucherImport 
 {
     private readonly VoucherFactory _voucherFactory;
 
@@ -16,7 +16,7 @@ public class XlsVoucherImport : IVoucherImport
         _voucherFactory = voucherFactory;
     }
 
-    public async Task<IEnumerable<Voucher>> ImportVouchersAsync(Stream fileStream, string fileName)
+    public async Task<IEnumerable<Voucher>> ImportFromXlsAsync(Stream fileStream, string fileName)
     {
         if (fileStream == null)
         {
