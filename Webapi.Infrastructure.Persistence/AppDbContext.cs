@@ -25,7 +25,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<Category> Categories { get; set; }
     public DbSet<ProductPhoto> ProductPhotos { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
-
     public DbSet<ProductSize> ProductSizes { get; set; }
     public DbSet<VoucherItem> VoucherItems { get; set; }
     public DbSet<VoucherType> VoucherTypes { get; set; }
@@ -93,5 +92,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .WithOne(x => x.Category)
             .HasForeignKey(x => x.CategoryId)
             .IsRequired();
+
+        builder.Entity<Voucher>()
+            .HasOne(x => x.Type);
     }
 }
