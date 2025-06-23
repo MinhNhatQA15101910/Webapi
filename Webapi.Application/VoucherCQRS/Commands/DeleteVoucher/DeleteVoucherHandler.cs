@@ -19,7 +19,14 @@ public class DeleteVoucherHandler(
             var voucher = await unitOfWork.VoucherRepository.GetByIdAsync(request.VoucherId, cancellationToken)
                 ?? throw new BadRequestException($"Voucher with ID {request.VoucherId} not found");
             
-            // Remove from repository
+            // Get and delete all voucher items
+            var voucherItems = await unitOfWork.VoucherItemRepository.GetByVoucherIdAsync(request.VoucherId, cancellationToken);
+            if (voucherItems.Any())
+            {
+                unitOfWork.VoucherItemRepository.RemoveRange(voucherItems);
+            }
+            
+            // Remove the voucher
             unitOfWork.VoucherRepository.Remove(voucher);
             
             // Save changes
@@ -27,7 +34,7 @@ public class DeleteVoucherHandler(
             
             return result;
         }
-        catch (NotFoundException)
+        catch (BadRequestException)
         {
             throw;
         }

@@ -10,6 +10,7 @@ public interface IUnitOfWork
     ICartItemRepository CartItemRepository { get; }
     IOrderRepository OrderRepository { get; }
     IVoucherRepository VoucherRepository { get; }
+    IVoucherItemRepository VoucherItemRepository { get; } // Add the new repository
     IReviewRepository ReviewRepository { get; }
     
     Task<bool> CompleteAsync(CancellationToken cancellationToken = default);

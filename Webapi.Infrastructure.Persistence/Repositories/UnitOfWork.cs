@@ -11,19 +11,21 @@ public class UnitOfWork(
     IProductSizeRepository productSizeRepository,
     ICartItemRepository cartItemRepository,
     IOrderRepository orderRepository,
-    IVoucherRepository voucherRepository
+    IVoucherRepository voucherRepository,
+    IVoucherItemRepository voucherItemRepository, 
+    IReviewRepository reviewRepository
 ) : IUnitOfWork
 {
     public IUserRepository UserRepository => userRepository;
     public IProductRepository ProductRepository => productRepository;
-
     public ICategoryRepository CategoryRepository => categoryRepository;
     public IProductPhotoRepository ProductPhotoRepository => productPhotoRepository;
     public IProductSizeRepository ProductSizeRepository => productSizeRepository;
     public ICartItemRepository CartItemRepository => cartItemRepository;
     public IOrderRepository OrderRepository => orderRepository;
     public IVoucherRepository VoucherRepository => voucherRepository;
-    public IReviewRepository ReviewRepository => new ReviewRepository(dbContext);
+    public IVoucherItemRepository VoucherItemRepository => voucherItemRepository; 
+    public IReviewRepository ReviewRepository => reviewRepository;
 
     public async Task<bool> CompleteAsync(CancellationToken cancellationToken = default)
     {

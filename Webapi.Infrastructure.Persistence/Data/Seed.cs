@@ -185,7 +185,7 @@ public class Seed
 
         foreach (var voucher in vouchers)
         {
-            Console.WriteLine($"Adding voucher: {voucher.Name}");
+            Console.WriteLine($"Adding voucher: {voucher.Type.Name}");
 
             unitOfWork.VoucherRepository.Add(voucher);
         }
