@@ -86,20 +86,16 @@ public partial class SqlInitial : Migration
             });
 
         migrationBuilder.CreateTable(
-            name: "Vouchers",
+            name: "VoucherTypes",
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "TEXT", nullable: false),
                 Name = table.Column<string>(type: "TEXT", nullable: false),
-                Value = table.Column<double>(type: "REAL", nullable: false),
-                ExpiredAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                Value = table.Column<double>(type: "REAL", nullable: false)
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_Vouchers", x => x.Id);
+                table.PrimaryKey("PK_VoucherTypes", x => x.Id);
             });
 
         migrationBuilder.CreateTable(
@@ -383,26 +379,23 @@ public partial class SqlInitial : Migration
             });
 
         migrationBuilder.CreateTable(
-            name: "OrderVouchers",
+            name: "Vouchers",
             columns: table => new
             {
-                OrderId = table.Column<Guid>(type: "TEXT", nullable: false),
-                VoucherId = table.Column<Guid>(type: "TEXT", nullable: false),
-                CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                TypeId = table.Column<Guid>(type: "TEXT", nullable: false),
+                CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                ExpiredAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_OrderVouchers", x => new { x.OrderId, x.VoucherId });
+                table.PrimaryKey("PK_Vouchers", x => x.Id);
                 table.ForeignKey(
-                    name: "FK_OrderVouchers_Orders_OrderId",
-                    column: x => x.OrderId,
-                    principalTable: "Orders",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_OrderVouchers_Vouchers_VoucherId",
-                    column: x => x.VoucherId,
-                    principalTable: "Vouchers",
+                    name: "FK_Vouchers_VoucherTypes_TypeId",
+                    column: x => x.TypeId,
+                    principalTable: "VoucherTypes",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
             });
@@ -457,6 +450,50 @@ public partial class SqlInitial : Migration
                     name: "FK_OrderProducts_ProductSizes_ProductSizeId",
                     column: x => x.ProductSizeId,
                     principalTable: "ProductSizes",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "OrderVouchers",
+            columns: table => new
+            {
+                OrderId = table.Column<Guid>(type: "TEXT", nullable: false),
+                VoucherId = table.Column<Guid>(type: "TEXT", nullable: false),
+                CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_OrderVouchers", x => new { x.OrderId, x.VoucherId });
+                table.ForeignKey(
+                    name: "FK_OrderVouchers_Orders_OrderId",
+                    column: x => x.OrderId,
+                    principalTable: "Orders",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_OrderVouchers_Vouchers_VoucherId",
+                    column: x => x.VoucherId,
+                    principalTable: "Vouchers",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "VoucherItems",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                VoucherId = table.Column<Guid>(type: "TEXT", nullable: false),
+                Status = table.Column<bool>(type: "INTEGER", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_VoucherItems", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_VoucherItems_Vouchers_VoucherId",
+                    column: x => x.VoucherId,
+                    principalTable: "Vouchers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
             });
@@ -562,6 +599,16 @@ public partial class SqlInitial : Migration
             name: "IX_UserPhotos_UserId",
             table: "UserPhotos",
             column: "UserId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_VoucherItems_VoucherId",
+            table: "VoucherItems",
+            column: "VoucherId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Vouchers_TypeId",
+            table: "Vouchers",
+            column: "TypeId");
     }
 
     /// <inheritdoc />
@@ -607,6 +654,9 @@ public partial class SqlInitial : Migration
             name: "UserPhotos");
 
         migrationBuilder.DropTable(
+            name: "VoucherItems");
+
+        migrationBuilder.DropTable(
             name: "AspNetRoles");
 
         migrationBuilder.DropTable(
@@ -616,15 +666,18 @@ public partial class SqlInitial : Migration
             name: "Orders");
 
         migrationBuilder.DropTable(
-            name: "Vouchers");
+            name: "Categories");
 
         migrationBuilder.DropTable(
-            name: "Categories");
+            name: "Vouchers");
 
         migrationBuilder.DropTable(
             name: "Products");
 
         migrationBuilder.DropTable(
             name: "AspNetUsers");
+
+        migrationBuilder.DropTable(
+            name: "VoucherTypes");
     }
 }
