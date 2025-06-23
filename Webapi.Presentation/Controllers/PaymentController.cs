@@ -26,6 +26,7 @@ public class PaymentController(IMediator mediator) : ControllerBase
         var command = new IpnConfirmCommand() { Data = Request.Query, Query = Request.Query, PaymentMethod = Webapi.SharedKernel.Enums.PaymentMethodEnum.VNPay };
 
         var response = await mediator.Send(command, cancellationToken);
+        Console.WriteLine(response.ToString());
 
         return response;
     }

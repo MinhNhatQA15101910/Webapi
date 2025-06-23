@@ -1,6 +1,7 @@
 using AutoMapper;
 using Webapi.Application.AuthCQRS.Commands.ValidateSignup;
 using Webapi.Domain.Entities;
+using Webapi.Domain.ValueObjects;
 using Webapi.SharedKernel.DTOs;
 using Webapi.SharedKernel.DTOs.CartItem;
 using Webapi.SharedKernel.DTOs.Orders;
@@ -113,7 +114,18 @@ public class AutoMapperProfile : Profile
                 opt => opt.MapFrom(src => src.Owner.UserName))
             .ForMember(
                 dest => dest.OwnerEmail,
-                opt => opt.MapFrom(src => src.Owner.Email));
+                opt => opt.MapFrom(src => src.Owner.Email))
+            ;
+        CreateMap<Address, AddressDto>();
+        CreateMap<OrderVoucher, OrderVoucherDto>()
+            .ForMember(
+                dest => dest.Name,
+                opt => opt.MapFrom(src => src.Voucher.Type.Name))
+            .ForMember(
+                dest => dest.Value,
+                opt => opt.MapFrom(src => src.Voucher.Type.Value))
+            ;
+
 
         CreateMap<Voucher, VoucherDto>()
             .ForMember(dest => dest.TypeName, opt => opt.MapFrom(src => src.Type.Name))
