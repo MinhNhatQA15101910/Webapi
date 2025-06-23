@@ -25,7 +25,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<Category> Categories { get; set; }
     public DbSet<ProductPhoto> ProductPhotos { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
-
     public DbSet<ProductSize> ProductSizes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
